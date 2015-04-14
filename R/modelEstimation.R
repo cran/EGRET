@@ -19,11 +19,15 @@
 #' Any of these values can be NA, not all EGRET functions will work with missing parts of the named list eList.
 #' @examples
 #' eList <- Choptank_eList
-#' \dontrun{EGRETreturn <- modelEstimation(eList)
+#' \dontrun{
+#' EGRETreturn <- modelEstimation(eList)
 #' Daily <- EGRETreturn$Daily
 #' Sample <- EGRETreturn$Sample
 #' INFO <- EGRETreturn$INFO
 #' surfaces <- EGRETreturn$surfaces
+#'  
+#' #Run an estimation adjusting windowQ from default:
+#' eList <- modelEstimation(eList, windowQ=5)
 #' }
 modelEstimation<-function(eList, 
                           windowY=7, windowQ=2, windowS=0.5,
@@ -38,6 +42,11 @@ modelEstimation<-function(eList,
   localINFO <- getInfo(eList)
   localSample <- getSample(eList)
   localDaily <- getDaily(eList)
+  
+  if(any(localSample$ConcLow[!is.na(localSample$ConcLow)] == 0)){
+
+    stop("modelEstimation cannot be run with 0 values in ConcLow. An estimate of the reporting limit needs to be included. See fixSampleFrame to adjust the Sample data frame")
+  }
   
   numDays <- length(localDaily$DecYear)
   DecLow <- localDaily$DecYear[1]
