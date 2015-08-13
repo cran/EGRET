@@ -1,7 +1,7 @@
-3a7f96222b9298624b9ad0f73e8a52db *DESCRIPTION
+3a156e3550cc2a623cfd89c34a3a967e *DESCRIPTION
 14c94690268a61d6ba36f37a6cc06db9 *LICENSE.note
-a8945b0fcafbe0a1c8c80c939b408ba3 *NAMESPACE
-8a210f799cf1c88c6928880b3af188fa *NEWS
+0743dfcc7960135a1ab02c24ff5849eb *NAMESPACE
+4b743a650e5c337f7e77188cdf51ed82 *NEWS
 49203982d9597b7b83cdb47bb16a198e *R/EGRET.R
 79c4fa9944c1dde17b5ecb8cba6e527a *R/blankTime.R
 015c53f387122c2cebf9519f3a927653 *R/boxConcMonth.R
@@ -30,7 +30,7 @@ b5fda78376c7ba4df87c6d91c3365b46 *R/logPretty1.R
 93cae4d00d29d87abe00183faf673aac *R/logPretty3.R
 bd5f8fb6f0dbb278d320293526555621 *R/makeAnnualSeries.R
 d386ad5f8ad08949e8531d0030c7040b *R/mergeReport.r
-8d17fd1e2d33d36da28a748f053b2a9e *R/modelEstimation.R
+6ad70822d3839777d2ccb77354da9443 *R/modelEstimation.R
 2955660a479e7a5ac819dde95d55399e *R/multiPlotDataOverview.R
 d363334bf95815485ef06adcfef877b9 *R/objectDefinitions.R
 48e2ff5404e025fe00e4adc53a881b4f *R/plot15.R
@@ -99,13 +99,7 @@ bf2ccd5fcaaea70cb478415456bd58d8 *demo/checkData.R
 c3e22eff093a74baf0288bf9cfd9040c *inst/CITATION
 00b1ec0b700d83c7cf632efce4cdf763 *inst/doc/EGRET.R
 58d10e374a7968a039afec5ee32f7d6a *inst/doc/EGRET.Rnw
-b285afd326c3e8d8c19d3f39cd566ff3 *inst/doc/EGRET.pdf
-f9e6ba46fdeb390ede9643c565b5442a *inst/doc/SeasonalFraction.R
-251abc207b9a7cbf726d6b15fc0b2384 *inst/doc/SeasonalFraction.Rmd
-b5b12557f197eee357152ea70e6ff3fb *inst/doc/SeasonalFraction.html
-256ffd71e6ab9f00225fcacef4df9666 *inst/doc/vignetteFlowWeighted.R
-017a770b10660604301dfaf57899b877 *inst/doc/vignetteFlowWeighted.Rmd
-21102ca6269a81286ac1827c03e348b3 *inst/doc/vignetteFlowWeighted.html
+aacaf27486c6df362b4dd6be62d96e72 *inst/doc/EGRET.pdf
 07c207c24c303cde891ca74dfbe72652 *inst/extdata/ChoptankRiverFlow.txt
 6d96452df7915d6222523cee6f6d811a *inst/extdata/ChoptankRiverNitrate.csv
 6c691d470e008489e17f64c0bea4fc91 *inst/extdata/James.rds
@@ -132,10 +126,8 @@ bb0261623876ccbbf6db39024fe920a5 *man/compressData.Rd
 44e8206ff899a4960d9a60604eff0901 *man/dateFormatCheck.Rd
 3d384da8b5ef3726b34977788ba19c52 *man/estCrossVal.Rd
 353d0145daf7e187aa5059a8b00d70a9 *man/estDailyFromSurfaces.Rd
-d081fb605889d0ae70855820428b4bf1 *man/estFNsegs.Rd
 617ee52838f890d6d4d03de25e571134 *man/estSurfaces.Rd
 5effc9bc86d2e1550033cd781afa5e3e *man/fixSampleFrame.Rd
-c9a6dda02bff3e9be833e93b7a61fa7c *man/flexFN.Rd
 31a4dbb5cc37b17912d9795651eb2503 *man/flowDuration.Rd
 bfae3871cf456b7a53261c2e7fff5aff *man/fluxBiasMulti.Rd
 b6d2525bd08841fac5d62c6a8f6ce036 *man/fluxBiasStat.Rd
