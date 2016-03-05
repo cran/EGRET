@@ -52,7 +52,7 @@ plotConcQ<-function(eList, qUnit = 2, tinyPlot = FALSE, logScale=FALSE,
     paLong <- 12
     paStart <- 10
   }
-  
+
   localSample <- if(paLong == 12) localSample else selectDays(localSample, paLong,paStart)
   title2<-if(paLong==12) "" else setSeasonLabelByUser(paStartInput=paStart,paLongInput=paLong)
   
@@ -67,8 +67,6 @@ plotConcQ<-function(eList, qUnit = 2, tinyPlot = FALSE, logScale=FALSE,
   qFactor<-qUnit@qUnitFactor
   x<-localSample$Q*qFactor
   
-  yLow<-localSample$ConcLow
-  yHigh<-localSample$ConcHigh
   Uncen<-localSample$Uncen
 
   plotTitle<-if(printTitle) paste(localINFO$shortName,"\n",localINFO$paramShortName,"\n","Concentration versus Discharge") else ""
@@ -87,8 +85,12 @@ plotConcQ<-function(eList, qUnit = 2, tinyPlot = FALSE, logScale=FALSE,
     yMin <- 0
   }
   
-  yInfo <- generalAxis(x=yHigh, maxVal=concMax, minVal=yMin, tinyPlot=tinyPlot,logScale=logScale,units=localINFO$param.units)
   xInfo <- generalAxis(x=x, maxVal=NA, minVal=NA, logScale=TRUE, tinyPlot=tinyPlot)
+  
+  yLow<-localSample$ConcLow
+  yHigh<-localSample$ConcHigh
+  
+  yInfo <- generalAxis(x=yHigh, maxVal=concMax, minVal=yMin, tinyPlot=tinyPlot,logScale=logScale,units=localINFO$param.units)
   
   genericEGRETDotPlot(x=x, y=yHigh, 
                       xlim=c(xInfo$bottom, xInfo$top), ylim=c(yInfo$bottom,yInfo$top),
@@ -100,6 +102,7 @@ plotConcQ<-function(eList, qUnit = 2, tinyPlot = FALSE, logScale=FALSE,
   )
   
   censoredSegments(yInfo$bottom, yLow, yHigh, x, Uncen,col=col,lwd=lwd)
+
   if (!tinyPlot) mtext(title2,side=3,line=-1.5)
 
 }

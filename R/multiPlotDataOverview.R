@@ -35,11 +35,12 @@ multiPlotDataOverview<-function (eList, qUnit = 2,cex.main=1.2,
     paLong <- 12
     paStart <- 10
   }
-  
+
   title2<-if(paLong==12) "" else setSeasonLabelByUser(paStartInput=paStart,paLongInput=paLong)
   
   par(mfcol=c(2,2),oma=c(0,2.4,4.5,2.4),tcl=0.5)
-  plotConcQ(eList, qUnit = qUnit, tinyPlot = TRUE, printTitle = FALSE,rmSciX=TRUE,logScale=logScaleConc)
+  plotConcQ(eList, qUnit = qUnit, tinyPlot = TRUE, printTitle = FALSE,
+            rmSciX=TRUE,logScale=logScaleConc)
   boxConcMonth(eList, printTitle = FALSE, tinyPlot=TRUE,logScale=logScaleConc)
   plotConcTime(eList, printTitle = FALSE, tinyPlot = TRUE,logScale=logScaleConc)
   boxQTwice(eList, printTitle = FALSE, qUnit = qUnit, tinyPlot=TRUE,logScale=logScaleQ)

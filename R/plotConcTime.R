@@ -95,8 +95,7 @@ plotConcTime<-function(eList, qUnit = 2,
   
   # the next section of code sets up the seasonal part of the plot title
   title2<-if(paLong==12) "" else setSeasonLabelByUser(paStartInput=paStart,paLongInput=paLong)
-  yLow<-subSample$ConcLow
-  yHigh<-subSample$ConcHigh
+
   Uncen<-subSample$Uncen
   x<-subSample$DecYear
   
@@ -113,6 +112,10 @@ plotConcTime<-function(eList, qUnit = 2,
   plotTitle<-if(printTitle) paste(localINFO$shortName,"\n",localINFO$paramShortName,"\n",title3,sep="") else ""
   
   xInfo <- generalAxis(x=x, minVal=min(x), maxVal=max(x), tinyPlot=tinyPlot)  
+  
+  yLow<-subSample$ConcLow
+  yHigh<-subSample$ConcHigh
+  
   yInfo <- generalAxis(x=yHigh, minVal=minYLow, maxVal=concMax, logScale=logScale, 
                        tinyPlot=tinyPlot,units=attr(eList, "param.units"))
   
@@ -124,6 +127,7 @@ plotConcTime<-function(eList, qUnit = 2,
                       cex.axis=cex.axis,cex.main=cex.main,tinyPlot=tinyPlot,col=col,customPar=customPar, ...
   )
   censoredSegments(yBottom=yInfo$ticks[1],yLow=yLow,yHigh=yHigh,x=x,Uncen=Uncen,col=col,lwd=lwd)
+
   if (!tinyPlot) mtext(title2,side=3,line=-1.5)
 
 }

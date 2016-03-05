@@ -41,6 +41,10 @@ plotResidQ<-function (eList, qUnit = 2,
   localINFO <- getInfo(eList)
   localSample <- getSample(eList)
   
+  if(!all((c("SE","yHat") %in% names(eList$Sample)))){
+    stop("This function requires running modelEstimation on eList")
+  }
+  
   if(sum(c("paStart","paLong") %in% names(localINFO)) == 2){
     paLong <- localINFO$paLong
     paStart <- localINFO$paStart  
@@ -62,21 +66,6 @@ plotResidQ<-function (eList, qUnit = 2,
   qFactor <- qUnit@qUnitFactor
   x <- localSample$Q * qFactor
    
-  yLow <- log(localSample$ConcLow) - localSample$yHat
-  yHigh <- log(localSample$ConcHigh) - localSample$yHat
-   
-  yLow <- if(stdResid){
-     yLow/localSample$SE
-  } else {
-       yLow
-  }
-   
-  yHigh <- if(stdResid){
-     yHigh/localSample$SE
-  } else {
-       yHigh
-  }
-   
   Uncen <- localSample$Uncen
   
   if (tinyPlot){
@@ -92,19 +81,55 @@ plotResidQ<-function (eList, qUnit = 2,
    
    #######################
    
-  xInfo <- generalAxis(x=x, minVal=NA, maxVal=NA, logScale=TRUE, tinyPlot=tinyPlot,padPercent=5)   
-  #    yInfo <- generalAxis(x=yHigh, minVal=(min(yLow, na.rm = TRUE) - 0.5), maxVal=(max(yHigh) + 0.1), tinyPlot=tinyPlot)
-  yInfo <- generalAxis(x=yHigh, minVal=NA, maxVal=NA, tinyPlot=tinyPlot,padPercent=5)
-   
-  genericEGRETDotPlot(x=x, y=yHigh,
-                       xTicks=xInfo$ticks, yTicks=yInfo$ticks,hLine=TRUE,
-                       xlim = c(xInfo$bottom, xInfo$top), ylim = c(yInfo$bottom, yInfo$top),
-                       xlab = xLab, ylab = yLab, plotTitle=plotTitle,cex=cex,
-                       log = "x", cex.axis=cex.axis,cex.main=cex.main, col=col,
-                       tinyPlot=tinyPlot,rmSciX=rmSciX, customPar=customPar,...
-  )
+  xInfo <- generalAxis(x=x, minVal=NA, maxVal=NA, logScale=TRUE, tinyPlot=tinyPlot,padPercent=5)
   
-  censoredSegments(yInfo$bottom, yLow, yHigh, x, Uncen,col=col, lwd=lwd )
+  # if(!rResid){
+  
+    yLow <- log(localSample$ConcLow) - localSample$yHat
+    yHigh <- log(localSample$ConcHigh) - localSample$yHat
+    
+    if(stdResid){
+      yLow <- yLow/localSample$SE
+      yHigh <- yHigh/localSample$SE
+    }
+    
+    yInfo <- generalAxis(x=yHigh, minVal=NA, maxVal=NA, tinyPlot=tinyPlot,padPercent=5)
+     
+    genericEGRETDotPlot(x=x, y=yHigh,
+                         xTicks=xInfo$ticks, yTicks=yInfo$ticks,hLine=TRUE,
+                         xlim = c(xInfo$bottom, xInfo$top), ylim = c(yInfo$bottom, yInfo$top),
+                         xlab = xLab, ylab = yLab, plotTitle=plotTitle,cex=cex,
+                         log = "x", cex.axis=cex.axis,cex.main=cex.main, col=col,
+                         tinyPlot=tinyPlot,rmSciX=rmSciX, customPar=customPar,...
+    )
+    
+    censoredSegments(yInfo$bottom, yLow, yHigh, x, Uncen,col=col, lwd=lwd )
+  # } else {
+  #   
+  #   if(!("rResid" %in% names(localSample))){
+  #     eList <- makeAugmentedSample(eList)
+  #     localSample <- eList$Sample
+  #   }
+  #   yHigh <- localSample$rResid
+  #   
+  #   if(stdResid){
+  #     yHigh <- yHigh/localSample$SE
+  #   }
+  #   
+  #   yInfo <- generalAxis(x=yHigh, minVal=NA, maxVal=NA, tinyPlot=tinyPlot,padPercent=5)
+  #   
+  #   genericEGRETDotPlot(x=x[Uncen == 1], y=yHigh[Uncen == 1],
+  #                       xTicks=xInfo$ticks, yTicks=yInfo$ticks,hLine=TRUE,
+  #                       xlim = c(xInfo$bottom, xInfo$top), ylim = c(yInfo$bottom, yInfo$top),
+  #                       xlab = xLab, ylab = yLab, plotTitle=plotTitle,cex=cex,
+  #                       log = "x", cex.axis=cex.axis,cex.main=cex.main, col=col,
+  #                       tinyPlot=tinyPlot,rmSciX=rmSciX, customPar=customPar,...
+  #   )
+  #   points(x=x[Uncen == 0], y=yHigh[Uncen == 0],cex=cex,col=col)
+  #   
+  # }
+  
   if (!tinyPlot) mtext(title2,side=3,line=-1.5)
+  # invisible(eList)
    
 }

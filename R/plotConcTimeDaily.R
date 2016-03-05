@@ -63,14 +63,11 @@ plotConcTimeDaily<-function(eList, startYear=NA, endYear=NA, tinyPlot = FALSE,
   title2<-if(paLong==12) "" else setSeasonLabelByUser(paStartInput=paStart,paLongInput=paLong)
   
   subSample<-localSample[localSample$DecYear>=startYear & localSample$DecYear<= endYear,]
-  
   subDaily<-localDaily[localDaily$DecYear>=startYear & localDaily$DecYear <= endYear,]
   
   xSample<-subSample$DecYear
   xDaily<-subDaily$DecYear
 
-  yLow<-subSample$ConcLow
-  yHigh<-subSample$ConcHigh
   Uncen<-subSample$Uncen
 
   plotTitle<-if(printTitle) paste(localINFO$shortName,"\n",localINFO$paramShortName,"\n","Observed and Estimated Concentration versus Time") else ""
@@ -80,6 +77,9 @@ plotConcTimeDaily<-function(eList, startYear=NA, endYear=NA, tinyPlot = FALSE,
   yBottom <- 0 #Not specified within script, added under assumption that it's always zero based on ylim definition in this function
   
   xInfo <- generalAxis(x=xSample, minVal=startYear, maxVal=endYear, tinyPlot=tinyPlot,padPercent=0,prettyDate=prettyDate)  
+  
+  yLow<-subSample$ConcLow
+  yHigh<-subSample$ConcHigh
   
   yCombined <- c(yHigh,subDaily$ConcDay)
   yInfo <- generalAxis(x = yCombined, minVal = yBottom, maxVal = concMax, 
@@ -91,9 +91,10 @@ plotConcTimeDaily<-function(eList, startYear=NA, endYear=NA, tinyPlot = FALSE,
                       cex.main=cex.main, tinyPlot=tinyPlot,customPar=customPar, xDate=TRUE,...
   )
 
-  lines(x=xDaily, y=subDaily$ConcDay, type="l",col=col,lwd=lwd)
-
   censoredSegments(yInfo$bottom,yLow=yLow,yHigh=yHigh,x=xSample,Uncen=Uncen,col=col,lwd=lwd)
+
+
+  lines(x=xDaily, y=subDaily$ConcDay, type="l",col=col,lwd=lwd)
   if (!tinyPlot) mtext(title2,side=3,line=-1.5)
 
 }

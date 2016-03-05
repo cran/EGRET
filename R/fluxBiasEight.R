@@ -105,5 +105,6 @@ fluxBiasMulti<-function (eList, qUnit = 2, fluxUnit = 3, moreTitle = "WRTDS",
   }
   
   par(mfcol = c(1, 1), oma = c(0, 0, 0, 0))
+  invisible(eList)
   
 }

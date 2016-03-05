@@ -33,10 +33,6 @@
 plotConcPred<-function(eList, concMax = NA, logScale=FALSE,
                        printTitle = TRUE,tinyPlot=FALSE,cex=0.8, cex.axis=1.1,
                        cex.main=1.1, customPar=FALSE,col="black",lwd=1,...){
-  # this function shows observed versus predicted concentration
-  # predicted concentration on the x-axis (these include the bias correction), 
-  # observed concentration on y-axis 
-  # these predictions are from a "leave-one-out" cross validation application of WRTDS 
 
   localINFO <- getInfo(eList)
   localSample <- getSample(eList) 
@@ -49,13 +45,16 @@ plotConcPred<-function(eList, concMax = NA, logScale=FALSE,
     paStart <- 10
   } 
   
+  if(!all((c("SE","yHat") %in% names(eList$Sample)))){
+    stop("This function requires running modelEstimation on eList")
+  }
+  
   localSample <- if(paLong == 12) localSample else selectDays(localSample, paLong,paStart)
   
   title2<-if(paLong==12) "" else setSeasonLabelByUser(paStartInput=paStart,paLongInput=paLong)
   
   x<-localSample$ConcHat
-  yLow<-localSample$ConcLow
-  yHigh<-localSample$ConcHigh
+
   Uncen<-localSample$Uncen
 
   if(tinyPlot){
@@ -79,9 +78,11 @@ plotConcPred<-function(eList, concMax = NA, logScale=FALSE,
   plotTitle<-if(printTitle) paste(localINFO$shortName,"\n",localINFO$paramShortName,"\n","Observed versus Estimated Concentration") else ""
 
   xInfo <- generalAxis(x=x, minVal=minXLow, maxVal=concMax, tinyPlot=tinyPlot,logScale=logScale)  
-  yInfo <- generalAxis(x=yHigh, minVal=minYLow, maxVal=concMax, tinyPlot=tinyPlot,logScale=logScale)
+
+  yLow<-localSample$ConcLow
+  yHigh<-localSample$ConcHigh
   
-  ############################
+  yInfo <- generalAxis(x=yHigh, minVal=minYLow, maxVal=concMax, tinyPlot=tinyPlot,logScale=logScale)
 
   genericEGRETDotPlot(x=x, y=yHigh,
                       xTicks=xInfo$ticks, yTicks=yInfo$ticks,
@@ -93,6 +94,8 @@ plotConcPred<-function(eList, concMax = NA, logScale=FALSE,
     )
 
   censoredSegments(yBottom=yInfo$bottom, yLow=yLow, yHigh=yHigh, x=x, Uncen=Uncen,col=col,lwd=lwd)
-  if (!tinyPlot) mtext(title2,side=3,line=-1.5)
 
+
+  if (!tinyPlot) mtext(title2,side=3,line=-1.5)
+  invisible(eList)
 }

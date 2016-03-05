@@ -44,6 +44,10 @@ plotFluxPred<-function(eList, fluxUnit = 3, fluxMax = NA,
   localINFO <- getInfo(eList)
   localSample <- getSample(eList)
   
+  if(!all((c("SE","yHat") %in% names(eList$Sample)))){
+    stop("This function requires running modelEstimation on eList")
+  }
+  
   if(sum(c("paStart","paLong") %in% names(localINFO)) == 2){
     paLong <- localINFO$paLong
     paStart <- localINFO$paStart  
@@ -79,18 +83,15 @@ plotFluxPred<-function(eList, fluxUnit = 3, fluxMax = NA,
 
   fluxFactor <- fluxUnit@unitFactor*86.40
   x<-localSample$ConcHat*localSample$Q*fluxFactor
-  yLow<-localSample$ConcLow*localSample$Q*fluxFactor
-  yHigh<-localSample$ConcHigh*localSample$Q*fluxFactor
+
   Uncen<-localSample$Uncen
 
   if (tinyPlot) {
     xLab <- fluxUnit@unitEstimateTiny
-#     yLab <- paste("Obs.", fluxUnit@unitExpressTiny)
     yLab <- substitute(a ~ b, list(a="Obs.",b= fluxUnit@unitExpressTiny[[1]]))
   } else {
     xLab <- fluxUnit@unitEstimate
     yLab <- substitute(a ~ b, list(a="Observed",b= fluxUnit@unitExpress[[1]]))
-#     yLab <- paste("Observed", fluxUnit@unitExpress)
   }
   
   if(logScale){
@@ -104,11 +105,12 @@ plotFluxPred<-function(eList, fluxUnit = 3, fluxMax = NA,
   }
   
   plotTitle<-if(printTitle) paste(localINFO$shortName,"\n",localINFO$paramShortName,"\n","Observed vs Estimated Flux") else ""
-  
-  ###############################
 
-  
   xInfo <- generalAxis(x=x, minVal=minX, maxVal=NA, logScale=logScale, tinyPlot=tinyPlot,padPercent=5)  
+
+  yLow<-localSample$ConcLow*localSample$Q*fluxFactor
+  yHigh<-localSample$ConcHigh*localSample$Q*fluxFactor
+  
   yInfo <- generalAxis(x=yHigh, minVal=minY, maxVal=fluxMax, logScale=logScale, tinyPlot=tinyPlot,padPercent=5)
   
   genericEGRETDotPlot(x=x, y=yHigh,
@@ -120,6 +122,7 @@ plotFluxPred<-function(eList, fluxUnit = 3, fluxMax = NA,
   )
   
   censoredSegments(yBottom=yInfo$bottom, yLow=yLow, yHigh=yHigh, x=x, Uncen=Uncen,col=col,lwd=lwd)
+
   if (!tinyPlot) mtext(title2,side=3,line=-1.5)
-  
+
 }

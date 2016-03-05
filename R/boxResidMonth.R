@@ -63,18 +63,28 @@ boxResidMonth<-function(eList, stdResid = FALSE, las=1,
   }
   
   plotTitle<-if(printTitle) paste(localINFO$shortName,"\n",localINFO$paramShortName,"\nBoxplots of residuals by month") else ""
-  resid<-log(localSample$ConcAve) - localSample$yHat
-  resid<-if(stdResid) resid/localSample$SE else resid
+  
+  # if(!rResid){
+    resid<-log(localSample$ConcAve) - localSample$yHat
+  # } else {
+  #   if(!("rResid" %in% names(localSample))){
+  #     eList <- makeAugmentedSample(eList)
+  #     localSample <- eList$Sample
+  #   }
+  #   resid <- localSample$rResid
+  # }
+  
+  if(stdResid) {
+    resid<- resid/localSample$SE
+  }
   
   singleMonthList <- sapply(c(1:12),function(x){monthInfo[[x]]@monthAbbrev})
   
   namesListFactor <- factor(singleMonthList, levels=singleMonthList)
   monthList <- as.character(apply(localSample, 1, function(x)  monthInfo[[as.numeric(x[["Month"]])]]@monthAbbrev))
   monthList <- factor(monthList, namesListFactor)
-  
-  tempDF <- data.frame(month=monthList, resid=resid)  
-  
-  boxplot(tempDF$resid ~ tempDF$month,
+
+  boxplot(resid ~ monthList,
           varwidth=TRUE,
           xlab="Month",ylab=yLab,
           main=plotTitle,
@@ -86,4 +96,5 @@ boxResidMonth<-function(eList, stdResid = FALSE, las=1,
           ...)
   abline(h=0)  
   if (!tinyPlot) mtext(title2,side=3,line=-1.5)
+  # invisible(eList)
 }

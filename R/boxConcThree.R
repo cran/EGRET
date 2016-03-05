@@ -45,6 +45,11 @@ boxConcThree<-function (eList, tinyPlot=FALSE,
     paStart <- 10
   } 
   
+  # if(rResid & !all((c("SE","yHat") %in% names(eList$Sample)))){
+  #   message("Pseudo only supported after running modelEstimation, defaulting to rResid=FALSE")
+  #   rResid <- FALSE
+  # }
+  
   localSample <- if(paLong == 12) localSample else selectDays(localSample,paLong,paStart)
   localDaily <- if(paLong == 12) localDaily else selectDays(localDaily, paLong,paStart)
   
@@ -56,7 +61,6 @@ boxConcThree<-function (eList, tinyPlot=FALSE,
   index2 <- rep(2, nS)
   index3 <- rep(3, nD)
   index <- c(index1, index2,index3)
-  concV <- c(localSample$ConcAve,localSample$ConcHat,localDaily$ConcDay)
   
   plotTitle <- if (printTitle) {
     paste(localINFO$shortName, ",", localINFO$paramShortName, 
@@ -64,10 +68,6 @@ boxConcThree<-function (eList, tinyPlot=FALSE,
   } else {
     ""
   }
-  
-  yMax<-max(concV,na.rm=TRUE)
-  yTicks<-yPretty(yMax)
-  yTop<-yTicks[length(yTicks)]
   
   if (tinyPlot) {
     yLab <- paste("Conc. (",localINFO$param.units,")",sep="")
@@ -83,13 +83,28 @@ boxConcThree<-function (eList, tinyPlot=FALSE,
   name3 <- "All day\nestimates"
   groupNames <- c(name1,name2,name3)
   
+  # if(!rResid){
+    concV <- c(localSample$ConcAve,localSample$ConcHat,localDaily$ConcDay)
+  
+  # } else {
+  #   if(!("rObserved" %in% names(localSample))){
+  #     eList <- makeAugmentedSample(eList)
+  #     localSample <- eList$Sample
+  #   }
+  #   concV <- c(localSample$rObserved,localSample$ConcHat,localDaily$ConcDay)
+  # }
+  
+  yMax<-max(concV,na.rm=TRUE)
+  yTicks<-yPretty(yMax)
+  yTop<-yTicks[length(yTicks)]
+  
   boxplot(concV ~ index,varwidth=TRUE,
           names=groupNames,xlab="",ylab=yLab,
           ylim=c(0,yTop),axes=FALSE,
           main=plotTitle,font.main=font.main,cex=cex,
           cex.main=cex.main,
           las=1,yaxs="i",
-          ...)
+          ...)  
   
   axis(1,tcl=0.5,at=c(1,2,3),labels=groupNames,cex.axis=cex.axis*0.5454)
   axis(2,tcl=0.5,las=1,at=yTicks,cex.axis=cex.axis)
@@ -97,5 +112,5 @@ boxConcThree<-function (eList, tinyPlot=FALSE,
   axis(4,tcl=0.5,at=yTicks,labels=FALSE)
   box()
   if (!tinyPlot) mtext(title2,side=3,line=-1.5)
-
+  invisible(eList)
 }
