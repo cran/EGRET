@@ -4,19 +4,26 @@
 \alias{plotConcTime}
 \title{Plot of Observed Concentration versus Time}
 \usage{
-plotConcTime(eList, qUnit = 2, qLower = NA, qUpper = NA,
-  tinyPlot = FALSE, concMax = NA, concMin = NA, printTitle = TRUE,
-  logScale = FALSE, cex = 0.8, cex.axis = 1.1, cex.main = 1.1,
-  customPar = FALSE, col = "black", lwd = 1, ...)
+plotConcTime(eList, qUnit = 2, yearStart = NA, yearEnd = NA,
+  qLower = NA, qUpper = NA, randomCensored = FALSE, tinyPlot = FALSE,
+  concMax = NA, concMin = NA, printTitle = TRUE, logScale = FALSE,
+  cex = 0.8, cex.axis = 1.1, cex.main = 1.1, customPar = FALSE,
+  col = "black", lwd = 1, ...)
 }
 \arguments{
 \item{eList}{named list with at least the Sample and INFO dataframes}
 
 \item{qUnit}{object of qUnit class \code{\link{printqUnitCheatSheet}}, or numeric represented the short code, or character representing the descriptive name.}
 
+\item{yearStart}{numeric is the calendar year containing the first estimated annual value to be plotted, default is NA (which allows it to be set automatically by the data)}
+
+\item{yearEnd}{numeric is the calendar year just after the last estimated annual value to be plotted, default is NA (which allows it to be set automatically by the data)}
+
 \item{qLower}{numeric the lower bound on values of discharge used to select the data points to be plotted, units are those specified by qUnit, default = NA which is equivalent to a lower bound of zero but if the desired lower bound is zero use qLower = NA}
 
 \item{qUpper}{numeric the upper bound on values of discharge for selection of data points to be plotted, units are those specified by qUnit, default = NA which is equivalent to an upper bound of infinity}
+
+\item{randomCensored}{logical. Show censored values as randomized.}
 
 \item{tinyPlot}{logical variable, if TRUE plot is designed to be plotted small as part of a multipart figure, default is FALSE.}
 
@@ -64,6 +71,7 @@ plotConcTime(eList)
 eList <- setPA(eList, paStart=6,paLong=3)
 plotConcTime(eList, qUnit = 1, qLower = 100, qUpper = 10000)
 plotConcTime(eList, logScale=TRUE)
+plotConcTime(eList, qUnit = 1, qLower = 100, qUpper = 10000, randomCensored = TRUE)
 }
 \seealso{
 \code{\link{selectDays}}, \code{\link{genericEGRETDotPlot}}

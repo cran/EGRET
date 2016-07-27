@@ -1,3 +1,16 @@
+EGRET 2.6.0
+===========
+* start/end year argument names unified to yearStart and yearEnd (previously included startYear and endYear)
+
+EGRET 2.5.3
+===========
+* Argument for randomized censored values names randomCensored
+
+EGRET 2.5.0
+===========
+* Added an argument to the concentration and residual plotting functions to randomize the censored values for the plots.
+* Minor bug fixes
+
 EGRET 2.3.1
 ===========
 * Removed unnecessary disclaimer.

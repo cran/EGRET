@@ -16,6 +16,8 @@
 #' @param qUnit object of qUnit class \code{\link{printqUnitCheatSheet}}, or numeric represented the short code, or character representing the descriptive name. 
 #' @param qLower numeric the lower bound on values of discharge used to select the data points to be plotted, units are those specified by qUnit, default = NA which is equivalent to a lower bound of zero but if the desired lower bound is zero use qLower = NA
 #' @param qUpper numeric the upper bound on values of discharge for selection of data points to be plotted, units are those specified by qUnit, default = NA which is equivalent to an upper bound of infinity
+#' @param yearStart numeric is the calendar year containing the first estimated annual value to be plotted, default is NA (which allows it to be set automatically by the data)
+#' @param yearEnd numeric is the calendar year just after the last estimated annual value to be plotted, default is NA (which allows it to be set automatically by the data)
 #' @param tinyPlot logical variable, if TRUE plot is designed to be plotted small as part of a multipart figure, default is FALSE.
 #' @param concMax numeric value for the maximum value to be used on the vertical axis, default is NA (which allows it to be set automatically by the data)
 #' @param concMin numeric value for lower limit on concentration shown on the vertical log graph, default is NA 
@@ -29,6 +31,7 @@
 #' (for example, adjusting margins with par(mar=c(5,5,5,5))). If customPar FALSE, EGRET chooses the best margins depending on tinyPlot.
 #' @param col color of points on plot, see ?par 'Color Specification'
 #' @param lwd number line width.
+#' @param randomCensored logical. Show censored values as randomized.
 #' @param \dots arbitrary functions sent to the generic plotting function.  See ?par for details on possible parameters.
 #' @keywords graphics water-quality statistics
 #' @export
@@ -41,8 +44,9 @@
 #' eList <- setPA(eList, paStart=6,paLong=3)
 #' plotConcTime(eList, qUnit = 1, qLower = 100, qUpper = 10000)
 #' plotConcTime(eList, logScale=TRUE)
-plotConcTime<-function(eList, qUnit = 2, 
-                       qLower = NA, qUpper = NA, 
+#' plotConcTime(eList, qUnit = 1, qLower = 100, qUpper = 10000, randomCensored = TRUE)
+plotConcTime<-function(eList, qUnit = 2, yearStart = NA, yearEnd = NA,
+                       qLower = NA, qUpper = NA, randomCensored=FALSE,
                        tinyPlot = FALSE, concMax = NA, concMin = NA, printTitle = TRUE,logScale=FALSE, 
                        cex=0.8, cex.axis=1.1,cex.main=1.1, customPar=FALSE,col="black",lwd=1,...){
 
@@ -89,15 +93,9 @@ plotConcTime<-function(eList, qUnit = 2,
   qText[3]<-paste("For Discharge <",qUpper,qUnit@qUnitName)
   qText[4]<-paste("For Discharge between",qLower,"and",qUpper,qUnit@qUnitName)
   title3<-qText[codeSum]
-  subSample<-subSample[subSample$Q>qLowerBound & subSample$Q<qUpperBound,]
 
-  subSample <- if(paLong == 12) subSample else selectDays(subSample, paLong,paStart)
-  
   # the next section of code sets up the seasonal part of the plot title
   title2<-if(paLong==12) "" else setSeasonLabelByUser(paStartInput=paStart,paLongInput=paLong)
-
-  Uncen<-subSample$Uncen
-  x<-subSample$DecYear
   
   #########################################################
   if (logScale){
@@ -108,26 +106,69 @@ plotConcTime<-function(eList, qUnit = 2,
     logVariable <- ""
   }  
   #########################################################
-
+  
   plotTitle<-if(printTitle) paste(localINFO$shortName,"\n",localINFO$paramShortName,"\n",title3,sep="") else ""
   
-  xInfo <- generalAxis(x=x, minVal=min(x), maxVal=max(x), tinyPlot=tinyPlot)  
-  
-  yLow<-subSample$ConcLow
-  yHigh<-subSample$ConcHigh
-  
-  yInfo <- generalAxis(x=yHigh, minVal=minYLow, maxVal=concMax, logScale=logScale, 
-                       tinyPlot=tinyPlot,units=attr(eList, "param.units"))
-  
-  genericEGRETDotPlot(x=x, y=yHigh, 
-                      xlim=c(xInfo$bottom,xInfo$top), ylim=c(yInfo$bottom,yInfo$top),
-                      xlab="", ylab=yInfo$label,
-                      xTicks=xInfo$ticks, yTicks=yInfo$ticks,cex=cex,
-                      plotTitle=plotTitle, log=logVariable,
-                      cex.axis=cex.axis,cex.main=cex.main,tinyPlot=tinyPlot,col=col,customPar=customPar, ...
-  )
-  censoredSegments(yBottom=yInfo$ticks[1],yLow=yLow,yHigh=yHigh,x=x,Uncen=Uncen,col=col,lwd=lwd)
+  if(!randomCensored){
+    subSample<-subSample[subSample$Q>qLowerBound & subSample$Q<qUpperBound,]
+    subSample <- if(paLong == 12) subSample else selectDays(subSample, paLong,paStart)
+    Uncen<-subSample$Uncen
+    x<-subSample$DecYear
+    
+    xInfo <- generalAxis(x=x, 
+                         minVal = ifelse(is.na(yearStart),min(x),yearStart),
+                         maxVal=ifelse(is.na(yearEnd),max(x),yearEnd), 
+                         tinyPlot=tinyPlot)  
+    
+    yLow<-subSample$ConcLow
+    yHigh<-subSample$ConcHigh
+    
+    yInfo <- generalAxis(x=yHigh, minVal=minYLow, maxVal=concMax, logScale=logScale, 
+                         tinyPlot=tinyPlot,units=attr(eList, "param.units"))
+    
+    genericEGRETDotPlot(x=x, y=yHigh, 
+                        xlim=c(xInfo$bottom,xInfo$top), ylim=c(yInfo$bottom,yInfo$top),
+                        xlab="", ylab=yInfo$label,
+                        xTicks=xInfo$ticks, yTicks=yInfo$ticks,cex=cex,
+                        plotTitle=plotTitle, log=logVariable,
+                        cex.axis=cex.axis,cex.main=cex.main,tinyPlot=tinyPlot,col=col,customPar=customPar, ...
+    )
+    censoredSegments(yBottom=yInfo$ticks[1],yLow=yLow,yHigh=yHigh,x=x,Uncen=Uncen,col=col,lwd=lwd)
+  } else {
+    if(!("rObserved" %in% names(localSample))){
+      eList <- makeAugmentedSample(eList)
+      localSample <- eList$Sample
+    }
+    
+    subSample<-localSample
+    subSample$Q<-subSample$Q*qFactor
+    
+    subSample<-subSample[subSample$Q>qLowerBound & subSample$Q<qUpperBound,]
+    subSample <- if(paLong == 12) subSample else selectDays(subSample, paLong,paStart)
+    
+    Uncen<-subSample$Uncen
+    x<-subSample$DecYear
 
+    xInfo <- generalAxis(x=x, 
+                         minVal = ifelse(is.na(yearStart),min(x),yearStart),
+                         maxVal=ifelse(is.na(yearEnd),max(x),yearEnd), 
+                         tinyPlot=tinyPlot)
+    
+    yHigh <- subSample$rObserved
+    yInfo <- generalAxis(x=yHigh, minVal=minYLow, maxVal=concMax, logScale=logScale, 
+                         tinyPlot=tinyPlot,units=attr(eList, "param.units"))
+    
+    genericEGRETDotPlot(x=x[Uncen == 1], y=yHigh[Uncen == 1], 
+                        xlim=c(xInfo$bottom,xInfo$top), ylim=c(yInfo$bottom,yInfo$top),
+                        xlab="", ylab=yInfo$label,
+                        xTicks=xInfo$ticks, yTicks=yInfo$ticks,cex=cex,
+                        plotTitle=plotTitle, log=logVariable,
+                        cex.axis=cex.axis,cex.main=cex.main,tinyPlot=tinyPlot,col=col,customPar=customPar, ...
+    )
+    points(x=x[Uncen == 0], y=yHigh[Uncen == 0], pch=1,cex=cex,col=col)
+    
+    
+  }
   if (!tinyPlot) mtext(title2,side=3,line=-1.5)
 
 }

@@ -5,7 +5,7 @@
 \title{Produces a 4 panel plot that gives an overview of the data set prior to any processing}
 \usage{
 multiPlotDataOverview(eList, qUnit = 2, cex.main = 1.2,
-  logScaleConc = TRUE, logScaleQ = TRUE)
+  randomCensored = FALSE, logScaleConc = TRUE, logScaleQ = TRUE)
 }
 \arguments{
 \item{eList}{named list with at least Daily, Sample, and INFO dataframes}
@@ -13,6 +13,8 @@ multiPlotDataOverview(eList, qUnit = 2, cex.main = 1.2,
 \item{qUnit}{object of qUnit class \code{\link{printqUnitCheatSheet}}, or numeric represented the short code, or character representing the descriptive name.}
 
 \item{cex.main}{magnification to be used for main titles relative to the current setting of cex}
+
+\item{randomCensored}{logical. Show censored values as randomized.}
 
 \item{logScaleConc}{logical if TRUE y in concentration graphs plotted in log axis. Default is TRUE.}
 
