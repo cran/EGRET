@@ -1,7 +1,10 @@
 #' Three box plots side-by-side
 #'
 #' @description
-#' This function is used to compare the distribution of concentration in the sample and predicted data set.
+#' This function is used to compare the distribution of concentration in the 
+#' sample and predicted data set. It shows three boxplots.  One for the sample, 
+#' one for the predictions on days with sample values, and one for all days 
+#' (whether or not they had sample values).
 #' 
 #' Data come from named list, which contains a Sample dataframe with the sample data, 
 #' a Daily dataframe with the daily flow data,
@@ -73,9 +76,9 @@ boxConcThree<-function (eList, tinyPlot=FALSE,
     if (!customPar) par(mar=c(5,6,4,2)+0.1,tcl=0.5,cex.lab=cex.axis)
 
   }
-  name1 <- "Sampled day\nvalues"
-  name2 <- "Sampled day\nestimates"
-  name3 <- "All day\nestimates"
+  name1 <- "Sampled\nvalues"
+  name2 <- "Sampled\nestimates"
+  name3 <- "All\nestimates"
   groupNames <- c(name1,name2,name3)
   
   # if(!rResid){

@@ -1,18 +1,16 @@
 #' formatCheckParameterCd
 #'
+#' This function was never incorporated into the EGRET workflow and will be removed in future versions. A similar check exists within the dataRetrieval functions.
 #' Checks that the parameter code is 5 digits. If it is less, it will pad the character with zeros. If more, ask the user to re-enter.
 #'
 #' @param parameterCd character to check
 #' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
 #' @keywords WRTDS flow
-#' @import dataRetrieval
 #' @return parameterCd character
 #' @export
-#' @examples
-#' pCode <- '01234'
-#' formatCheckParameterCd(pCode)
 formatCheckParameterCd <- function(parameterCd, interactive=TRUE){     #checks for a 5 digit number
   
+  .Deprecated()
   pCodeReturn <- rep(NA,length(parameterCd))
   index <- 1
   
@@ -31,8 +29,8 @@ formatCheckParameterCd <- function(parameterCd, interactive=TRUE){     #checks f
         }
       } else {
         tempText <- dataRetrieval::zeroPad(i,5)
-        warningMessage <- paste("Most USGS parameter codes are 5 digits long, you entered ", 
-                                i , ".\n",tempText," will be used instead", sep="")
+        warningMessage <- paste0("Most USGS parameter codes are 5 digits long, you entered ", 
+                                i , ".\n",tempText," will be used instead")
         warning(warningMessage)
         i <- dataRetrieval::zeroPad(i,5)
       }

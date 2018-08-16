@@ -30,7 +30,8 @@ This function aggregates the results stored on a daily basis in the Daily data f
 eList <- Choptank_eList
 Daily <- getDaily(eList)
 AnnualResults <- setupYears(Daily, 4, 10)
+
+
 }
 \keyword{statistics}
 \keyword{water-quality}
-

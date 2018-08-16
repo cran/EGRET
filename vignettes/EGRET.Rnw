@@ -138,12 +138,21 @@ library(EGRET)
 @
 
 
-<<include=TRUE ,echo=FALSE,eval=TRUE>>=
-opts_chunk$set(highlight=TRUE, tidy=TRUE, keep.space=TRUE, keep.blank.space=FALSE, keep.comment=TRUE, concordance=TRUE,tidy=FALSE,comment="")
+<<include=TRUE ,echo=FALSE,eval=TRUE, message=FALSE, warning=FALSE>>=
+opts_chunk$set(highlight=TRUE,
+               keep.space=TRUE, 
+               keep.blank.space=FALSE, 
+               keep.comment=TRUE, 
+               concordance=TRUE,
+               tidy=FALSE,
+               comment="",
+               eval = nzchar(Sys.getenv("EGRET_eval")))
 
 knit_hooks$set(inline = function(x) {
    if (is.numeric(x)) round(x, 3)})
+
 knit_hooks$set(crop = hook_pdfcrop)
+
 
 bold.colHeaders <- function(x) {
   x <- gsub("\\^(\\d)","$\\^\\1$",x)
@@ -186,7 +195,7 @@ addSpace <- function(x) ifelse(x != "1", "[5pt]","")
 
 EGRET includes statistics and graphics for streamflow history, water quality trends, and the statistical modeling algorithm Weighted Regressions on Time, Discharge, and Season (WRTDS).  Please see the official EGRET User Guide \cite{HirschI} for more information on the EGRET package:
 
-(\url{http://dx.doi.org/10.3133/tm4A10}) 
+(\url{https://dx.doi.org/10.3133/tm4A10}) 
 
 For information on getting started in R, downloading and installing the package, see section \ref{sec:appendix1}.
 
@@ -350,7 +359,7 @@ vignette("dataRetrieval")
 
 EGRET uses entirely SI units to store the data, but for purposes of output, it can report results in a wide variety of units, which will be discussed in (\ref{sec:units}). To start our exploration, you must install the packages (check Section \ref{sec:appendix1} for detailed instructions), and then open EGRET with the following command:
 
-<<openlibraries, echo=TRUE,eval=TRUE>>=
+<<openlibraries, echo=TRUE,eval=FALSE>>=
 library(EGRET)
 @
 
@@ -563,7 +572,7 @@ Sample <-readNWISSample(siteNumber,parameterCd,
 
 Information on USGS parameter codes can be found here:
 
-\url{http://help.waterdata.usgs.gov/codes-and-parameters/parameters}
+\url{https://help.waterdata.usgs.gov/codes-and-parameters/parameters}
 
 %------------------------------------------------------------ 
 \subsubsection{readWQPSample}
@@ -581,7 +590,7 @@ Sample <-readWQPSample(site,characteristicName,
 
 To request USGS data from the Water Quality Portal, the siteNumber must have \enquote{USGS-} pasted before the identification number. For USGS data, the \texttt{characteristicName} argument can be either a list of 5-digit parameter codes, or the characteristic name. A table that describes how USGS parameters relate with the defined characteristic name can be found here:
 
-\url{http://www.waterqualitydata.us/public_srsnames.jsp}
+\url{https://www.waterqualitydata.us/public_srsnames}
 
 \FloatBarrier
 
@@ -920,11 +929,9 @@ eList <- as.egret(INFO, Daily, NA, NA)
 
 @
 
-<<flowHistoryLoad,echo=FALSE,eval=TRUE>>=
-filePath <- system.file("extdata", package="EGRET")
+<<flowHistoryLoad,echo=FALSE>>=
 fileName <- "eListColumbia.RData"
-
-load(paste(filePath,fileName,sep="/"))
+load(fileName)
 eList <- eListColumbia
 
 @
@@ -956,7 +963,7 @@ eList <- setPA(eList,paStart=12,paLong=3)
 @
 
 To set the default value (water year):
-<<newChunck, echo=TRUE,eval=TRUE>>=
+<<newChunck, echo=TRUE>>=
 eList <- setPA(eList)
 @
 
@@ -991,9 +998,9 @@ The next step can be to create the annual series of discharge statistics.  These
 \label{sec:plotOptions}
 %------------------------------------------------------------ 
 
-This section shows examples of the available plots appropriate for studying discharge history. The plots here use the default variable input options.  For any function, you can get a complete list of input variables (as described in section \ref{sec:flowHistoryVariables}) in a help file by typing a ? before the function name in the R console. The EGRET user guide has more detailed information for each plot type (\url{http://pubs.usgs.gov/tm/04/a10/}). Finally, see section \ref{app:savingPlots} for information on saving plots.
+This section shows examples of the available plots appropriate for studying discharge history. The plots here use the default variable input options.  For any function, you can get a complete list of input variables (as described in section \ref{sec:flowHistoryVariables}) in a help file by typing a ? before the function name in the R console. The EGRET user guide has more detailed information for each plot type (\url{https://pubs.usgs.gov/tm/04/a10/}). Finally, see section \ref{app:savingPlots} for information on saving plots.
 
-The simplest way to look at these time series is with the function \texttt{plotFlowSingle}. The statistic index (istat) must be defined by the user, but for all other arguments there are default values so the user isn't required to specify anything else. To see a list of these optional arguments and other information about the function, type \text{?plotFlowSingle} in the R console. All of the graphs in \texttt{plotFlowSingle}, \texttt{plotFourStats}, and all but one of the graphs in plotFour, show both the individual annual values of the selected discharge statistic (e.g. the annual mean or 7-day minimum), but they also show a curve that is a smooth fit to those data.  The curve is a LOWESS (locally weighted scatterplot smooth).  The algorithm for computing it is provided in the User Guide (\url{http://pubs.usgs.gov/tm/04/a10/}), in the section titled \enquote{The Smoothing Method Used in Flow History Analyses.} The default is that the annual values of the selected discharge statistics are smoothed with a \enquote{half-window width} of 20 years.  The smoothing window is an optional user-defined option. 
+The simplest way to look at these time series is with the function \texttt{plotFlowSingle}. The statistic index (istat) must be defined by the user, but for all other arguments there are default values so the user isn't required to specify anything else. To see a list of these optional arguments and other information about the function, type \text{?plotFlowSingle} in the R console. All of the graphs in \texttt{plotFlowSingle}, \texttt{plotFourStats}, and all but one of the graphs in plotFour, show both the individual annual values of the selected discharge statistic (e.g. the annual mean or 7-day minimum), but they also show a curve that is a smooth fit to those data.  The curve is a LOWESS (locally weighted scatterplot smooth).  The algorithm for computing it is provided in the User Guide (\url{https://pubs.usgs.gov/tm/04/a10/}), in the section titled \enquote{The Smoothing Method Used in Flow History Analyses.} The default is that the annual values of the selected discharge statistics are smoothed with a \enquote{half-window width} of 20 years.  The smoothing window is an optional user-defined option. 
 
 \texttt{plotSDLogQ} produces a graphic of the running standard deviation of the log of daily discharge over time to visualize how variability of daily discharge is changing over time.  By using the standard deviation of the log discharge the statistic becomes dimensionless.  The standard deviation plot is a way of looking at variability quite aside from average values, so, in the case of a system where discharge might be increasing over a period of years, this graphic provides a way of looking at the variability relative to that changing mean value.  The standard deviation of the log discharge is much like a coefficient of variation, but it has sample properties that make it a smoother measure of variability.  People often comment about how things like urbanization or enhanced greenhouse gases in the atmosphere are bringing about an increase in variability, and this analysis is one way to explore that idea. \texttt{plotFour}, \texttt{plotFourStats}, and \texttt{plot15} are all designed to plot several graphs from the other functions in a single figure. 
 
@@ -1016,23 +1023,22 @@ siteNumber<-"11264500"
 Daily <-readNWISDaily(siteNumber,"00060",startDate="",endDate="")
 INFO <- readNWISInfo(siteNumber,"",interactive=FALSE)
 INFO$shortName <- "Merced River at Happy Isles Bridge, CA"
-eListMerced <- as.egret(INFO, Daily, NA, NA)
+eList <- as.egret(INFO, Daily, NA, NA)
 @
 
-<<Merceddata, echo=FALSE,eval=TRUE>>=
-filePath <- system.file("extdata", package="EGRET")
+<<Merceddata, echo=FALSE>>=
 fileName <- "eListMerced.RData"
-
-load(paste(filePath,fileName,sep="/"))
+load(fileName)
+eList <- eListMerced
 @
 
 
-<<Mercedplot, echo=TRUE,eval=TRUE,fig.cap="Merced River winter trend",fig.subcap=c("Water Year", "December - February"),out.width='.5\\linewidth',out.height='.5\\linewidth',fig.show='hold',fig.pos="h">>=
-plotFlowSingle(eListMerced, istat=5)
+<<Mercedplot, echo=TRUE,fig.cap="Merced River winter trend",fig.subcap=c("Water Year", "December - February"),out.width='.5\\linewidth',out.height='.5\\linewidth',fig.show='hold',fig.pos="h">>=
+plotFlowSingle(eList, istat=5)
 
 # Then, we can run the same function, but first set 
 # the pa to start in December and only run for 3 months.
-eListMerced <- setPA(eListMerced,paStart=12,paLong=3)
+eListMerced <- setPA(eList,paStart=12,paLong=3)
 plotFlowSingle(eListMerced,istat=5,qMax=200)
 
 @
@@ -1042,13 +1048,13 @@ What these figures show us is that on an annual basis there is very little indic
 \newpage
 \FloatBarrier
 <<plotFour, echo=TRUE, fig.cap="\\texttt{plotFour(eListMerced, qUnit=3)}",fig.show='asis',out.width='1\\linewidth',out.height='1\\linewidth',fig.pos="h">>=
-plotFour(eListMerced, qUnit=3)
+plotFour(eList, qUnit=3)
 @
 
 \newpage
 \FloatBarrier
 <<plotFourStats,echo=TRUE, fig.cap="\\texttt{plotFourStats(eListMerced, qUnit=3)}",fig.show='asis',out.width='1\\linewidth',out.height='1\\linewidth',fig.pos="h",cache=TRUE>>=
-plotFourStats(eListMerced, qUnit=3)
+plotFourStats(eList, qUnit=3)
 @
 
 \newpage
@@ -1065,20 +1071,18 @@ siteNumber<-"05474500"
 Daily <-readNWISDaily(siteNumber,"00060",startDate="",endDate="")
 INFO <- readNWISInfo(siteNumber,"",interactive=FALSE)
 INFO$shortName <- "Mississippi River at Keokuk Iowa"
-eListMiss <- as.egret(INFO, Daily, NA, NA)
+eList <- as.egret(INFO, Daily, NA, NA)
 @
 
-<<MissDataRetrieval, echo=FALSE, eval=TRUE>>=
-filePath <- system.file("extdata", package="EGRET")
+<<MissDataRetrieval, echo=FALSE>>=
 fileName <- "eListMiss.RData"
-
-load(paste(filePath,fileName,sep="/"))
-
+load(fileName)
+eList <- eListMiss
 @
 
-<<MississippiPlot, echo=TRUE,eval=TRUE,fig.cap="Mississippi River at Keokuk Iowa",fig.subcap=c("Water Year", "Dec-Feb"),out.width='1\\linewidth',out.height='1\\linewidth',fig.show='hold',fig.pos="h">>=
+<<MississippiPlot, echo=TRUE,fig.cap="Mississippi River at Keokuk Iowa",fig.subcap=c("Water Year", "Dec-Feb"),out.width='1\\linewidth',out.height='1\\linewidth',fig.show='hold',fig.pos="h">>=
 
-plotQTimeDaily(eListMiss, qUnit=3,qLower=300)
+plotQTimeDaily(eList, qUnit=3,qLower=300)
 
 @
 
@@ -1093,7 +1097,7 @@ Sometimes it is easier to consider results in table formats rather than graphica
 
 
 <<printSeries, eval=FALSE,echo=TRUE>>=
-seriesResult <- printSeries(eListMiss, istat=3, qUnit=3)
+seriesResult <- printSeries(eList, istat=3, qUnit=3)
 @
 
 \singlespacing
@@ -1126,8 +1130,8 @@ Another way to look at the results is to consider how much the smoothed values c
 Another argument can be very useful in this function: yearPoints.  In the default case, the set of years that are compared are at 5 year intervals along the whole data set.  If the data set was quite long this can be a daunting number of comparisons.  For example, in an 80 year record, there would be 136 such pairs. Instead, we could look at changes between only 3 year points: 1890, 1950, and 2010: 
 
 
-<<tfc, eval=TRUE,echo=TRUE>>=
-tableFlowChange(eListMiss, istat=3, qUnit=3,yearPoints=c(1890,1950,2010))
+<<tfc, echo=TRUE>>=
+tableFlowChange(eList, istat=3, qUnit=3,yearPoints=c(1890,1950,2010))
 @
 
 See section \ref{app:createWordTable} for instructions on converting an R data frame to a table in Microsoft\textregistered\ software. Excel, Microsoft, PowerPoint, Windows, and Word are registered trademarks of Microsoft Corporation in the United States and other countries.
@@ -1223,7 +1227,7 @@ The \texttt{multiPlotDataOverview} (Figure \ref{fig:multiPlotDataOverview}) func
 %------------------------------------------------------------ 
 Another useful tool for checking the data before running the WRTDS estimations is \texttt{flowDuration}. This is a utility function that can help you define the discharge ranges that we want to explore.  It prints out key points on the discharge duration curve.  Define the points for a particular part of the year using the \texttt{"}centerDate\texttt{"} and \texttt{"}span\texttt{"} arguments, although the points can be defined for the entire year (default).  
 
-<<flowDuration, eval=TRUE, echo=TRUE>>=
+<<flowDuration, echo=TRUE>>=
 flowDuration(eList, qUnit=1)
 
 flowDuration(eList, qUnit=1, centerDate="09-30", span=30)
@@ -1987,9 +1991,7 @@ dev.off()
 %-------------------------------------
 \section{Disclaimer}
 %------------------------------------
-Software created by USGS employees along with contractors and grantees (unless specific stipulations are made in a contract or grant award) are to be released as Public Domain and free of copyright or license. Contributions of software components such as specific algorithms to existing software licensed through a third party are encouraged, but those contributions should be annotated as freely available in the Public Domain wherever possible. If USGS software uses existing licensed components, those licenses must be adhered to and redistributed.
-
-Although this software has been used by the U.S. Geological Survey (USGS), no warranty, expressed or implied, is made by the USGS or the U.S. Government as to accuracy and functionality, nor shall the fact of distribution constitute any such warranty, and no responsibility is assumed by the USGS in connection therewith.
+This software has been approved for release by the U.S. Geological Survey (USGS). Although the software has been subjected to rigorous review, the USGS reserves the right to update the software as needed pursuant to further analysis and review. No warranty, expressed or implied, is made by the USGS or the U.S. Government as to the functionality of the software and related material nor shall the fact of release constitute any such warranty. Furthermore, the software is released on condition that neither the USGS nor the U.S. Government shall be held liable for any damages resulting from its authorized or unauthorized use.
 
 
 %------------------------------------------------------------
@@ -1998,10 +2000,10 @@ Although this software has been used by the U.S. Geological Survey (USGS), no wa
 \begin{thebibliography}{10}
 
 % \bibitem{HirschI}
-% Helsel, D.R. and R. M. Hirsch, 2002. Statistical Methods in Water Resources Techniques of Water Resources Investigations, Book 4, chapter A3. U.S. Geological Survey. 522 pages. \url{http://pubs.usgs.gov/twri/twri4a3/}
+% Helsel, D.R. and R. M. Hirsch, 2002. Statistical Methods in Water Resources Techniques of Water Resources Investigations, Book 4, chapter A3. U.S. Geological Survey. 522 pages. \url{https://pubs.usgs.gov/twri/twri4a3/}
 
 \bibitem{HirschI}
-Hirsch, R.M., De Cicco, L.A. (2014), User guide to Exploration and Graphics for RivEr Trends (EGRET) and dataRetrieval: R packages for hydrologic data (version 2.0, February 2015): U.S. Geological Survey Techniques and Methods book 4, chap. A10, 93 p. \url{http://dx.doi.org/10.3133/tm4A10}
+Hirsch, R.M., De Cicco, L.A. (2014), User guide to Exploration and Graphics for RivEr Trends (EGRET) and dataRetrieval: R packages for hydrologic data (version 2.0, February 2015): U.S. Geological Survey Techniques and Methods book 4, chap. A10, 93 p. \url{https://dx.doi.org/10.3133/tm4A10}
 
 
 \bibitem{HirschII}
@@ -2011,10 +2013,10 @@ Hirsch, R.M., Moyer, D.L. and Archfield, S.A. (2010), Weighted Regressions on Ti
 Sprague, L.A., Hirsch, R.M., and Aulenbach, B.T. (2011), Nitrate in the Mississippi River and Its Tributaries, 1980 to 2008: Are We Making Progress? Environmental Science \& Technology, 45 (17): 7209-7216. doi: 10.1021/es201221s 
 
 \bibitem{HirschIV}
-Moyer, D.L., Hirsch, R.M., and Hyer, K.E. (2012), Comparison of Two Regression-Based Approaches for Determining Nutrient and Sediment Fluxes and Trends in the Chesapeake Bay Watershed: U.S. Geological Survey Scientific Investigations Report 2012-5244, 118 p. \url{http://pubs.usgs.gov/sir/2012/5244/}
+Moyer, D.L., Hirsch, R.M., and Hyer, K.E. (2012), Comparison of Two Regression-Based Approaches for Determining Nutrient and Sediment Fluxes and Trends in the Chesapeake Bay Watershed: U.S. Geological Survey Scientific Investigations Report 2012-5244, 118 p. \url{https://pubs.usgs.gov/sir/2012/5244/}
 
 \bibitem{HirschV}
-Rice, K.C., and Hirsch, R.M. (2012), Spatial and temporal trends in runoff at long-term streamgages within and near the Chesapeake Bay Watershed: U.S. Geological Survey Scientific Investigations Report 2012-5151, 56 p. \url{http://pubs.usgs.gov/sir/2012/5151}
+Rice, K.C., and Hirsch, R.M. (2012), Spatial and temporal trends in runoff at long-term streamgages within and near the Chesapeake Bay Watershed: U.S. Geological Survey Scientific Investigations Report 2012-5151, 56 p. \url{https://pubs.usgs.gov/sir/2012/5151}
 
 
 \end{thebibliography}

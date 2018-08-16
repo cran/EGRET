@@ -5,9 +5,10 @@
 \title{Graph of annual concentration and flow normalized concentration versus year}
 \usage{
 plotConcHist(eList, yearStart = NA, yearEnd = NA, concMax = NA,
-  printTitle = TRUE, tinyPlot = FALSE, plotFlowNorm = TRUE, cex = 0.8,
-  cex.axis = 1.1, cex.main = 1.1, lwd = 2, col = "black",
-  col.pred = "green", customPar = FALSE, ...)
+  printTitle = TRUE, tinyPlot = FALSE, plotFlowNorm = TRUE,
+  plotAnnual = TRUE, cex = 0.8, cex.axis = 1.1, cex.main = 1.1,
+  lwd = 2, col = "black", col.pred = "green", customPar = FALSE,
+  ...)
 }
 \arguments{
 \item{eList}{named list with at least the Daily and INFO dataframes}
@@ -16,13 +17,15 @@ plotConcHist(eList, yearStart = NA, yearEnd = NA, concMax = NA,
 
 \item{yearEnd}{numeric is the calendar year just after the last estimated annual value to be plotted, default is NA (which allows it to be set automatically by the data)}
 
-\item{concMax}{number specifying the maximum value to be used on the vertical axis, default is NA (which allows it to be set automatically by the data)}
+\item{concMax}{numeric. Maximum value of concentration to be plotted.}
 
 \item{printTitle}{logical variable if TRUE title is printed, if FALSE title is not printed (this is best for a multi-plot figure)}
 
 \item{tinyPlot}{logical variable, if TRUE plot is designed to be plotted small, as a part of a multipart figure, default is FALSE}
 
 \item{plotFlowNorm}{logical variable if TRUE flow normalized line is plotted, if FALSE not plotted}
+
+\item{plotAnnual}{logical variable if TRUE annual concentration points are plotted, if FALSE not plotted}
 
 \item{cex}{numerical value giving the amount by which plotting symbols should be magnified}
 
@@ -56,11 +59,12 @@ Although there are a lot of optional arguments to this function, most are set to
 yearStart <- 2001
 yearEnd <- 2010
 eList <- Choptank_eList
+
 # Water year:
 plotConcHist(eList, yearStart, yearEnd)
 # Graphs consisting of Jun-Aug
 eList <- setPA(eList, paStart=6,paLong=3)
-plotConcHist(eList, yearStart, yearEnd)
+plotConcHist(eList)
 }
 \seealso{
 \code{\link{setupYears}}, \code{\link{genericEGRETDotPlot}}
@@ -68,4 +72,3 @@ plotConcHist(eList, yearStart, yearEnd)
 \keyword{graphics}
 \keyword{statistics}
 \keyword{water-quality}
-

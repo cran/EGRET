@@ -1,6 +1,6 @@
-#' Processing of USGS NWIS Water Quality Data
+#' Processing of Water Quality Data
 #'
-#' Processes water quality portal data. This function looks at detection limit and detection 
+#' Processes water quality data. This function looks at detection limit and detection 
 #' conditions to determine if a value is left censored or not. Censored values are given the qualifier
 #' "<".  The dataframe is also converted from a long to wide format.
 #' 
@@ -14,12 +14,9 @@
 #' @examples
 #' \dontrun{
 #' library(dataRetrieval)
-#' 
-#' rawSample <- readWQPqw('USGS-01594440','', '', '')
-#' rawSampleSelect <- processQWData(rawSample)
-#' 
+#'  
 #' rawWQP <- readWQPqw('21FLEECO_WQX-IMPRGR80','Phosphorus', '', '')
-#' Sample2 <- processQWData(rawWQP)
+#' Sample2 <- processQWData(rawWQP, pCode=FALSE)
 #' }
 processQWData <- function(data,pCode=TRUE){
 

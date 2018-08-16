@@ -5,8 +5,8 @@
 \title{Produces 8-panel plot that is useful for determining if there is a flux bias problem}
 \usage{
 fluxBiasMulti(eList, qUnit = 2, fluxUnit = 3, moreTitle = "WRTDS",
-  cex = 0.7, cex.axis = 1.1, cex.main = 1.1, randomCensored = FALSE,
-  col = "black", lwd = 1, ...)
+  cex = 0.7, cex.axis = 1.1, cex.main = 1.1,
+  randomCensored = FALSE, col = "black", lwd = 1, ...)
 }
 \arguments{
 \item{eList}{named list with at least Sample, Daily, and INFO dataframes}
@@ -35,13 +35,15 @@ fluxBiasMulti(eList, qUnit = 2, fluxUnit = 3, moreTitle = "WRTDS",
 These plots use the jack-knife estimates from WRTDS to investigate the potential flux bias problem. 
 It can also be used for estimates constructed by other methods (such as LOADEST) if the results are
 stored in a data frame organized like the Sample data frame.  It allows additional label information
-to indicate what method is used. 
+to indicate what method is used. The use of this plot is described in Hirsch, Robert M., 2014. 
+Large Biases in Regression-Based Constituent Flux Estimates: Causes and Diagnostic
+Tools. Journal of the American Water Resources Association (JAWRA) 1-24. DOI: 10.1111/jawr.12195
+
 
 Although there are a lot of optional arguments to this function, most are set to a logical default. 
 
 Data come from named list, which contains a Sample dataframe with the sample data, 
-a Daily dataframe with the daily flow data,
-and an INFO dataframe with metadata
+a Daily dataframe with the daily flow data, and an INFO dataframe with metadata.
 }
 \examples{
 eList <- Choptank_eList
@@ -61,4 +63,3 @@ dev.off()
 \keyword{graphics}
 \keyword{statistics}
 \keyword{water-quality}
-

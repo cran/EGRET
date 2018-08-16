@@ -4,7 +4,8 @@
 \alias{tableFlowChange}
 \title{Prints table of change metrics for a given streamflow statistic}
 \usage{
-tableFlowChange(eList, istat, qUnit = 1, runoff = FALSE, yearPoints = NA)
+tableFlowChange(eList, istat, qUnit = 1, runoff = FALSE,
+  yearPoints = NA)
 }
 \arguments{
 \item{eList}{named list with at least Daily and INFO dataframes}
@@ -31,4 +32,3 @@ df <- tableFlowChange(eList, istat=5,yearPoints=c(2001,2005,2009))
 }
 \keyword{statistics}
 \keyword{streamflow}
-

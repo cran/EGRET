@@ -37,6 +37,9 @@
 #' using the function \code{colorRampPalette(c("blue","white","red"))}. A few preset options are heat.colors, topo.colors, and terrain.colors.
 #' @param customPar logical defaults to FALSE. If TRUE, par() should be set by user before calling this function 
 #' (for example, adjusting margins with par(mar=c(5,5,5,5))). If customPar FALSE, EGRET chooses the best margins.
+#' @param usgsStyle logical option to use USGS style guidelines. Setting this option
+#' to TRUE does NOT guarantee USGS complience. It will only change automatically
+#' generated labels. 
 #' @param \dots arbitrary functions sent to the generic plotting function.  See ?par for details on possible parameters
 #' @keywords water-quality statistics graphics
 #' @export
@@ -69,9 +72,9 @@ plotDiffContours<-function (eList, year0, year1,
                             whatSurface = 3, tcl=0.1,
                             qUnit = 2, span = 60, pval = 0.05, printTitle = TRUE, plotPercent = FALSE,
                             vert1 = NA, vert2 = NA, horiz = NA, flowDuration = TRUE, yTicks=NA,tick.lwd=2,
-                            lwd=1,cex.main=0.95,cex.axis=1,customPar=FALSE,
+                            lwd=1,cex.main=0.95,cex.axis=1,customPar=FALSE,usgsStyle = FALSE,
                             color.palette=colorRampPalette(c("blue","white","red")),...) {
-  
+
   localINFO <- getInfo(eList)
   localDaily <- getDaily(eList)
   localsurfaces <- getSurfaces(eList)
@@ -83,19 +86,14 @@ plotDiffContours<-function (eList, year0, year1,
   }
   
   if(!customPar){
-    par(oma=c(6,1,6,0))
-    par(mar=c(5,5,4,2)+0.1)
+    par(mgp=c(2.5,0.5,0))
   }
 
   surfaceName <- c("log of Concentration", "Standard Error of log(C)", 
                    "Concentration")
   j <- 3
-  j <- if (whatSurface == 1) 
-    1
-  else j
-  j <- if (whatSurface == 2) 
-    2
-  else j
+  j <- if (whatSurface == 1) 1 else j
+  j <- if (whatSurface == 2) 2 else j
   surf <- localsurfaces
   
   bottomLogQ <- localINFO$bottomLogQ
@@ -138,18 +136,14 @@ plotDiffContours<-function (eList, year0, year1,
   qTopT <- ifelse(is.na(qTop), quantile(localDaily$Q, probs = 0.95)*qFactor, qTop)
   
   if(any(is.na(yTicks))){
-    qBottomT <- max(0.9*y[1],qBottomT)
-    qTopT <- min(1.1*y[numY],qTopT)
     
-    yTicks <- logPretty3(qBottomT,qTopT)
-  }
-  
-  if(!is.na(qBottom)){
-    yTicks <- c(qBottom, yTicks)
-  }
-  
-  if(!is.na(qTop)){
-    yTicks <- c(yTicks, qTop)
+    if(is.na(qBottom)){
+      qBottom <- max(0.9*y[1],qBottomT)
+    }
+    if(is.na(qTop)){
+      qTop <- min(1.1*y[numY],qTopT)
+    }
+    yTicks <- logPretty3(qBottom,qTop)
   }
 
   xTicks <- c(0,0.0848,0.1642,0.249,0.331,0.416,0.498,0.583,0.668,0.750,0.835,0.917,1)
@@ -209,12 +203,10 @@ plotDiffContours<-function (eList, year0, year1,
                   log(yTicks[1], 10) - 1)
   v1 <- if (is.na(vert1)) 
     vectorNone
-  else c(vert1, log(yTicks[1], 10), vert1, log(yTicks[nYTicks], 
-                                               10))
+  else c(vert1, log(yTicks[1], 10), vert1, log(yTicks[nYTicks], 10))
   v2 <- if (is.na(vert2)) 
     vectorNone
-  else c(vert2, log(yTicks[1], 10), vert2, log(yTicks[nYTicks], 
-                                               10))
+  else c(vert2, log(yTicks[1], 10), vert2, log(yTicks[nYTicks], 10))
   h1 <- if (is.na(horiz)) 
     vectorNone
   else c(year0, log(horiz, 10), year1, log(horiz, 10))
@@ -222,11 +214,11 @@ plotDiffContours<-function (eList, year0, year1,
   deltaY <- (log(yTicks[length(yTicks)],10)-log(yTicks[1],10))/25
   deltaX <- (1)/25
   
-  yLab <- qUnit@qUnitExpress
+  yLab <- ifelse(usgsStyle,qUnit@unitUSGS,qUnit@qUnitExpress)
   filled.contour(x, log(y, 10), difft, levels = contourLevels, 
                  xlim = c(0,1), ylim = c(log(yTicks[1], 
                                              10), log(yTicks[nYTicks], 10)), #main = plotTitle, 
-                 xlab = "", ylab = yLab, xaxs = "i", yaxs = "i", cex.main = cex.main, 
+                 xlab = "", xaxs = "i", yaxs = "i", cex.main = cex.main, 
                  plot.axes = {
                    axis(1, tcl = 0, at = xTicks, labels = xLabels, cex.axis=0.9*cex.axis)
                    axis(2, tcl = 0, las = 1, at = log(yTicks, 10), 
@@ -244,8 +236,11 @@ plotDiffContours<-function (eList, year0, year1,
                    segments(rep(0,length(yTicks)), log(yTicks,10), rep(grconvertX(grconvertX(par("usr")[1],from="user",to="inches")+tcl,from="inches",to="user"),length(yTicks)),log(yTicks,10), lwd = tick.lwd)
                    segments(rep(grconvertX(grconvertX(par("usr")[2],from="user",to="inches")-tcl,from="inches",to="user"),length(yTicks)), log(yTicks,10), rep(1,length(yTicks)),log(yTicks,10), lwd = tick.lwd)
                    
-                 }, color.palette=color.palette,...)
-  if (printTitle) title(plotTitle,outer=TRUE,cex.main=cex.main,line=-3)
-#   par(oma = c(0, 0, 0, 0))
-#   par(mar = c(5, 4, 4, 2) + 0.1)
+                 },
+                  plot.title = {
+                     if(printTitle) title(main = plotTitle,outer=TRUE,cex.main=cex.main, line=-3)
+                     mtext(yLab,2,cex=cex.main,line=2,las=0)
+                  }, 
+                 color.palette=color.palette,...)
+
 }

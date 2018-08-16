@@ -4,10 +4,10 @@
 \alias{plotConcPred}
 \title{Plot of Observed Concentration versus Estimated Concentration}
 \usage{
-plotConcPred(eList, concMax = NA, logScale = FALSE, printTitle = TRUE,
-  tinyPlot = FALSE, cex = 0.8, cex.axis = 1.1, cex.main = 1.1,
-  customPar = FALSE, col = "black", lwd = 1, randomCensored = FALSE,
-  ...)
+plotConcPred(eList, concMax = NA, logScale = FALSE,
+  printTitle = TRUE, tinyPlot = FALSE, cex = 0.8, cex.axis = 1.1,
+  cex.main = 1.1, customPar = FALSE, col = "black", lwd = 1,
+  randomCensored = FALSE, ...)
 }
 \arguments{
 \item{eList}{named list with at least the Sample and INFO dataframes}
@@ -58,4 +58,3 @@ plotConcPred(eList)
 \keyword{graphics}
 \keyword{statistics}
 \keyword{water-quality}
-

@@ -113,11 +113,11 @@ plotConcQSmooth<-function(eList, date1,date2,date3,qLow,qHigh,qUnit = 2, legendL
   
   for(iCurve in 1:numDates) {
     yrs<-rep(decYear[index[iCurve]],48)
-    result<-runSurvReg(yrs,LQ,numDays,DecLow,DecHigh,localSample,
+    result<-runSurvReg(yrs,LQ,DecLow,DecHigh,localSample,
                        windowY = windowY, windowQ = windowQ, 
                        windowS = windowS, minNumObs=minNumObs, 
-                       minNumUncen = minNumUncen,interactive=FALSE,
-                       edgeAdjust=edgeAdjust)
+                       minNumUncen = minNumUncen,verbose=FALSE,
+                       edgeAdjust=edgeAdjust,run.parallel = FALSE)
     y[index[iCurve],]<-result[,3]
   }
   

@@ -4,11 +4,19 @@
 \alias{estSurfaces}
 \title{Estimate the three surfaces (for yHat, SE and ConcHat) as a function of DecYear and logQ and store in the three-dimensional object called surfaces}
 \usage{
-estSurfaces(eList, windowY = 7, windowQ = 2, windowS = 0.5,
-  minNumObs = 100, minNumUncen = 50, edgeAdjust = TRUE)
+estSurfaces(eList, surfaceStart = NA, surfaceEnd = NA,
+  localSample = NA, windowY = 7, windowQ = 2, windowS = 0.5,
+  minNumObs = 100, minNumUncen = 50, edgeAdjust = TRUE,
+  verbose = TRUE, interactive = NULL, run.parallel = FALSE)
 }
 \arguments{
 \item{eList}{named list with at least the Sample and Daily dataframes}
+
+\item{surfaceStart}{Date object for start of surface slice (or character starting date for data retrieval in the form YYYY-MM-DD). Default is NA .}
+
+\item{surfaceEnd}{Date object for end of surface slice (or character starting date for data retrieval in the form YYYY-MM-DD). Default is NA .}
+
+\item{localSample}{data frame to override eList$Sample. Default is NA .}
 
 \item{windowY}{numeric specifying the half-window width in the time dimension, in units of years, default is 7}
 
@@ -21,6 +29,12 @@ estSurfaces(eList, windowY = 7, windowQ = 2, windowS = 0.5,
 \item{minNumUncen}{numeric specifying the minimum number of uncensored observations to run the weighted regression, default is 50}
 
 \item{edgeAdjust}{logical specifying whether to use the modified method for calculating the windows at the edge of the record. Default is TRUE.}
+
+\item{verbose}{logical specifying whether or not to display progress message}
+
+\item{interactive}{logical deprecated. Use 'verbose' instead}
+
+\item{run.parallel}{logical to run bootstrapping in parallel or not}
 }
 \value{
 surfaces array containing the three surfaces estimated, array is 3 dimensional
@@ -40,8 +54,18 @@ The second index is time, layed out as 16 increments of the calendar year, start
 }
 \examples{
 eList <- Choptank_eList
-\dontrun{surfaces <- estSurfaces(eList)}
+\dontrun{
+surfaces <- estSurfaces(eList)
+
+surfaceStart <- "1984-10-01"
+surfaceEnd <- "1986-09-30"
+surfaces_1 <- estSurfaces(eList, surfaceStart, surfaceEnd)
+
+wall_sample <- head(eList$Sample, n=500)
+
+surface_wall <- estSurfaces(eList, localSample = wall_sample)
+
+}
 }
 \keyword{statistics}
 \keyword{water-quality}
-

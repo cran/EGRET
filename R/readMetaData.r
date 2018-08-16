@@ -14,7 +14,6 @@
 #' @keywords data import USGS web service
 #' @export
 #' @name INFOdataframe
-#' @import dataRetrieval
 #' @seealso \code{\link[dataRetrieval]{readNWISsite}}, \code{\link[dataRetrieval]{readNWISpCode}}
 #' @seealso \code{\link[dataRetrieval]{whatWQPsites}}
 #' @return INFO data frame. Any metadata can be stored in INFO. However, there are 8 columns that EGRET uses by name in some functions:

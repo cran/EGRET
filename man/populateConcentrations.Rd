@@ -13,7 +13,8 @@ populateConcentrations(rawData)
 concentrationColumns dataframe
 }
 \description{
-Creates ConcLow, ConcHigh, Uncen (0 if censored, 1 if uncensored) columns for Sample data frame for WRTDS study.
+Creates ConcLow, ConcHigh, Uncen (0 if censored, 1 if uncensored) columns 
+for Sample data frame for WRTDS analysis.
 }
 \examples{
 code <- c("","<","")
@@ -21,4 +22,3 @@ value <- c(1,2,3)
 dataInput <- data.frame(value, code, stringsAsFactors=FALSE)
 concentrationDF <- populateConcentrations(dataInput)
 }
-

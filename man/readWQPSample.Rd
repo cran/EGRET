@@ -2,10 +2,10 @@
 % Please edit documentation in R/readWQPSample.R
 \name{readWQPSample}
 \alias{readWQPSample}
-\title{Import Sample Data for WRTDS}
+\title{Import Sample Data from the Water Quality Portal for WRTDS}
 \usage{
 readWQPSample(siteNumber, characteristicName, startDate, endDate,
-  interactive = TRUE)
+  verbose = TRUE, interactive = NULL)
 }
 \arguments{
 \item{siteNumber}{character site number.  If USGS, it should be in the form :'USGS-XXXXXXXXX...'}
@@ -16,7 +16,9 @@ readWQPSample(siteNumber, characteristicName, startDate, endDate,
 
 \item{endDate}{character ending date for data retrieval in the form YYYY-MM-DD.}
 
-\item{interactive}{logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.}
+\item{verbose}{logical specifying whether or not to display progress message}
+
+\item{interactive}{logical deprecated. Use 'verbose' instead}
 }
 \value{
 A data frame 'Sample' with the following columns:
@@ -37,14 +39,14 @@ CosDY \tab numeric \tab Cosine of the DecYear
 }
 }
 \description{
-Imports data from the Water Quality Portal, so it could be STORET, NWIS, or . This function gets the data from: \url{http://www.waterqualitydata.us}
+Imports data from the Water Quality Portal, so it could be STORET, USGS, or USDA data. 
+This function gets the data from: \url{https://www.waterqualitydata.us}
 For raw data, use readWQPdata.  This function will retrieve the raw data, and compress it (summing constituents). See
 chapter 7 of the EGRET user guide for more details, then converts it to the Sample dataframe structure.
 }
 \examples{
 # These examples require an internet connection to run
 \dontrun{
-Sample_01075 <- readWQPSample('USGS-01594440','Chloride', '', '')
 Sample_All <- readWQPSample('WIDNR_WQX-10032762','Specific conductance', '', '')
 }
 }
@@ -56,4 +58,3 @@ Sample_All <- readWQPSample('WIDNR_WQX-10032762','Specific conductance', '', '')
 \keyword{WRTDS}
 \keyword{data}
 \keyword{import}
-

@@ -4,21 +4,22 @@
 \alias{compressData}
 \title{Compress sample data frame}
 \usage{
-compressData(data, interactive = TRUE)
+compressData(data, verbose = TRUE, interactive = NULL)
 }
 \arguments{
 \item{data}{dataframe contains at least dateTime, value, code columns}
 
-\item{interactive}{logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.}
+\item{verbose}{logical specifying whether or not to display progress message}
+
+\item{interactive}{logical deprecated. Use 'verbose' instead}
 }
 \value{
-dataframe returnDataFrame data frame containing dateTime, ConcHigh, ConcLow, Uncen, ConcAve
+data frame returnDataFrame data frame containing dateTime, ConcHigh, ConcLow, Uncen
 }
 \description{
 Using raw data that has at least dateTime, value, code, populates the measured data portion of the Sample dataframe used in EGRET.
 ConcLow  = Lower bound for an observed concentration
 ConcHigh = Upper bound for an observed concentration
-ConcAve  = Average of ConcLow and ConcHigh.  If ConcLow is NA, then ConcAve = ConcHigh/2
 Uncen    = 1 if uncensored, 0 if censored
 }
 \examples{
@@ -36,4 +37,3 @@ compressData(dataInput)
 }
 \keyword{WRTDS}
 \keyword{flow}
-

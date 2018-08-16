@@ -1,20 +1,20 @@
 #' Import NWIS Daily Data for EGRET analysis
 #'
-#' Imports data from NWIS web service. This function gets the data from here: \url{http://waterservices.usgs.gov/}
-#' A list of parameter codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/pmcodes/}
-#' A list of statistic codes can be found here: \url{http://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
+#' Imports daily data from NWIS web service. This function gets the data from here: \url{https://waterservices.usgs.gov/}
+#' A list of parameter codes can be found here: \url{https://nwis.waterdata.usgs.gov/nwis/pmcodes/}
+#' A list of statistic codes can be found here: \url{https://nwis.waterdata.usgs.gov/nwis/help/?read_file=stat&format=table}
 #'
 #' @param siteNumber character USGS site number.  This is usually an 8 digit number
 #' @param parameterCd character USGS parameter code.  This is usually an 5 digit number.
 #' @param startDate character starting date for data retrieval in the form YYYY-MM-DD.
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD.
-#' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
+#' @param verbose logical specifying whether or not to display progress message
+#' @param interactive logical deprecated. Use 'verbose' instead
 #' @param convert logical Option to include a conversion from cfs to cms (35.314667). The default is TRUE, 
 #' which is appropriate for using NWIS data in the EGRET package.  Set this to FALSE to not include the conversion. If the parameter code is not 00060 (NWIS discharge),
 #' there is no conversion applied.
 #' @keywords data import USGS WRTDS
 #' @export
-#' @import dataRetrieval
 #' @return A data frame 'Daily' with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
@@ -39,41 +39,49 @@
 #' DailySuspSediment <- readNWISDaily('01594440','80154', '1985-01-01', '1985-03-31',convert=FALSE)
 #' }
 readNWISDaily <- function (siteNumber,parameterCd="00060",
-                           startDate="",endDate="",interactive=TRUE,convert=TRUE){
+                           startDate="",endDate="",verbose = TRUE, interactive=NULL,convert=TRUE){
 
-#   data <- readNWISdv(siteNumber,parameterCd,startDate,endDate)
-#   #  need to setup conversion factor because the NWIS data are in cfs but we store in cms
-#   names(data) <- c('agency', 'site', 'dateTime', 'tz_cd','code', 'value')  # do a merge instead?
-#   
-#   data$dateTime <- as.Date(data$dateTime) 
-  ##################################
+
+  if(!is.null(interactive)) {
+    warning("The argument 'interactive' is deprecated. Please use 'verbose' instead")
+    verbose <- interactive
+  }
+  
   url <- dataRetrieval::constructNWISURL(siteNumber,parameterCd,startDate,endDate,"dv",statCd="00003", format = "tsv")
   
-  data <- dataRetrieval::importRDB1(url, asDateTime=FALSE)
-  if(nrow(data)>0){
-    names(data) <- c('agency', 'site', 'dateTime', 'value', 'code')
-    data$dateTime <- as.Date(data$dateTime)
-    #####################################
-    qConvert <- ifelse("00060" == parameterCd, 35.314667, 1)
-    qConvert<- ifelse(convert,qConvert,1)
-    
-    localDaily <- populateDaily(data,qConvert,interactive=interactive)
-  } else {
-    localDaily <- data.frame(Date=as.Date(character()),
-                         Q=numeric(), 
-                         Julian=numeric(),
-                         Month=numeric(),
-                         Day=numeric(),
-                         DecYear=numeric(),
-                         MonthSeq=numeric(),
-                         Qualifier=character(),
-                         i=integer(),
-                         LogQ=numeric(),
-                         Q7=numeric(),
-                         Q30=numeric(),
-                         stringsAsFactors=FALSE)
-  }
+  data_rdb <- dataRetrieval::importRDB1(url, asDateTime=FALSE)
+  
+  localDaily <- data.frame(Date=as.Date(character()),
+                           Q=numeric(), 
+                           Julian=numeric(),
+                           Month=numeric(),
+                           Day=numeric(),
+                           DecYear=numeric(),
+                           MonthSeq=numeric(),
+                           Qualifier=character(),
+                           i=integer(),
+                           LogQ=numeric(),
+                           Q7=numeric(),
+                           Q30=numeric(),
+                           stringsAsFactors=FALSE)
+  
+  if(nrow(data_rdb) > 0){
+    if(length(names(data_rdb)) >= 5){
+      names(data_rdb) <- c('agency', 'site', 'dateTime', 'value', 'code')
+      data_rdb$dateTime <- as.Date(data_rdb$dateTime)
+      data_rdb$value <- as.numeric(data_rdb$value)
+      #####################################
+      qConvert <- ifelse("00060" == parameterCd, 35.314667, 1)
+      qConvert<- ifelse(convert,qConvert,1)
+      
+      localDaily <- populateDaily(data_rdb,qConvert,verbose = verbose)      
+    } else {
+      if("comment" %in% names(attributes(data_rdb))){
+        message(attr(data_rdb, "comment"))
+      }
+    }
 
+  } 
 
   return (localDaily)
 }

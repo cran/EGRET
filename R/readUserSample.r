@@ -1,16 +1,18 @@
-#' Import user sample data for EGRET analysis
+#' Import user-supplied sample data for EGRET analysis
 #'
 #' Imports data from a user-supplied file, and converts it to a Sample data frame 
 #' (including summing multiple constituents), appropriate for EGRET analysis. 
 #' First column is date, second is remark code, and third is value. If multiple constituents 
-#' are to be combinded with interval censoring, additional columns can be inserted, each starting with
+#' are to be combined with interval censoring, additional columns can be inserted, each starting with
 #' remark code (specifically looking for <), and values.
 #'
 #' @param filePath character specifying the path to the file
 #' @param fileName character name of file to open
 #' @param hasHeader logical true if the first row of data is the column headers
-#' @param separator character character that separates data cells
-#' @param interactive logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.
+#' @param separator character character that separates data cells. , default is ","
+#'  which is separator used in a .csv file.
+#' @param verbose logical specifying whether or not to display progress message
+#' @param interactive logical deprecated. Use 'verbose' instead
 #' @keywords data import file
 #' @seealso \code{\link{compressData}}, \code{\link{populateSampleColumns}}
 #' @export
@@ -34,9 +36,15 @@
 #' filePath <- system.file("extdata", package="EGRET")
 #' fileName <- 'ChoptankRiverNitrate.csv'
 #' Sample <- readUserSample(filePath,fileName, separator=";",interactive=FALSE)
-readUserSample <- function (filePath,fileName,hasHeader=TRUE,separator=",", interactive=TRUE){
+readUserSample <- function (filePath,fileName,hasHeader=TRUE,separator=",", verbose=TRUE, interactive=NULL){
+  
+  if(!is.null(interactive)) {
+    warning("The argument 'interactive' is deprecated. Please use 'verbose' instead")
+    verbose <- interactive
+  }
+  
   data <- readDataFromFile(filePath,fileName,hasHeader=hasHeader,separator=separator)
-  compressedData <- compressData(data, interactive=interactive)
+  compressedData <- compressData(data, verbose=verbose)
   Sample <- populateSampleColumns(compressedData)
   return(Sample)
 }

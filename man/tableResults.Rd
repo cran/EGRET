@@ -4,7 +4,7 @@
 \alias{tableResults}
 \title{Table of annual results for discharge, concentration and flux}
 \usage{
-tableResults(eList, qUnit = 2, fluxUnit = 9)
+tableResults(eList, qUnit = 2, fluxUnit = 9, localDaily = NA)
 }
 \arguments{
 \item{eList}{named list with at least Daily and INFO dataframes}
@@ -12,6 +12,8 @@ tableResults(eList, qUnit = 2, fluxUnit = 9)
 \item{qUnit}{object of qUnit class. \code{\link{printqUnitCheatSheet}}, or numeric represented the short code, or character representing the descriptive name.}
 
 \item{fluxUnit}{object of fluxUnit class. \code{\link{printFluxUnitCheatSheet}}, or numeric represented the short code, or character representing the descriptive name.}
+
+\item{localDaily}{data frame to override eList$Daily}
 }
 \value{
 results dataframe, if returnDataFrame=TRUE
@@ -20,18 +22,21 @@ dataframe with year, discharge, concentration, flow-normalized concentration, fl
 }
 \description{
 Produce an ASCII table showing: year, mean discharge, mean concentration, flow-normalized concentration, 
-mean flux, and flow-normalized flux.
+mean flux, and flow-normalized flux. Note that the flux and flow-normalized flux are rates and not a mass.  As such a value for some period shorter than a full year 
+could be larger than the value for a full year.
 }
 \examples{
 eList <- Choptank_eList
 # Water Year:
+\dontrun{
 tableResults(eList, fluxUnit = 1)
+tableResults(eList, fluxUnit = 1, flowNormYears = c(1980:1995, 1997:2002, 2004:2011))
 tableResults(eList, fluxUnit = 'kgDay', qUnit = 'cms')
 returnedTable <- tableResults(eList, fluxUnit = 1)
 # Winter:
 eList <- setPA(eList, paLong=3,paStart=12)
 tableResults(eList, fluxUnit = 1)
 }
+}
 \keyword{statistics}
 \keyword{water-quality}
-

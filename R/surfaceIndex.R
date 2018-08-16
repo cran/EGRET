@@ -22,15 +22,23 @@ surfaceIndex<-function(Daily){
   
   localDaily <- Daily
   
-  bottomLogQ<-min(localDaily$LogQ) - 0.05
-  topLogQ<-max(localDaily$LogQ) + 0.05
-  stepLogQ<-(topLogQ-bottomLogQ)/13
-  vectorLogQ<-seq(bottomLogQ,topLogQ,stepLogQ)
+  bottomLogQ<- min(localDaily$LogQ, na.rm = TRUE) - 0.05
+  topLogQ <- max(localDaily$LogQ, na.rm = TRUE) + 0.05
+  stepLogQ <-(topLogQ-bottomLogQ)/13
+  vectorLogQ <- seq(bottomLogQ,topLogQ,stepLogQ)
   stepYear<-1/16
-  bottomYear<-floor(min(localDaily$DecYear))
-  topYear<-ceiling(max(localDaily$DecYear))
+  bottomYear<-floor(min(localDaily$DecYear, na.rm = TRUE))
+  topYear<-ceiling(max(localDaily$DecYear, na.rm = TRUE))
   vectorYear<-seq(bottomYear,topYear,stepYear)
   nVectorYear<-length(vectorYear)
-  surfaceIndexParameters<-c(bottomLogQ,stepLogQ,14,bottomYear,stepYear,nVectorYear)
+  
+  surfaceIndexParameters<-list(bottomLogQ=bottomLogQ,
+                            stepLogQ=stepLogQ,
+                            nVectorLogQ=14,
+                            bottomYear=bottomYear,
+                            stepYear=stepYear,
+                            nVectorYear=nVectorYear,
+                            vectorYear=vectorYear,
+                            vectorLogQ=vectorLogQ)
   return(surfaceIndexParameters)
 }

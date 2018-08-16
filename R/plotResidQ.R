@@ -71,10 +71,10 @@ plotResidQ<-function (eList, qUnit = 2,
   
   if (tinyPlot){
      xLab <- qUnit@qUnitTiny
-     yLab <- ifelse(stdResid, "Standardized Residual", "Residual")
+     yLab <- ifelse(stdResid, "Standardized residual", "Residual")
   } else {
      xLab <- qUnit@qUnitExpress
-     yLab <- ifelse(stdResid, "Standardized Residual in natural log units", "Residual in natural log units")
+     yLab <- ifelse(stdResid, "Standardized residual in natural log units", "Residual in natural log units")
   }
   
   plotTitle <- ifelse (printTitle,  paste(localINFO$shortName, "\n", localINFO$paramShortName, 
@@ -104,7 +104,7 @@ plotResidQ<-function (eList, qUnit = 2,
                          tinyPlot=tinyPlot,rmSciX=rmSciX, customPar=customPar,...
     )
     
-    censoredSegments(yInfo$bottom, yLow, yHigh, x, Uncen,col=col, lwd=lwd )
+    censoredSegments(yInfo$bottom, yLow, yHigh, x, Uncen,col=col, lwd=lwd)
   } else {
 
     if(!("rResid" %in% names(localSample))){

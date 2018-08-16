@@ -19,6 +19,8 @@
 #' eList <- Choptank_eList
 #' Daily <- getDaily(eList)
 #' AnnualResults <- setupYears(Daily, 4, 10)
+#' 
+#' 
 setupYears<-function(localDaily, paLong = 12, paStart = 10){
   # this function aggregates the results in the data frame Daily into annual values
   # but it gives the user flexibility as to the period of analysis
@@ -27,13 +29,10 @@ setupYears<-function(localDaily, paLong = 12, paStart = 10){
   #   But, the simplest case, a Water Year would have
   #   paLong=12, and paStart=10
   # it is designed to handle NA values
-  #
-  #  
+  
   numDays<-length(localDaily$MonthSeq)
   firstMonthSeq<-localDaily$MonthSeq[1]
   lastMonthSeq<-localDaily$MonthSeq[numDays]
-  
-  
   
   #   creating a data frame of starting and ending months for each year
   Starts<-seq(paStart,lastMonthSeq,12)
@@ -51,6 +50,10 @@ setupYears<-function(localDaily, paLong = 12, paStart = 10){
   Flux<-rep(NA,numYears)
   FNConc<-rep(NA,numYears)
   FNFlux<-rep(NA,numYears)
+  
+  hasFlex <- all(c("flexConc","flexFlux") %in% names(localDaily))
+  flexConc <- rep(NA, numYears)
+  flexFlux <- rep(NA, numYears)
   
   for(i in 1:numYears) {
     
@@ -71,16 +74,18 @@ setupYears<-function(localDaily, paLong = 12, paStart = 10){
     DecYear[i]<-mean(DailyYear$DecYear)
     Q[i]<-mean(DailyYear$Q)
     if(good) {
-      Conc[i]<- mean(DailyYear$ConcDay,na.rm=TRUE)# else NA it's alreay NA as setup before the loop
-      Flux[i]<-mean(DailyYear$FluxDay,na.rm=TRUE)# else NA
-      FNConc[i]<- mean(DailyYear$FNConc,na.rm=TRUE)# else NA
-      FNFlux[i]<-mean(DailyYear$FNFlux,na.rm=TRUE)# else NA
+      Conc[i] <- mean(DailyYear$ConcDay,na.rm=TRUE)# else NA it's alreay NA as setup before the loop
+      Flux[i] <-mean(DailyYear$FluxDay,na.rm=TRUE)# else NA
+      FNConc[i] <- mean(DailyYear$FNConc,na.rm=TRUE)# else NA
+      FNFlux[i] <- mean(DailyYear$FNFlux,na.rm=TRUE)# else NA
     }
   }
   #  create two more variables that just report paStart and paLong
   #    needed later to verify the period of analysis used in the Annual Results summary
   PeriodStart<-rep(paStart,numYears)
   PeriodLong<-rep(paLong,numYears)
+
   AnnualResults<-data.frame(DecYear,Q,Conc,Flux,FNConc,FNFlux,PeriodLong,PeriodStart)
+
   return(AnnualResults)		
 }

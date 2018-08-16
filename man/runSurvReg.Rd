@@ -2,22 +2,25 @@
 % Please edit documentation in R/runSurvReg.R
 \name{runSurvReg}
 \alias{runSurvReg}
+\alias{run_WRTDS}
 \title{Run the weighted survival regression for a set of estimation points (defined by DecYear and Log(Q))}
 \usage{
-runSurvReg(estPtYear, estPtLQ, numDays, DecLow, DecHigh, Sample, windowY = 7,
+runSurvReg(estPtYear, estPtLQ, DecLow, DecHigh, Sample, windowY = 7,
   windowQ = 2, windowS = 0.5, minNumObs = 100, minNumUncen = 50,
-  interactive = TRUE, edgeAdjust = TRUE)
+  verbose = TRUE, interactive = NULL, edgeAdjust = TRUE,
+  run.parallel = FALSE)
+
+run_WRTDS(estY, estLQ, localSample, DecLow, DecHigh, minNumObs,
+  minNumUncen, windowY, windowQ, windowS, edgeAdjust)
 }
 \arguments{
 \item{estPtYear}{numeric vector of Decimal Year values at the estimation points}
 
 \item{estPtLQ}{numeric vector of ln(Q) values at the estimation points, must be the same length as estPtYear}
 
-\item{numDays}{number of days in the Daily record}
+\item{DecLow}{number specifying minimum decimal year (left edge of the estimated surfaces).}
 
-\item{DecLow}{number specifying minimum decimal year}
-
-\item{DecHigh}{number specifying maximum decimal year}
+\item{DecHigh}{number specifying maximum decimal year (right edge of the estimated surfaces).}
 
 \item{Sample}{dataframe created for EGRET analysis}
 
@@ -31,30 +34,41 @@ runSurvReg(estPtYear, estPtLQ, numDays, DecLow, DecHigh, Sample, windowY = 7,
 
 \item{minNumUncen}{numeric specifying the minimum number of uncensored observations to run the weighted regression, default is 50}
 
-\item{interactive}{logical specifying whether or not to display progress message}
+\item{verbose}{logical specifying whether or not to display progress message}
+
+\item{interactive}{logical deprecated. Use 'verbose' instead}
 
 \item{edgeAdjust}{logical specifying whether to use the modified method for calculating the windows at the edge of the record.  The modified method tends to reduce curvature near the start and end of record.  Default is TRUE.}
+
+\item{run.parallel}{logical to run bootstrapping in parallel or not}
+
+\item{estY}{numeric decimal year values at the estimation point}
+
+\item{estLQ}{numeric ln(Q) values at the estimation point}
+
+\item{localSample}{"Sample" data frame from the eList.}
 }
 \value{
 resultSurvReg numeric array containing the yHat, SE, and ConcHat values array dimensions are (numEstPts,3)
 }
 \description{
 This function runs the survival regression which is the concentration estimation method of WRTDS. 
-   It uses sample data from the data frame Sample. 
-   It does the estimation for a set of data points defined by two vectors: estPtYear and estPtLQ. 
-   It returns an array of results for the estimation points.  
-   The array returned contains yHat, SE and ConcHat (in that order).
+It uses sample data from the data frame Sample. 
+It does the estimation for a set of data points defined by two vectors: estPtYear and estPtLQ. 
+It returns an array of results for the estimation points.  
+The array returned contains yHat, SE and ConcHat (in that order). yHat is the expected value of log(concentration), SE is 
+the standard error of log(concentration) and ConcHat is the expected value of concentration.
 }
 \examples{
 eList <- Choptank_eList
 estPtYear<-c(2001.0,2005.0,2009.0)
 estPtLQ<-c(1,1,1)
 Sample <- getSample(eList)
-numDays <- Sample$Julian[nrow(Sample)] - Sample$Julian[1] + 1
 DecLow <- Sample$DecYear[1]
 DecHigh <- Sample$DecYear[nrow(Sample)]
-resultSurvReg <- runSurvReg(estPtYear,estPtLQ,numDays,DecLow,DecHigh,Sample)
+resultSurvReg <- runSurvReg(estPtYear,estPtLQ,
+                            DecLow,DecHigh,Sample,
+                            run.parallel = FALSE)
 }
 \keyword{statistics}
 \keyword{water-quality}
-

@@ -4,14 +4,16 @@
 \alias{populateDaily}
 \title{Populate Daily data frame}
 \usage{
-populateDaily(rawData, qConvert, interactive = TRUE)
+populateDaily(rawData, qConvert, verbose = TRUE, interactive = NULL)
 }
 \arguments{
 \item{rawData}{dataframe contains at least dateTime, value, code columns}
 
 \item{qConvert}{character conversion to cubic meters per second}
 
-\item{interactive}{logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.}
+\item{verbose}{logical specifying whether or not to display progress message}
+
+\item{interactive}{logical deprecated. Use 'verbose' instead  If true, there is user interaction for error handling and data checks.}
 }
 \value{
 A data frame 'Daily' with the following columns:
@@ -31,7 +33,7 @@ Q30 \tab numeric \tab 30 day running average of Q \cr
 }
 }
 \description{
-Using raw data that has at least dateTime, value, code, populates the rest of the basic Daily data frame used in WRTDS
+Using raw data that has at least dateTime, value, code, populates the rest of the basic Daily data frame used in EGRET analysis.
 }
 \examples{
 dateTime <- as.character(seq(as.Date("2001/1/1"), 
@@ -41,12 +43,11 @@ code <- rep("",365)
 dataInput <- data.frame(dateTime, value, code, stringsAsFactors=FALSE)
 Daily <- populateDaily(dataInput, 2)
 }
-\author{
-Robert M. Hirsch \email{rhirsch@usgs.gov}
-}
 \seealso{
 \code{\link{readNWISDaily}}, \code{\link{readUserDaily}}
 }
+\author{
+Robert M. Hirsch \email{rhirsch@usgs.gov}
+}
 \keyword{WRTDS}
 \keyword{flow}
-

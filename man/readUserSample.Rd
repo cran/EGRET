@@ -2,10 +2,10 @@
 % Please edit documentation in R/readUserSample.r
 \name{readUserSample}
 \alias{readUserSample}
-\title{Import user sample data for EGRET analysis}
+\title{Import user-supplied sample data for EGRET analysis}
 \usage{
 readUserSample(filePath, fileName, hasHeader = TRUE, separator = ",",
-  interactive = TRUE)
+  verbose = TRUE, interactive = NULL)
 }
 \arguments{
 \item{filePath}{character specifying the path to the file}
@@ -14,9 +14,12 @@ readUserSample(filePath, fileName, hasHeader = TRUE, separator = ",",
 
 \item{hasHeader}{logical true if the first row of data is the column headers}
 
-\item{separator}{character character that separates data cells}
+\item{separator}{character character that separates data cells. , default is ","
+which is separator used in a .csv file.}
 
-\item{interactive}{logical Option for interactive mode.  If true, there is user interaction for error handling and data checks.}
+\item{verbose}{logical specifying whether or not to display progress message}
+
+\item{interactive}{logical deprecated. Use 'verbose' instead}
 }
 \value{
 A data frame 'Sample' with the following columns:
@@ -40,7 +43,7 @@ CosDY \tab numeric \tab Cosine of the DecYear
 Imports data from a user-supplied file, and converts it to a Sample data frame 
 (including summing multiple constituents), appropriate for EGRET analysis. 
 First column is date, second is remark code, and third is value. If multiple constituents 
-are to be combinded with interval censoring, additional columns can be inserted, each starting with
+are to be combined with interval censoring, additional columns can be inserted, each starting with
 remark code (specifically looking for <), and values.
 }
 \examples{
@@ -54,4 +57,3 @@ Sample <- readUserSample(filePath,fileName, separator=";",interactive=FALSE)
 \keyword{data}
 \keyword{file}
 \keyword{import}
-
