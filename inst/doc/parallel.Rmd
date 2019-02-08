@@ -34,7 +34,7 @@ There is some overhead involved in going from serial to parallel computing, so y
  
 ## Registering your cores
 
-Once you've checked that your computer has multiple cores, you need to register how many cores you want to use. There are a few ways to do this. It will depend on your operating system and general workflow what exactly is the best way to do this. There are currently 2 main packages that you can use to parallelize the `modelEstimation` function: `doParallel`  and `doMC`.
+Once you've checked that your computer has multiple cores, you need to register how many cores you want to use. There are a few ways to do this. It will depend on your operating system and general workflow what exactly is the best way to do this. There are currently 3 main packages that you can use to parallelize the `modelEstimation` function: `doParallel`, `doSNOW`, and `doMC`.
 
 The `doParallel` package recommend to most new users because it works best on all three major operating systems (Windows, Mac, Linux). However, `doMC` can be more efficient on Linux. Therefore, we recommend `doParallel`, but will show workflows for both of the packages.
 
