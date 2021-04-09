@@ -5,8 +5,8 @@
 \title{Jack-Knife cross validation of the WRTDS (Weighted Regressions on Time, Discharge, and Season)}
 \usage{
 estCrossVal(DecLow, DecHigh, Sample, windowY = 7, windowQ = 2,
-  windowS = 0.5, minNumObs = 100, minNumUncen = 50,
-  edgeAdjust = TRUE, verbose = TRUE)
+  windowS = 0.5, minNumObs = 100, minNumUncen = 50, edgeAdjust = TRUE,
+  verbose = TRUE)
 }
 \arguments{
 \item{DecLow}{number specifying minimum decimal year}
@@ -46,8 +46,8 @@ Daily <- getDaily(eList)
 numDays <- length(Daily$DecYear)
 DecLow <- Daily$DecYear[1]
 DecHigh <- Daily$DecYear[numDays]
-\dontrun{
-SampleCrossV <- estCrossVal(numDays,DecLow,DecHigh,Sample)
+\donttest{
+SampleCrossV <- estCrossVal(DecLow,DecHigh,Sample)
 }
 }
 \keyword{statistics}

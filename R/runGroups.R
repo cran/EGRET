@@ -1,19 +1,33 @@
 #' Runs a comparison of any group of years in the record.
 #' 
 #' \code{runGroups} provides comparisons of results, in terms of 
-#' flow-normalized concentration and flow-normalzed flux for any groups of years
+#' flow-normalized concentration and flow-normalized flux for any groups of years
 #' of years in the water quality record.  Comparison could involve the 
-#' use of the "wall" and/or use of "generalized flow normalization".  
-#' These two concepts are described in detail in the vignette.
+#' use of the "wall" and/or use of "generalized flow-normalization".  
+#' These two concepts are described in detail in the vignette:
+#' \code{vignette("Enhancements", package = "EGRET")}.
+#' 
+#' @details
+#' When using generalized flow-normalization, it is best to have the Daily data frame
+#' extend well beyond the years that are in the Sample data frame.  Ideally, 
+#' the Daily data frame would start windowSide years before the
+#' start of the Sample data set, if the data exist to provide for that. Generally
+#' that isn't possible for the end of the record because the Sample data
+#' may end very close to the present. To the extent that is possible therefore, it is better to
+#' include more discharge data after the end of the Sample record. 
+#' Also note that in the case run in the examples don't do that, 
+#' because the data set needs to be appropriate for stationary flow 
+#' normalization as well (and package size considerations make it difficult to
+#' include specialized examples).
 #' 
 #' @export
 #' @param eList named list with at least the Daily, Sample, and INFO dataframes
-#' @param group1firstYear integer year. Starting year of first group.
-#' @param group1lastYear integer year. Ending year of first group.
-#' @param group2firstYear integer year. Starting year of second group.
-#' @param group2lastYear integer year. Ending year of second group.
+#' @param group1firstYear decimal year. Starting year of first group.
+#' @param group1lastYear decimal year. Ending year of first group.
+#' @param group2firstYear decimal year. Starting year of second group.
+#' @param group2lastYear decimal year. Ending year of second group.
 #' @param windowSide integer. The width of the flow normalization window on each side of the year being estimated.
-#' A common value is 7, but no default is specified.  If stationary flow normalization is to be used, then windowSide = 0 (this means that 
+#' A common value is 11, but no default is specified.  If stationary flow normalization is to be used, then windowSide = 0 (this means that 
 #' flow-normalization period for all years is the same).
 #' @param flowBreak logical. Is there an abrupt break in the discharge record, default is FALSE.
 #' @param Q1EndDate The Date (as character in YYYY-MM-DD) which is the last day, just before the flowBreak.
@@ -21,7 +35,8 @@
 #' NA, which makes the QStartDate become the first Date in eList$Daily. 
 #' @param QEndDate The last Date (as character in YYYY-MM-DD) used in the flow normalization method.  Default is NA, 
 #' which makes the QEndDate become the last Date in eList$Daily.
-#' @param wall logical. Whether there is an abrupt break in the concentration versus discharge relationship.  Default is FALSE
+#' @param wall logical. Whether there is an abrupt break in the concentration versus discharge relationship due to some major change in 
+#' pollution control or water management.  Default is FALSE.
 #' @param surfaceStart The Date (or character in YYYY-MM-DD) that is the start of the WRTDS model to be estimated and the first of the 
 #' daily outputs to be generated. Default is NA, which means that the surfaceStart is based on the date of the first sample. 
 #' @param surfaceEnd The Date (or character in YYYY-MM-DD) that is the end of the WRTDS model to be estimated and the last of the daily outputs 
@@ -32,8 +47,10 @@
 #' to the first Date in eList$Sample.
 #' @param sampleEndDate The Date (as character in YYYY-MM-DD) of the last sample to be used. 
 #' Default is NA which sets it to the last Date in eList$Sample.
-#' @param paLong numeric integer specifying the length of the period of analysis, in months, 1<=paLong<=12, default is 12.
-#' @param paStart numeric integer specifying the starting month for the period of analysis, 1<=paStart<=12, default is 10  (used when period is water year). 
+#' @param paLong numeric integer specifying the length of the period of analysis, in months, 1<=paLong<=12. 
+#' Default is NA, which will use the paLong in the eList$INFO data frame. See also \code{\link{setPA}}.
+#' @param paStart numeric integer specifying the starting month for the period of analysis, 1<=paStart<=12.
+#' Default is NA, which will use the paStart in the eList$INFO data frame. See also \code{\link{setPA}}.
 #' @param windowY numeric specifying the half-window width in the time dimension, in units of years, default is 7
 #' @param windowQ numeric specifying the half-window width in the discharge dimension, units are natural log units, default is 2
 #' @param windowS numeric specifying the half-window with in the seasonal dimension, in units of years, default is 0.5
@@ -45,27 +62,22 @@
 #' @param edgeAdjust logical specifying whether to use the modified method for calculating the windows at the edge of the record.  
 #' The edgeAdjust method tends to reduce curvature near the start and end of record.  Default is TRUE.
 #' @param oldSurface logical specifying whether to use the original surface, or create a new one. Default is FALSE.
-#' @return data frame with the following columns:
-#' \tabular{lll}{
-#' Name \tab Description \cr
-#' Total Change \tab   The difference between the results for year2 - year1\cr
-#' CQTC \tab this number is the difference between between the two years, but only the part that is due to the change 
-#' in the CQR. It is x20 - x10. In the results reported above as, "Concentration v. Q Trend 
-#' Component" it is computed as 100 * (x20 - x10) / x11 \cr
-#' QTC \tab  The difference between the two years, but only the part that is due to the change in the QD. 
-#' It is the Total Change - CQTC. Or it can be stated as x22 - x11 - x20 + x10. In the results reported above as, "Q Trend Component" 
-#' it is computed as 100 * (x22 - x11 - x20 + x10) / x11. \cr
-#' x10 \tab The results using the concentration versus discharge relationship (CQR) for year 1, but using the discharge 
-#' distribution (QD) for the entire period of record (starting with QStartDate and 
-#' ending with QEndDate, or if they aren't specified, it is all the discharge data 
-#' in the Daily data frame).\cr
-#' x11 \tab The results using the CQR for year 1, but using the QD specified by the user for year 1.\tab \cr
-#' x20 \tab The results using the CQR for year 2, but using the QD for the entire period. \cr
-#' x22 \tab The results for the CQR for year 2, but using the QD specified by the user for year 2. \cr
+#' @return Dataframe with 7 columns and 2 rows.  The first row is about trends in concentration (mg/L), the second column is about trends in flux (million kg/year).
+#' The data frame has a number of attributes.
+#' \tabular{ll}{
+#' Column Name \tab Description \cr
+#' Total Change \tab   The difference between the results for group2 - group1 (x22 - x11). \cr
+#' CQTC \tab CQTC is the "Concentration v. Q Trend Component." It is the component of total change due to the change in the CQR (Concentration Discharge Relationship). (x20 - x10). \cr
+#' QTC \tab QTC is the "Q Trend Component." It is the component of total change due to the trend in the QD (Discharge Distribution). (x22 - x11 - x20 + x10). \cr
+#' x10 \tab The estimated value based on the CQR computed for the years in group1, integrated over the QD for the entire timespan of the Daily data frame (or the 
+#' period QStartDate and to QEndDate if these are specified).\cr
+#' x11 \tab The estimated value based on the CQR for the years in group1, integrated over the QD specified by the user for group1. \cr
+#' x20 \tab The estimated value based on the CQR computed for the years in group2, integrated over the QD for the entire period of record. \cr
+#' x22 \tab The estimated value based on the CQR for the years in group2, integrated over the QD specified by the user for group2. \cr
 #' }
 #' @examples 
 #' eList <- Choptank_eList
-#' \dontrun{
+#' \donttest{
 #' 
 #'#Option 1:  Use all years for group flow normalization.
 #'groupOut_1 <- runGroups(eList,  windowSide = 0,
@@ -73,9 +85,9 @@
 #'                        group2firstYear = 1995, group2lastYear = 2005)
 #'
 #'# Option 2: Use sliding window.
-#'#                In each case it is a 15 year window (15 = 1 + 2*7)
+#'#                In each case it is a 23 year window (23 = 1 + 2 * 11)
 #'
-#'groupOut_2 <- runGroups(eList,  windowSide = 7,
+#'groupOut_2 <- runGroups(eList,  windowSide = 11,
 #'                        group1firstYear = 1980, group1lastYear = 1990,
 #'                        group2firstYear = 1995, group2lastYear = 2005)
 #'
@@ -90,9 +102,9 @@
 #'                        Q1EndDate = "1990-09-30")
 #'
 #'# Option 4: Flow normalization is based on splitting the flow record at 1990-09-30
-#'#                but before the break uses a 15 year window of years before the break
-#'#                after the break uses a 15 year window of years after the break
-#'groupOut_4 <- runGroups(eList,  windowSide = 7,
+#'#                but before the break uses a 23 year window of years before the break
+#'#                after the break uses a 23 year window of years after the break
+#'groupOut_4 <- runGroups(eList,  windowSide = 11,
 #'                        group1firstYear = 1980, group1lastYear = 1990,
 #'                        group2firstYear = 1995, group2lastYear = 2005,
 #'                        flowBreak = TRUE, 
@@ -108,7 +120,7 @@ runGroups <- function (eList, windowSide,
                        wall = FALSE, oldSurface = FALSE,  fractMin = 0.75,
                        sample1EndDate = NA, sampleStartDate = NA, 
                        sampleEndDate = NA, 
-                       paStart = 10, paLong = 12, 
+                       paStart = NA, paLong = NA, 
                        minNumObs = 100, minNumUncen = 50, 
                        windowY = 7, windowQ = 2, windowS = 0.5, 
                        edgeAdjust = TRUE, verbose = TRUE) {
@@ -120,22 +132,48 @@ runGroups <- function (eList, windowSide,
   localSample <- getSample(eList)
   localDaily <- getDaily(eList)
   localsurfaces <- getSurfaces(eList)
+  
   if (is.na(sampleStartDate)){ 
     sampleStartDate <- localSample$Date[1]
   } else {
     sampleStartDate <- as.Date(sampleStartDate)
   }
+  
   numSamples <- length(localSample$Date)
-  sampleEndDate <- if (is.na(sampleEndDate)) 
-    localSample$Date[numSamples]
-  else as.Date(sampleEndDate)
-  QStartDate <- if (is.na(QStartDate)) 
-    localDaily$Date[1]
-  else as.Date(QStartDate)
+  
+  if(is.na(sampleEndDate)){
+    sampleEndDate <- localSample$Date[numSamples]
+  } else {
+    sampleEndDate <- as.Date(sampleEndDate)
+  }
+                       
+  
+  if(is.na(QStartDate)){
+    QStartDate <- localDaily$Date[1]
+  } else {
+    QStartDate <- as.Date(QStartDate)
+  }
+
   numQDays <- length(localDaily$Date)
-  QEndDate <- if (is.na(QEndDate)) 
-    localDaily$Date[numQDays]
-  else as.Date(QEndDate)
+  
+  if(is.na(QEndDate)){
+    QEndDate <- localDaily$Date[numQDays]
+  } else {
+    QEndDate <- as.Date(QEndDate)
+  }
+  
+  if(is.na(paStart)){
+    paStart <- eList$INFO$paStart
+  } else {
+    eList$INFO$paStart <- paStart
+  }
+  
+  if(is.na(paLong)){
+    paLong <- eList$INFO$paLong
+  } else {
+    eList$INFO$paLong <- paLong
+  }
+  
   localDaily <- localDaily[localDaily$Date >= QStartDate & 
                              localDaily$Date <= QEndDate, ]
   firstSample <- localSample$Date[1]

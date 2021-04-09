@@ -5,8 +5,8 @@
 \title{Produces 8-panel plot that is useful for determining if there is a flux bias problem}
 \usage{
 fluxBiasMulti(eList, qUnit = 2, fluxUnit = 3, moreTitle = "WRTDS",
-  cex = 0.7, cex.axis = 1.1, cex.main = 1.1,
-  randomCensored = FALSE, col = "black", lwd = 1, ...)
+  cex = 0.7, cex.axis = 1.1, cex.main = 1.1, randomCensored = FALSE,
+  col = "black", lwd = 1, ...)
 }
 \arguments{
 \item{eList}{named list with at least Sample, Daily, and INFO dataframes}
@@ -23,7 +23,7 @@ fluxBiasMulti(eList, qUnit = 2, fluxUnit = 3, moreTitle = "WRTDS",
 
 \item{cex.main}{magnification to be used for main titles relative to the current setting of cex}
 
-\item{randomCensored}{logical. Show censored residuals as randomized.}
+\item{randomCensored}{logical, if TRUE plot a random value for censored data.  Default is FALSE.}
 
 \item{col}{color of points on plot, see ?par 'Color Specification'}
 
@@ -47,18 +47,12 @@ a Daily dataframe with the daily flow data, and an INFO dataframe with metadata.
 }
 \examples{
 eList <- Choptank_eList
-fluxBiasMulti(eList)
 # Water year:
-\dontrun{
-pdf("fluxBiasMulti.pdf", height=9, width=8)
 fluxBiasMulti(eList)
-dev.off()
+fluxBiasMulti(eList, fluxUnit = 2)
 # Graphs consisting of Jun-Aug
 eList <- setPA(eList,paStart=6,paLong=3)
-pdf("fluxBiasMultiSummer.pdf", height=9, width=8)
 fluxBiasMulti(eList)
-dev.off()
-}
 }
 \keyword{graphics}
 \keyword{statistics}

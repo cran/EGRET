@@ -5,9 +5,9 @@
 \title{stitch surfaces}
 \usage{
 stitch(eList, sample1StartDate, sample1EndDate, sample2StartDate,
-  sample2EndDate, surfaceStart = NA, surfaceEnd = NA,
-  minNumObs = 100, minNumUncen = 50, fractMin = 0.75, windowY = 7,
-  windowQ = 2, windowS = 0.5, edgeAdjust = TRUE, verbose = FALSE,
+  sample2EndDate, surfaceStart = NA, surfaceEnd = NA, minNumObs = 100,
+  minNumUncen = 50, fractMin = 0.75, windowY = 7, windowQ = 2,
+  windowS = 0.5, edgeAdjust = TRUE, verbose = FALSE,
   run.parallel = FALSE)
 }
 \arguments{
@@ -68,7 +68,7 @@ sample1EndDate <- "1992-09-30"
 sample2StartDate <- "1996-10-01"
 sample2EndDate <- "2011-09-30"
 
-\dontrun{
+\donttest{
 surface_skip <- stitch(eList, 
                          sample1StartDate, sample1EndDate, 
                          sample2StartDate, sample2EndDate,

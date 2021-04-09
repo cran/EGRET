@@ -1,15 +1,15 @@
-## ----message=FALSE-------------------------------------------------------
+## ----message=FALSE------------------------------------------------------------
 library(parallel)
 detectCores()
 
-## ----eval=FALSE----------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  library(EGRET)
 #  library(parallel)
 #  
 #  eList <- Choptank_eList
 #  nCores <- detectCores(logical = FALSE) - 1
 
-## ----eval=FALSE----------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  library(doParallel)
 #  library(parallel)
 #  
@@ -19,7 +19,7 @@ detectCores()
 #  stopCluster(cl)
 #  
 
-## ----eval=FALSE----------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  library(doMC)
 #  library(parallel)
 #  
@@ -29,7 +29,7 @@ detectCores()
 #  stopCluster(cl)
 #  
 
-## ----eval=FALSE----------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  library(doParallel)
 #  library(parallel)
 #  library(EGRET)
@@ -45,7 +45,7 @@ detectCores()
 #    stopCluster(cl)
 #  })
 
-## ----eval=FALSE----------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  system.time({
 #    eList <- modelEstimation(eList, verbose = FALSE, run.parallel = FALSE)
 #  })

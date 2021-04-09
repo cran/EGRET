@@ -12,11 +12,11 @@
 #' @export
 #' @seealso \code{\link[dataRetrieval]{readWQPqw}}
 #' @examples
-#' \dontrun{
-#' library(dataRetrieval)
+#' \donttest{
+#' #library(dataRetrieval)
 #'  
-#' rawWQP <- readWQPqw('21FLEECO_WQX-IMPRGR80','Phosphorus', '', '')
-#' Sample2 <- processQWData(rawWQP, pCode=FALSE)
+#' #rawWQP <- readWQPqw('21FLEECO_WQX-IMPRGR80','Phosphorus', '', '')
+#' #Sample2 <- processQWData(rawWQP, pCode=FALSE)
 #' }
 processQWData <- function(data,pCode=TRUE){
 
@@ -30,11 +30,15 @@ processQWData <- function(data,pCode=TRUE){
   qualifier[grep("DETECTED NOT QUANTIFIED",detectText)] <- "<"
   qualifier[grep("BELOW QUANTIFICATION LIMIT",detectText)] <- "<"
   
-  qualifier[!is.na(data$DetectionQuantitationLimitMeasure.MeasureValue) && 
+  qualifier[!is.na(data$DetectionQuantitationLimitMeasure.MeasureValue) & 
               data$ResultMeasureValue < data$DetectionQuantitationLimitMeasure.MeasureValue] <- "<"
     
   correctedData<-ifelse((nchar(qualifier)==0),data$ResultMeasureValue,data$DetectionQuantitationLimitMeasure.MeasureValue)
-  test <- data.frame(data$USGSPCode)
+  if(pCode){
+    test <- data.frame(data$USGSPCode)
+  } else {
+    test <- data.frame(data$CharacteristicName)
+  }
   
   test$dateTime <- data$ActivityStartDate
   

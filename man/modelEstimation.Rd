@@ -5,8 +5,8 @@
 \title{Estimation process for the WRTDS (Weighted Regressions on Time, Discharge, and Season)}
 \usage{
 modelEstimation(eList, windowY = 7, windowQ = 2, windowS = 0.5,
-  minNumObs = 100, minNumUncen = 50, edgeAdjust = TRUE,
-  verbose = TRUE, run.parallel = FALSE)
+  minNumObs = 100, minNumUncen = 50, edgeAdjust = TRUE, verbose = TRUE,
+  run.parallel = FALSE)
 }
 \arguments{
 \item{eList}{named list with at least the INFO, Daily, and Sample dataframes}
@@ -17,7 +17,7 @@ modelEstimation(eList, windowY = 7, windowQ = 2, windowS = 0.5,
 
 \item{windowS}{numeric specifying the half-window with in the seasonal dimension, in units of years, default is 0.5}
 
-\item{minNumObs}{numeric specifying the miniumum number of observations required to run the weighted regression, default is 100}
+\item{minNumObs}{numeric specifying the minimum number of observations required to run the weighted regression, default is 100}
 
 \item{minNumUncen}{numeric specifying the minimum number of uncensored observations to run the weighted regression, default is 50}
 
@@ -30,30 +30,20 @@ The edgeAdjust method tends to reduce curvature near the start and end of record
 }
 \value{
 eList named list with INFO, Daily, and Sample dataframes, along with the surfaces matrix.
-Any of these values can be NA, not all EGRET functions will work with missing parts of the named list eList.
 }
 \description{
 This one function does three things. 
-1) a jack-knife cross-validation of a WRTDS model in which it augments the Sample data frame in the eList
-2) fits the WRTDS model creating the, fits the surfaces matrix and places it in the eList
-(the surfaces matrix expresses the estimated concentration as a function of discharge and time), 
+1) a jack-knife cross-validation of a WRTDS model in which it augments the Sample data frame in the eList,
+2) fits the WRTDS model creating the surfaces matrix and places it in the eList
+(the surfaces matrix expresses the estimated concentration as a function of discharge and time), and 
 3) estimates the daily values of concentration and flux, and flow normalized concentration and 
-flux and places these in the Daily data frame in the eList values. 
+flux and places these in the Daily data frame in the eList. 
 It returns a named list with the following dataframes: Daily, INFO, Sample, and the matrix: surfaces.
 }
 \examples{
 eList <- Choptank_eList
-\dontrun{
- 
-#Run an estimation adjusting windowQ from default:
-eList <- modelEstimation(eList, windowQ=5)
-
-library(doParallel)
-nCores <- parallel::detectCores() - 1
-cl <- makePSOCKcluster(nCores)
-registerDoParallel(cl)
-eList <- modelEstimation(eList, windowQ=5, run.parallel = TRUE)
-stopCluster(cl)
+\donttest{
+eList <- modelEstimation(eList)
 }
 }
 \keyword{statistics}

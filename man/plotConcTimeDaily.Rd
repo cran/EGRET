@@ -4,11 +4,10 @@
 \alias{plotConcTimeDaily}
 \title{Plot of the time series of daily concentration estimates and the sample values for the days that were sampled}
 \usage{
-plotConcTimeDaily(eList, yearStart = NA, yearEnd = NA,
-  tinyPlot = FALSE, concMax = NA, printTitle = TRUE, cex = 0.8,
-  cex.axis = 1.1, randomCensored = FALSE, cex.main = 1.1,
-  customPar = FALSE, col = "black", lwd = 1, prettyDate = TRUE,
-  usgsStyle = FALSE, ...)
+plotConcTimeDaily(eList, yearStart = NA, yearEnd = NA, tinyPlot = FALSE,
+  concMax = NA, printTitle = TRUE, cex = 0.8, cex.axis = 1.1,
+  randomCensored = FALSE, cex.main = 1.1, customPar = FALSE,
+  col = "black", lwd = 1, prettyDate = TRUE, usgsStyle = FALSE, ...)
 }
 \arguments{
 \item{eList}{named list with at least the Daily, Sample, and INFO dataframes}
@@ -27,7 +26,7 @@ plotConcTimeDaily(eList, yearStart = NA, yearEnd = NA,
 
 \item{cex.axis}{magnification to be used for axis annotation relative to the current setting of cex}
 
-\item{randomCensored}{logical. Show censored values as randomized.}
+\item{randomCensored}{if TRUE plot a random value for censored data.  Default is FALSE.}
 
 \item{cex.main}{magnification to be used for main titles relative to the current setting of cex}
 
@@ -41,7 +40,7 @@ plotConcTimeDaily(eList, yearStart = NA, yearEnd = NA,
 \item{prettyDate}{logical use 'pretty' limits for date axis if TRUE, or force the yearStart/yearEnd as limits if FALSE}
 
 \item{usgsStyle}{logical option to use USGS style guidelines. Setting this option
-to TRUE does NOT guarantee USGS complience. It will only change automatically
+to TRUE does NOT guarantee USGS compliance. It will only change automatically
 generated labels}
 
 \item{\dots}{arbitrary functions sent to the generic plotting function.  See ?par for details on possible parameters}
@@ -63,9 +62,6 @@ eList <- Choptank_eList
 # Water year:
 plotConcTimeDaily(eList)
 plotConcTimeDaily(eList, yearStart=1998,yearEnd=2001)
-# Graphs consisting of Jun-Aug
-eList <- setPA(eList, paStart=6,paLong=3)
-plotConcTimeDaily(eList)
 }
 \seealso{
 \code{\link{selectDays}}, \code{\link{genericEGRETDotPlot}}

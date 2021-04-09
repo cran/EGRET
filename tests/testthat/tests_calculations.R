@@ -5,6 +5,9 @@ test_that("calculateMonthly returns expected type/format", {
   expect_is(results, "data.frame")
   expect_gt(nrow(results), 1)
   expect_is(results$Q, "numeric")
+  expect_true(all(names(results) %in% c("Month", "Year", "DecYear", "Q",          
+                                 "Conc", "Flux", "FNConc",     
+                                 "FNFlux")))
 })
 
 test_that("flowDuration returns expected type, and arguments change output", {

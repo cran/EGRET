@@ -23,7 +23,7 @@
 #' @param concMin numeric value for lower limit on concentration shown on the vertical log graph, default is NA 
 #' (which causes the lower limit to be set automatically, based on the data). This value is ignored for linear scales, using 0 as the minimum value for the concentration axis.
 #' @param printTitle logical variable if TRUE title is printed, if FALSE title is not printed (this is best for a multi-plot figure).
-#' @param logScale logical, default FALSE, FALSE creates a linear scale y-axis, TRUE creates a y-axis is in log scale.
+#' @param logScale logical. If TRUE concentration is plotted on a log axis, default FALSE.
 #' @param cex numerical value giving the amount by which plotting symbols should be magnified.
 #' @param cex.main magnification to be used for main titles relative to the current setting of cex.
 #' @param cex.axis magnification to be used for axis annotation relative to the current setting of cex.
@@ -33,9 +33,19 @@
 #' @param lwd number line width.
 #' @param randomCensored logical. Show censored values as randomized.
 #' @param usgsStyle logical option to use USGS style guidelines. Setting this option
-#' to TRUE does NOT guarantee USGS complience. It will only change automatically
+#' to TRUE does NOT guarantee USGS compliance. It will only change automatically
 #' generated labels
 #' @param \dots arbitrary functions sent to the generic plotting function.  See ?par for details on possible parameters.
+#' @details
+#' The function has two possible ways to plot censored values (e.g. "less-than values").
+#'  
+#' The default is to plot them as a vertical line that goes from the reporting limit down to the bottom of the graph.
+#'
+#' The alternative is to set randomCensored = TRUE.  In this case a random value is used for plotting the individual sample value.  This random value lies between the reporting limit and zero and it is distributed as a truncated log normal based on the fitted WRTDS model.
+#'
+#' The function makeAugmentedSample must be run first if randomCensored = TRUE.  Running makeAugmentedSample requires that modelEstimation has already been run.
+#'
+#' These random censored values are used to create more readable plots and are not used in any computations about the data set.  The random censored values are shown as open circles and the non-censored data are shown as filled dots.
 #' @keywords graphics water-quality statistics
 #' @export
 #' @seealso \code{\link{selectDays}}, \code{\link{genericEGRETDotPlot}}
@@ -49,10 +59,10 @@
 #' plotConcTime(eList, logScale=TRUE)
 #' plotConcTime(eList, qUnit = 1, qLower = 100, qUpper = 10000, randomCensored = TRUE)
 plotConcTime<-function(eList, qUnit = 2, yearStart = NA, yearEnd = NA,
-                       qLower = NA, qUpper = NA, randomCensored=FALSE,
-                       tinyPlot = FALSE, concMax = NA, concMin = NA, printTitle = TRUE,logScale=FALSE, 
-                       cex=0.8, cex.axis=1.1,cex.main=1.1, customPar=FALSE,
-                       col="black",lwd=1, usgsStyle = FALSE,...){
+                       qLower = NA, qUpper = NA, randomCensored = FALSE,
+                       tinyPlot = FALSE, concMax = NA, concMin = NA, printTitle = TRUE,logScale = FALSE, 
+                       cex = 0.8, cex.axis = 1.1,cex.main = 1.1, customPar = FALSE,
+                       col = "black", lwd=1, usgsStyle = FALSE, ...){
 
   localINFO <- getInfo(eList)
   localSample <- getSample(eList)

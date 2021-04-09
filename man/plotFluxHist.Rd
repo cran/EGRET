@@ -6,9 +6,10 @@
 \usage{
 plotFluxHist(eList, yearStart = NA, yearEnd = NA, fluxUnit = 9,
   fluxMax = NA, printTitle = TRUE, usgsStyle = FALSE,
-  plotFlowNorm = TRUE, plotAnnual = TRUE, tinyPlot = FALSE,
-  col = "black", col.pred = "green", cex = 0.8, cex.axis = 1.1,
-  cex.main = 1.1, lwd = 2, customPar = FALSE, ...)
+  plotFlowNorm = TRUE, plotAnnual = TRUE, plotGenFlux = FALSE,
+  tinyPlot = FALSE, col = "black", col.pred = "green", col.gen = "red",
+  cex = 0.8, cex.axis = 1.1, cex.main = 1.1, lwd = 2,
+  customPar = FALSE, ...)
 }
 \arguments{
 \item{eList}{named list with at least the Daily and INFO dataframes}
@@ -24,18 +25,22 @@ plotFluxHist(eList, yearStart = NA, yearEnd = NA, fluxUnit = 9,
 \item{printTitle}{logical variable if TRUE title is printed, if FALSE title is not printed (this is best for a multi-plot figure)}
 
 \item{usgsStyle}{logical option to use USGS style guidelines. Setting this option
-to TRUE does NOT guarantee USGS complience. It will only change automatically
+to TRUE does NOT guarantee USGS compliance. It will only change automatically
 generated labels.}
 
 \item{plotFlowNorm}{logical variable if TRUE the flow normalized line is plotted, if FALSE not plotted}
 
 \item{plotAnnual}{logical variable if TRUE annual flux points are plotted, if FALSE not plotted}
 
+\item{plotGenFlux}{logical variable. If \code{TRUE}, annual flux points from WRTDS_K output are plotted, if \code{FALSE} not plotted}
+
 \item{tinyPlot}{logical variable, if TRUE plot is designed to be plotted small, as a part of a multipart figure, default is FALSE}
 
 \item{col}{color of points on plot, see ?par 'Color Specification'}
 
 \item{col.pred}{color of flow normalized line on plot, see ?par 'Color Specification'}
+
+\item{col.gen}{color of points for WRTDS_K output on plot, see ?par 'Color Specification'}
 
 \item{cex}{numerical value giving the amount by which plotting symbols should be magnified}
 
@@ -54,10 +59,12 @@ generated labels.}
 The annual results reported are for a specified "period of analysis" which can be 
 an entire water year, a calendar, a season or even an individual month. 
 The user specifies this period of analysis in the call to setupYears.
+Values plotted express a flux rate, such as thousand kg per year
+For a period of analysis that is less than a year, this does not equal the mass transported over the period of analysis
 
 Although there are a lot of optional arguments to this function, most are set to a logical default.
 
-Data come from named list, which contains a Daily dataframe with the daily flow data,
+Data come from named list (eList), which contains a Daily dataframe with the daily flow data,
 and an INFO dataframe with metadata.
 }
 \examples{
@@ -65,14 +72,10 @@ yearStart <- 2001
 yearEnd <- 2010
 eList <- Choptank_eList
 # Water year:
-\dontrun{
+\donttest{
 plotFluxHist(eList)
 plotFluxHist(eList, yearStart, yearEnd, fluxUnit = 1)
 plotFluxHist(eList, yearStart, yearEnd, fluxUnit = 'kgDay')
-# Graphs consisting of Jun-Aug
-eList <- setPA(eList, paStart=6,paLong=3)
-plotFluxHist(eList) 
-
 }
 }
 \seealso{

@@ -46,7 +46,7 @@ Imports data from a user-supplied file, and converts it to a Daily data frame, a
 \examples{
 filePath <- system.file("extdata", package="EGRET")
 fileName <- "ChoptankRiverFlow.txt"
-Daily <- readUserDaily(filePath,fileName,separator="\\t")
+Daily <- readUserDaily(filePath,fileName,separator="\t")
 }
 \keyword{USGS}
 \keyword{WRTDS}

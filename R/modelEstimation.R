@@ -1,18 +1,18 @@
 #' Estimation process for the WRTDS (Weighted Regressions on Time, Discharge, and Season)
 #'
 #' This one function does three things. 
-#' 1) a jack-knife cross-validation of a WRTDS model in which it augments the Sample data frame in the eList
-#' 2) fits the WRTDS model creating the, fits the surfaces matrix and places it in the eList
-#' (the surfaces matrix expresses the estimated concentration as a function of discharge and time), 
+#' 1) a jack-knife cross-validation of a WRTDS model in which it augments the Sample data frame in the eList,
+#' 2) fits the WRTDS model creating the surfaces matrix and places it in the eList
+#' (the surfaces matrix expresses the estimated concentration as a function of discharge and time), and 
 #' 3) estimates the daily values of concentration and flux, and flow normalized concentration and 
-#' flux and places these in the Daily data frame in the eList values. 
+#' flux and places these in the Daily data frame in the eList. 
 #' It returns a named list with the following dataframes: Daily, INFO, Sample, and the matrix: surfaces.
 #' 
 #' @param eList named list with at least the INFO, Daily, and Sample dataframes
 #' @param windowY numeric specifying the half-window width in the time dimension, in units of years, default is 7
 #' @param windowQ numeric specifying the half-window width in the discharge dimension, units are natural log units, default is 2
 #' @param windowS numeric specifying the half-window with in the seasonal dimension, in units of years, default is 0.5
-#' @param minNumObs numeric specifying the miniumum number of observations required to run the weighted regression, default is 100
+#' @param minNumObs numeric specifying the minimum number of observations required to run the weighted regression, default is 100
 #' @param minNumUncen numeric specifying the minimum number of uncensored observations to run the weighted regression, default is 50
 #' @param edgeAdjust logical specifying whether to use the modified method for calculating the windows at the edge of the record.  
 #' The edgeAdjust method tends to reduce curvature near the start and end of record.  Default is TRUE.
@@ -21,36 +21,29 @@
 #' @keywords water-quality statistics
 #' @export
 #' @return eList named list with INFO, Daily, and Sample dataframes, along with the surfaces matrix.
-#' Any of these values can be NA, not all EGRET functions will work with missing parts of the named list eList.
 #' @examples
 #' eList <- Choptank_eList
-#' \dontrun{
-#'  
-#' #Run an estimation adjusting windowQ from default:
-#' eList <- modelEstimation(eList, windowQ=5)
-#' 
-#' library(doParallel)
-#' nCores <- parallel::detectCores() - 1
-#' cl <- makePSOCKcluster(nCores)
-#' registerDoParallel(cl)
-#' eList <- modelEstimation(eList, windowQ=5, run.parallel = TRUE)
-#' stopCluster(cl)
+#' \donttest{
+#' eList <- modelEstimation(eList)
 #' }
 modelEstimation<-function(eList, 
-                          windowY=7, windowQ=2, windowS=0.5,
-                          minNumObs=100,minNumUncen=50, 
-                          edgeAdjust=TRUE, verbose = TRUE,
+                          windowY = 7, windowQ = 2, windowS = 0.5,
+                          minNumObs = 100, minNumUncen = 50, 
+                          edgeAdjust = TRUE, verbose = TRUE,
                           run.parallel = FALSE){
 
   if(!is.egret(eList)){
     stop("Please check eList argument")
   }
-  eList <- setUpEstimation(eList=eList, windowY=windowY, windowQ=windowQ, windowS=windowS,
-                  minNumObs=minNumObs, minNumUncen=minNumUncen,edgeAdjust=edgeAdjust, verbose=verbose)
+  
+  eList <- setUpEstimation(eList = eList, 
+                           windowY = windowY, windowQ = windowQ, windowS = windowS,
+                           minNumObs = minNumObs, minNumUncen = minNumUncen,
+                           edgeAdjust = edgeAdjust, verbose = verbose)
 
   if(verbose) cat("\n first step running estCrossVal may take about 1 minute")
   
-  Sample1<-estCrossVal(eList$Daily$DecYear[1],
+  Sample1 <- estCrossVal(eList$Daily$DecYear[1],
                        eList$Daily$DecYear[length(eList$Daily$DecYear)], 
                        eList$Sample, 
                        windowY=windowY, windowQ=windowQ, windowS=windowS,
@@ -62,13 +55,13 @@ modelEstimation<-function(eList,
   if(verbose) cat("\nNext step running  estSurfaces with survival regression:\n")
   
   surfaces1 <- estSurfaces(eList, 
-                         windowY=windowY, windowQ=windowQ, windowS=windowS,
-                         minNumObs=minNumObs, minNumUncen=minNumUncen,edgeAdjust=edgeAdjust,
-                         verbose=verbose, run.parallel = run.parallel)
+                         windowY = windowY, windowQ=windowQ, windowS=windowS,
+                         minNumObs = minNumObs, minNumUncen = minNumUncen, edgeAdjust = edgeAdjust,
+                         verbose = verbose, run.parallel = run.parallel)
 
   eList$surfaces <- surfaces1
   
-  Daily1<-estDailyFromSurfaces(eList)
+  Daily1 <- estDailyFromSurfaces(eList)
   
   eList$Daily <- Daily1
   

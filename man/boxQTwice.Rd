@@ -6,8 +6,7 @@
 \usage{
 boxQTwice(eList, printTitle = TRUE, qUnit = 2, cex = 0.8,
   cex.main = 1.1, logScale = TRUE, cex.axis = 1.1, tcl = 0.5,
-  las = 1, tinyPlot = FALSE, usgsStyle = FALSE, customPar = FALSE,
-  ...)
+  las = 1, tinyPlot = FALSE, usgsStyle = FALSE, customPar = FALSE, ...)
 }
 \arguments{
 \item{eList}{named list with at least the Daily, Sample, and INFO dataframes}
@@ -31,7 +30,7 @@ boxQTwice(eList, printTitle = TRUE, qUnit = 2, cex = 0.8,
 \item{tinyPlot}{logical variable, if TRUE plot is designed to be plotted small as part of a multi-plot figure, default is FALSE.}
 
 \item{usgsStyle}{logical option to use USGS style guidelines. Setting this option
-to TRUE does NOT guarantee USGS complience. It will only change automatically
+to TRUE does NOT guarantee USGS compliance. It will only change automatically
 generated labels.}
 
 \item{customPar}{logical defaults to FALSE. If TRUE, par() should be set by user before calling this function}
@@ -46,6 +45,8 @@ using the log values but the scale is presented in the original units. An
 ideal situation would show the two boxes roughly similar to each other or 
 the sample boxplot having median, upper quartile, and higher values being 
 slightly greater than in the boxplot of all days.
+
+Box widths are proportional to the square root of the number of observations (left box based on number of sampled days, right box based on total number of days in the record).
 
 Data come from named list, which contains a Sample dataframe with the sample data, 
 a Daily dataframe with the daily flow data,

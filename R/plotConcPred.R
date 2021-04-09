@@ -10,7 +10,7 @@
 #' @param concMax number specifying the maximum value to be used on the vertical axis, default is NA (which allows it to be set automatically by the data)
 #' @param printTitle logical variable if TRUE title is printed, if FALSE not printed (this is best for a multi-plot figure)
 #' @param tinyPlot logical variable, if TRUE plot is designed to be plotted small, as a part of a multipart figure, default is FALSE
-#' @param logScale logical, default TRUE, TRUE indicates y axis is in log scale, "xy" indicates both x and y in log scale, "x" is only x
+#' @param logScale logical, default TRUE, TRUE indicates x and y axes are on a log scale. FALSE indicates both x and y are on an arithmetic scale.
 #' @param cex numerical value giving the amount by which plotting symbols should be magnified
 #' @param cex.main magnification to be used for main titles relative to the current setting of cex
 #' @param cex.axis magnification to be used for axis annotation relative to the current setting of cex
@@ -20,7 +20,7 @@
 #' @param lwd number line width
 #' @param randomCensored logical. Show censored values as randomized.
 #' @param usgsStyle logical option to use USGS style guidelines. Setting this option
-#' to TRUE does NOT guarantee USGS complience. It will only change automatically
+#' to TRUE does NOT guarantee USGS compliance. It will only change automatically
 #' generated labels
 #' @param \dots arbitrary graphical parameters that will be passed to genericEGRETDotPlot function (see ?par for options)
 #' @keywords graphics water-quality statistics
@@ -30,10 +30,10 @@
 #' eList <- Choptank_eList
 #' # Water year:
 #' plotConcPred(eList)
-#' plotConcPred(eList, logScale=TRUE)
+#' 
 #' # Graphs consisting of Jun-Aug
 #' eList <- setPA(eList, paStart=6,paLong=3)
-#' plotConcPred(eList, usgsStyle=TRUE)
+#' plotConcPred(eList)
 plotConcPred<-function(eList, concMax = NA, logScale=FALSE,
                        printTitle = TRUE,tinyPlot=FALSE,cex=0.8, cex.axis=1.1,
                        cex.main=1.1, customPar=FALSE,col="black",lwd=1, 

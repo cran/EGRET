@@ -2,7 +2,9 @@
 #'
 #' Produce an ASCII table showing: year, mean discharge, mean concentration, flow-normalized concentration, 
 #' mean flux, and flow-normalized flux. Note that the flux and flow-normalized flux are rates and not a mass.  As such a value for some period shorter than a full year 
-#' could be larger than the value for a full year. 
+#' could be larger than the value for a full year.
+#'
+#' Can also procude a table for any Period of Analysis (individual months or sequence of months) using \code{\link{setPA}}. 
 #'
 #' @param eList named list with at least Daily and INFO dataframes
 #' @param qUnit object of qUnit class. \code{\link{printqUnitCheatSheet}}, or numeric represented the short code, or character representing the descriptive name. 
@@ -11,18 +13,20 @@
 #' @return results dataframe, if returnDataFrame=TRUE
 #' @keywords water-quality statistics
 #' @export
-#' @return dataframe with year, discharge, concentration, flow-normalized concentration, flux, and flow-normalized concentration columns. 
+#' @return dataframe with year, discharge, concentration,
+#' flow-normalized concentration, flux, and flow-normalized concentration columns. 
+#' If the eList was run through WRTDSKalman, an additional column generalized flux
+#' is included.
 #' @examples
 #' eList <- Choptank_eList
 #' # Water Year:
-#' \dontrun{
-#' tableResults(eList, fluxUnit = 1)
-#' tableResults(eList, fluxUnit = 1, flowNormYears = c(1980:1995, 1997:2002, 2004:2011))
-#' tableResults(eList, fluxUnit = 'kgDay', qUnit = 'cms')
-#' returnedTable <- tableResults(eList, fluxUnit = 1)
-#' # Winter:
-#' eList <- setPA(eList, paLong=3,paStart=12)
-#' tableResults(eList, fluxUnit = 1)
+#' \donttest{
+#' tableResults(eList, fluxUnit = 8)
+#' df <- tableResults(eList, fluxUnit = 1)
+#' df
+#' # Spring:
+#' eList <- setPA(eList, paStart = 3, paLong = 3)
+#' tableResults(eList, fluxUnit = 1, qUnit = "cfs")
 #' }
 tableResults<-function(eList, qUnit = 2, fluxUnit = 9, localDaily = NA) {
   
@@ -80,16 +84,29 @@ tableResults<-function(eList, qUnit = 2, fluxUnit = 9, localDaily = NA) {
   c2<-format(localAnnualResults$Q*qFactor,digits=3,width=9)
   c3<-format(localAnnualResults$Conc,digits=3,width=9)
   c4<-format(localAnnualResults$FNConc,digits=3,width=9)
-  
-  cat("\n   Year   Discharge    Conc    FN_Conc     Flux    FN_Flux")
-  cat("\n         ", qName, "         mg/L         ", fName, "\n\n")
   c5<-format(localAnnualResults$Flux*fluxFactor,digits=3,width=9)
   c6<-format(localAnnualResults$FNFlux*fluxFactor,digits=3,width=9)
-  results<-data.frame(c1,c2,c3,c4,c5,c6)
-  colnames(results) <- c("Year", paste0("Discharge [", qNameNoSpace, "]"),
-                         "Conc [mg/L]", "FN Conc [mg/L]", 
-                         paste0("Flux [", fNameNoSpace, "]"), 
-                         paste0("FN Flux [", fNameNoSpace, "]") )
+  
+  if(all(c("GenFlux") %in% names(localAnnualResults))){
+    c7 <- format(localAnnualResults$GenFlux*fluxFactor,digits=3,width=9)
+    cat("\n   Year   Discharge    Conc    FN_Conc     Flux    FN_Flu   GenFlux")
+    cat("\n         ", qName, "         mg/L              ", fName, "\n\n")
+    results<-data.frame(c1,c2,c3,c4,c5,c6,c7)
+    colnames(results) <- c("Year", paste0("Discharge [", qNameNoSpace, "]"),
+                           "Conc [mg/L]", "FN Conc [mg/L]", 
+                           paste0("Flux [", fNameNoSpace, "]"), 
+                           paste0("FN Flux [", fNameNoSpace, "]"),
+                           paste0("GenFlux [", fNameNoSpace,"]")) 
+  } else {
+    cat("\n   Year   Discharge    Conc    FN_Conc     Flux    FN_Flux")
+    cat("\n         ", qName, "         mg/L         ", fName, "\n\n")
+
+    results<-data.frame(c1,c2,c3,c4,c5,c6)
+    colnames(results) <- c("Year", paste0("Discharge [", qNameNoSpace, "]"),
+                           "Conc [mg/L]", "FN Conc [mg/L]", 
+                           paste0("Flux [", fNameNoSpace, "]"), 
+                           paste0("FN Flux [", fNameNoSpace, "]") )    
+  }
   
   write.table(results,file="",quote=FALSE,col.names=FALSE,row.names=FALSE)
   

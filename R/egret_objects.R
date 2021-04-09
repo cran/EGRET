@@ -24,6 +24,8 @@
 #' plotFluxQ(eList_full)
 as.egret <- function(INFO, Daily, Sample=NA, surfaces=NA) {
   
+  int_cols <- c("Julian", "Month", "Day", "MonthSeq", "waterYear")
+  
   if(exists("Daily") && !all(is.na(Daily))){
     
     if(!("Q" %in% names(Daily))){
@@ -35,13 +37,18 @@ as.egret <- function(INFO, Daily, Sample=NA, surfaces=NA) {
       message("\nDaily data frame expecting columns: ",expectedCols[!expectedCols %in% names(Daily)])
     }
     if(any(duplicated(Daily$Date))){
-      message("\nThere are ",sum(duplicated(eList$Daily$Date))," duplicated Daily dates.")
+      message("\nThere are ",sum(duplicated(Daily$Date))," duplicated Daily dates.")
     }
     
     if(is.unsorted(Daily$Date)){
       Daily <- Daily[order(Daily$Date, decreasing = FALSE),]
       message("\nThe Daily data frame was sorted chronologically.")
     }
+    
+    int_indexs <- which(names(Daily) %in% int_cols)
+    
+    Daily[,int_indexs] <- sapply(Daily[,int_indexs], as.integer)
+    
   }
   
   if(exists("Sample") && !all(is.na(Sample))){
@@ -57,6 +64,11 @@ as.egret <- function(INFO, Daily, Sample=NA, surfaces=NA) {
       message("\nPlease double check that the Sample dataframe is correctly defined.")
       message("\nMissing columns:", c("ConcLow","ConcHigh","Uncen","ConcAve")[!(c("ConcLow","ConcHigh","Uncen","ConcAve") %in% names(Sample))])
     }
+    
+    int_indexs <- which(names(Sample) %in% c("Julian", "Month", "Day", "MonthSeq", "waterYear"))
+    
+    Sample[,int_indexs] <- sapply(Sample[,int_indexs], as.integer)
+
   }
   
   if(exists("INFO") && !any(c("param.units", "shortName", "paramShortName", "constitAbbrev", "drainSqKm") %in% names(INFO))){

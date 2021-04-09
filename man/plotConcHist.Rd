@@ -6,9 +6,9 @@
 \usage{
 plotConcHist(eList, yearStart = NA, yearEnd = NA, concMax = NA,
   printTitle = TRUE, tinyPlot = FALSE, usgsStyle = FALSE,
-  plotFlowNorm = TRUE, plotAnnual = TRUE, cex = 0.8,
-  cex.axis = 1.1, cex.main = 1.1, lwd = 2, col = "black",
-  col.pred = "green", customPar = FALSE, ...)
+  plotFlowNorm = TRUE, plotAnnual = TRUE, plotGenConc = FALSE,
+  cex = 0.8, cex.axis = 1.1, cex.main = 1.1, lwd = 2, col = "black",
+  col.pred = "green", col.gen = "red", customPar = FALSE, ...)
 }
 \arguments{
 \item{eList}{named list with at least the Daily and INFO dataframes}
@@ -24,12 +24,14 @@ plotConcHist(eList, yearStart = NA, yearEnd = NA, concMax = NA,
 \item{tinyPlot}{logical variable, if TRUE plot is designed to be plotted small, as a part of a multipart figure, default is FALSE}
 
 \item{usgsStyle}{logical option to use USGS style guidelines. Setting this option
-to TRUE does NOT guarantee USGS complience. It will only change automatically
+to TRUE does NOT guarantee USGS compliance. It will only change automatically
 generated labels}
 
 \item{plotFlowNorm}{logical variable if TRUE flow normalized line is plotted, if FALSE not plotted}
 
-\item{plotAnnual}{logical variable if TRUE annual concentration points are plotted, if FALSE not plotted}
+\item{plotAnnual}{logical variable if \code{TRUE}, annual concentration points from WRTDS output are plotted, if \code{FALSE} not plotted}
+
+\item{plotGenConc}{logical variable. If \code{TRUE}, annual concentration points from WRTDS_K output are plotted, if \code{FALSE} not plotted}
 
 \item{cex}{numerical value giving the amount by which plotting symbols should be magnified}
 
@@ -43,19 +45,26 @@ generated labels}
 
 \item{col.pred}{color of flow normalized line on plot, see ?par 'Color Specification'}
 
+\item{col.gen}{color of points for WRTDS_K output on plot, see ?par 'Color Specification'}
+
 \item{customPar}{logical defaults to FALSE. If TRUE, par() should be set by user before calling this function 
 (for example, adjusting margins with par(mar=c(5,5,5,5))). If customPar FALSE, EGRET chooses the best margins depending on tinyPlot.}
 
 \item{\dots}{arbitrary graphical parameters that will be passed to genericEGRETDotPlot function (see ?par for options)}
 }
 \description{
-Data come from named list, which contains a Daily dataframe with the daily flow data,
+Data come from named list (eList), which contains a Daily dataframe with the daily flow data,
 and an INFO dataframe with metadata. 
 
 The annual concentrations are "time-weighted" mean concentrations (as opposed to "flow-weighted"). 
 The annual results reported are for a specified "period of analysis" which can be 
 an entire water year, a calendar, a season or even an individual month.  
 User specifies this period of analysis in the call to \code{setupYears}.
+
+User can specify plotting of three possible series.  All are in units of mg/L.
+  Annual mean concentration 
+  WRTDS_K version of annual mean concentration (requires that WRTDSKalman has been run)
+  Flow normalized mean concentration
 
 Although there are a lot of optional arguments to this function, most are set to a logical default.
 }
@@ -64,11 +73,7 @@ yearStart <- 2001
 yearEnd <- 2010
 eList <- Choptank_eList
 
-# Water year:
 plotConcHist(eList, yearStart, yearEnd)
-# Graphs consisting of Jun-Aug
-eList <- setPA(eList, paStart=6,paLong=3)
-plotConcHist(eList)
 }
 \seealso{
 \code{\link{setupYears}}, \code{\link{genericEGRETDotPlot}}

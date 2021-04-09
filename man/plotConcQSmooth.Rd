@@ -6,13 +6,12 @@
 \usage{
 plotConcQSmooth(eList, date1, date2, date3, qLow, qHigh, qUnit = 2,
   legendLeft = 0, legendTop = 0, concMax = NA, concMin = NA,
-  bw = FALSE, printTitle = TRUE, printValues = FALSE,
-  minNumObs = 100, minNumUncen = 50, colors = c("black", "red",
-  "green"), printLegend = TRUE, windowY = 7, windowQ = 2,
-  windowS = 0.5, tinyPlot = FALSE, customPar = FALSE, lwd = 2,
-  cex = 0.8, cex.axis = 1.1, cex.main = 1.1, cex.legend = 1.2,
-  lineVal = c(1, 1, 1), logScale = FALSE, edgeAdjust = TRUE,
-  usgsStyle = FALSE, ...)
+  bw = FALSE, printTitle = TRUE, printValues = FALSE, minNumObs = 100,
+  minNumUncen = 50, colors = c("black", "red", "green"),
+  printLegend = TRUE, windowY = 7, windowQ = 2, windowS = 0.5,
+  tinyPlot = FALSE, customPar = FALSE, lwd = 2, cex = 0.8,
+  cex.axis = 1.1, cex.main = 1.1, cex.legend = 1.2, lineVal = c(1, 1,
+  1), logScale = FALSE, edgeAdjust = TRUE, usgsStyle = FALSE, ...)
 }
 \arguments{
 \item{eList}{named list with at least the Sample and INFO dataframes}
@@ -50,7 +49,7 @@ plotConcQSmooth(eList, date1, date2, date3, qLow, qHigh, qUnit = 2,
 
 \item{colors}{color vector of lines on plot, see ?par 'Color Specification'. Defaults to c("black","red","green")}
 
-\item{printLegend}{logicalif TRUE, legend is included}
+\item{printLegend}{logical if TRUE, legend is included}
 
 \item{windowY}{numeric specifying the half-window width in the time dimension, in units of years, default is 7}
 
@@ -63,7 +62,7 @@ plotConcQSmooth(eList, date1, date2, date3, qLow, qHigh, qUnit = 2,
 \item{customPar}{logical defaults to FALSE. If TRUE, par() should be set by user before calling this function 
 (for example, adjusting margins with par(mar=c(5,5,5,5))). If customPar FALSE, EGRET chooses the best margins depending on tinyPlot.}
 
-\item{lwd}{number line width}
+\item{lwd}{number line width, default is 2}
 
 \item{cex}{numerical value giving the amount by which plotting symbols should be magnified}
 
@@ -75,12 +74,12 @@ plotConcQSmooth(eList, date1, date2, date3, qLow, qHigh, qUnit = 2,
 
 \item{lineVal}{vector of line types. Defaults to c(1,1,1) which is a solid line for each line. Options: 0=blank, 1=solid (default), 2=dashed, 3=dotted, 4=dotdash, 5=longdash, 6=twodash}
 
-\item{logScale}{logical whether or not to use a log scale in the y axis.}
+\item{logScale}{logical whether or not to use a log scale in the y axis. Default is FALSE}
 
 \item{edgeAdjust}{logical specifying whether to use the modified method for calculating the windows at the edge of the record.  The modified method tends to reduce curvature near the start and end of record.  Default is TRUE.}
 
 \item{usgsStyle}{logical option to use USGS style guidelines. Setting this option
-to TRUE does NOT guarantee USGS complience. It will only change automatically
+to TRUE does NOT guarantee USGS compliance. It will only change automatically
 generated labels}
 
 \item{\dots}{arbitrary graphical parameters that will be passed to genericEGRETDotPlot function (see ?par for options)}
@@ -92,20 +91,26 @@ Typically the time points selected would be in three years at the same time of y
 Another possibility is to use this to explore seasonal differences.  In this case the three
 dates would be in the same year but different times during the year.
 
+This plot can also help identify situations where the windowQ may be too small.  If there are substantial oscillations of some of the curves, then the windowQ should be increased.  Alternatively, windowQ may be too large.  This can be seen when the windowQ is reduced (say to 1.0).  A good choice of windowQ would be a value just great enough to damp out oscillations in the curves.
+
 Although there are a lot of optional arguments to this function, most are set to a logical default. 
 
 Data come from named list, which contains a Sample dataframe with the sample data, 
 and an INFO dataframe with metadata.
 }
 \examples{
-date1<-"2001-06-01"
-date2<-"2005-06-01"
-date3<-"2010-06-01"
-qLow<-1
-qHigh<-100
+date1 <- "1982-06-01"
+date2 <- "1994-06-01"
+date3 <- "2010-06-01"
+qLow <- 0.5
+qHigh <- 50
 eList <- Choptank_eList
-plotConcQSmooth(eList, date1,date2,date3,qLow,qHigh)
-plotConcQSmooth(eList, date1,date2,date3,qLow,qHigh,logScale=TRUE)
+\donttest{
+plotConcQSmooth(eList, date1, date2, date3, qLow, qHigh,
+                 legendLeft = 0.6, legendTop = 0.7)
+plotConcQSmooth(eList, date1, date2, date3, qLow, qHigh,
+                logScale=TRUE, legendLeft = 0.6, legendTop = 0.7)
+}
 }
 \seealso{
 \code{\link{genericEGRETDotPlot}}, \code{\link{runSurvReg}}

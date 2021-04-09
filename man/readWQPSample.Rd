@@ -41,17 +41,18 @@ CosDY \tab numeric \tab Cosine of the DecYear
 \description{
 Imports data from the Water Quality Portal, so it could be STORET, USGS, or USDA data. 
 This function gets the data from: \url{https://www.waterqualitydata.us}
-For raw data, use readWQPdata.  This function will retrieve the raw data, and compress it (summing constituents). See
-chapter 7 of the EGRET user guide for more details, then converts it to the Sample dataframe structure.
+For raw data, use readWQPdata.  This function will retrieve the raw data, 
+compress it (summing constituents), then converts it to the Sample dataframe structure.
+See chapter 7 of the EGRET user guide for more details.
 }
 \examples{
 # These examples require an internet connection to run
-\dontrun{
-Sample_All <- readWQPSample('WIDNR_WQX-10032762','Specific conductance', '', '')
+\donttest{
+# Sample_All <- readWQPSample('WIDNR_WQX-10032762','Specific conductance', '', '')
 }
 }
 \seealso{
-\code{\link[dataRetrieval]{readWQPdata}}, \code{\link[dataRetrieval]{whatWQPsites}}, 
+\code{\link[dataRetrieval]{readWQPdata}}, \code{dataRetrieval::whatWQPsites}, 
 \code{\link[dataRetrieval]{readWQPqw}}, \code{\link{compressData}}, \code{\link{populateSampleColumns}}
 }
 \keyword{USGS}

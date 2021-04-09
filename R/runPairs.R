@@ -1,17 +1,31 @@
 #' Runs a comparison of any two years in the record.
 #' 
 #' \code{runPairs} provides comparisons of results, in terms of 
-#' flow-normalized concentration and flow-normalzed flux for any pair 
+#' flow-normalized concentration and flow-normalized flux for any pair 
 #' of years in the water quality record.  Comparison could involve the 
 #' use of the "wall" and/or use of "generalized flow normalization".  
-#' These two concepts are described in detail in the vignette.
+#' These two concepts are described in detail in the vignette:
+#' \code{vignette("Enhancements", package = "EGRET")}.
+#' 
+#' @details
+#' When using generalized flow-normalization, it is best to have the Daily data frame
+#' extend well beyond the years that are in the Sample data frame.  Ideally, 
+#' the Daily data frame would start windowSide years before the
+#' start of the Sample data set, if the data exist to provide for that. Generally
+#' that isn't possible for the end of the record because the Sample data
+#' may end very close to the present. To the extent that is possible therefore, it is better to
+#' include more discharge data after the end of the Sample record. 
+#' Also note that in the case run in the examples don't do that, 
+#' because the data set needs to be appropriate for stationary flow 
+#' normalization as well (and package size considerations make it difficult to
+#' include specialized examples).
 #' 
 #' @export
 #' @param eList named list with at least the Daily, Sample, and INFO dataframes
 #' @param year1 integer the ending year of the first year in the pair
 #' @param year2 integer the ending year of the second year in the pair
 #' @param windowSide integer. The width of the flow normalization window on each side of the year being estimated.
-#' A common value is 7, but no default is specified.  If stationary flow normalization is to be used, then windowSide = 0 (this means that 
+#' A common value is 11, but no default is specified.  If stationary flow normalization is to be used, then windowSide = 0 (this means that 
 #' flow-normalization period for all years is the same).
 #' @param flowBreak logical. Is there an abrupt break in the discharge record, default is FALSE.
 #' @param Q1EndDate The Date (as character in YYYY-MM-DD) which is the last day, just before the flowBreak.
@@ -19,15 +33,18 @@
 #' NA, which makes the QStartDate become the first Date in eList$Daily. 
 #' @param QEndDate The last Date (as character in YYYY-MM-DD) used in the flow normalization method.  Default is NA, 
 #' which makes the QEndDate become the last Date in eList$Daily.
-#' @param wall logical. Whether there is an abrupt break in the concentration versus discharge relationship.  Default is FALSE
+#' @param wall logical. Whether there is an abrupt break in the concentration versus discharge relationship due to some major change in 
+#' pollution control or water management.  Default is FALSE.
 #' @param sample1EndDate The Date (as character in YYYY-MM-DD) of the last date just before the wall. Default = NA. 
 #' A date must be specified if wall = TRUE.
 #' @param sampleStartDate The Date (as character in YYYY-MM-DD) of the first sample to be used. Default is NA which sets it 
 #' to the first Date in eList$Sample.
 #' @param sampleEndDate The Date (as character in YYYY-MM-DD) of the last sample to be used. 
 #' Default is NA which sets it to the last Date in eList$Sample.
-#' @param paLong numeric integer specifying the length of the period of analysis, in months, 1<=paLong<=12, default is 12.
-#' @param paStart numeric integer specifying the starting month for the period of analysis, 1<=paStart<=12, default is 10  (used when period is water year). 
+#' @param paLong numeric integer specifying the length of the period of analysis, in months, 1<=paLong<=12. 
+#' Default is NA, which will use the paLong in the eList$INFO data frame. See also \code{\link{setPA}}.
+#' @param paStart numeric integer specifying the starting month for the period of analysis, 1<=paStart<=12.
+#' Default is NA, which will use the paStart in the eList$INFO data frame. See also \code{\link{setPA}}.
 #' @param windowY numeric specifying the half-window width in the time dimension, in units of years, default is 7
 #' @param windowQ numeric specifying the half-window width in the discharge dimension, units are natural log units, default is 2
 #' @param windowS numeric specifying the half-window with in the seasonal dimension, in units of years, default is 0.5
@@ -38,23 +55,21 @@
 #' @param edgeAdjust logical specifying whether to use the modified method for calculating the windows at the edge of the record.  
 #' The edgeAdjust method tends to reduce curvature near the start and end of record.  Default is TRUE.
 #' @param oldSurface logical specifying whether to use the original surface, or create a new one. Default is FALSE.
-#' @return data frame with the following columns:
-#' \tabular{lll}{
-#' Name \tab Description \cr
-#' Total Change \tab   The difference between the results for year2 - year1\cr
-#' CQTC \tab this number is the difference between between the two years, but only the part that is due to the change 
-#' in the CQR. It is x20 - x10. In the results reported above as, "Concentration v. Q Trend 
-#' Component" it is computed as 100 * (x20 - x10) / x11 \cr
-#' QTC \tab  The difference between the two years, but only the part that is due to the change in the QD. 
-#' It is the Total Change - CQTC. Or it can be stated as x22 - x11 - x20 + x10. In the results reported above as, "Q Trend Component" 
-#' it is computed as 100 * (x22 - x11 - x20 + x10) / x11. \cr
-#' x10 \tab The results using the concentration versus discharge relationship (CQR) for year 1, but using the discharge 
-#' distribution (QD) for the entire period of record (starting with QStartDate and 
-#' ending with QEndDate, or if they aren't specified, it is all the discharge data 
-#' in the Daily data frame).\cr
-#' x11 \tab The results using the CQR for year 1, but using the QD specified by the user for year 1.\tab \cr
-#' x20 \tab The results using the CQR for year 2, but using the QD for the entire period. \cr
-#' x22 \tab The results for the CQR for year 2, but using the QD specified by the user for year 2. \cr
+#' @return Data frame with 7 columns and 2 rows.  The first row is about trends in concentration (mg/L), 
+#' the second column is about trends in flux (million kg/year).  
+#' The data frame has a number of attributes.
+#' \tabular{ll}{
+#' Column Name \tab Description \cr
+#' Total Change \tab   The difference between the results for year2 - year1 (x22 - x11)\cr
+#' CQTC \tab CQTC is the "Concentration v. Q Trend Component." It is the component of total 
+#' change due to the change in the CQR (Concentration Discharge Relationship). (x20 - x10). \cr
+#' QTC \tab  QTC is the "Q Trend Component." It is the component of total change due to the
+#' trend in the QD (Discharge Distribution). (x22 - x11 - x20 + x10).  \cr
+#' x10 \tab The estimated value based on the CQR computed for year1, integrated over the QD for the entire 
+#' timespan of the Daily data frame (or the period QStartDate and to QEndDate if these are specified).\cr
+#' x11 \tab The estimated value based on the CQR for year1, integrated over the QD specified by the user for year1.\cr
+#' x20 \tab The estimated value based on the CQR computed for year2, integrated over the QD for the entire period of record. \cr
+#' x22 \tab The estimated value based on the CQR for year2, integrated over the QD specified by the user for year2. \cr
 #' }
 #' Additionally, there is an attribute on the data frame "Other", containing
 #' a list that includes minNumObs=minNumObs, minNumUncen, windowY, windowQ, 
@@ -70,8 +85,8 @@
 #' year1 <- 1985
 #' year2 <- 2010
 #' 
-#' \dontrun{
-#' # Automatic calculations based on windowSide=7
+#' \donttest{
+#' # Automatic calculations based on windowSide = 11
 #' # four possible ways to do generalized flow normalization:
 #' 
 #' #Option 1: Use all years for flow normalization.
@@ -79,9 +94,9 @@
 #' pairOut_1 <- runPairs(eList, year1, year2, windowSide = 0)
 #' 
 #' # Option 2:  Use different windows for flow normalization for year1 versus year2
-#' #            In each case it is a 15 year window (15 = 1 + 2*7)
+#' #            In each case it is a 23 year window (23 = 1 + 2*11)
 #' 
-#' pairOut_2 <- runPairs(eList, year1, year2, windowSide = 7)
+#' pairOut_2 <- runPairs(eList, year1, year2, windowSide = 11)
 #' 
 #' # Option 3: Flow normalization is based on splitting the flow record at 1990-09-30
 #' #          But year1 uses all flow data from before the break, 
@@ -92,11 +107,11 @@
 #'                       Q1EndDate = "1990-09-30")
 #' 
 #' # Option 4: Flow normalization is based on splitting the flow record at 1990-09-30
-#' #           but year1 uses a 15 year window before the break
-#' #           year2 uses a 15 year window after the break
+#' #           but year1 uses a 23 year window before the break
+#' #           year2 uses a 23 year window after the break
 #' 
 #' pairOut_4 <- runPairs(eList, year1, year2, 
-#'                       windowSide = 7, flowBreak = TRUE,
+#'                       windowSide = 11, flowBreak = TRUE,
 #'                       Q1EndDate = "1990-09-30")
 #'                       
 #' 
@@ -106,7 +121,7 @@ runPairs <- function(eList, year1, year2, windowSide,
                      Q1EndDate = NA, QStartDate = NA, QEndDate = NA, 
                      wall = FALSE, oldSurface = FALSE,
                      sample1EndDate = NA, sampleStartDate = NA, sampleEndDate = NA,
-                     paStart = 10, paLong = 12,
+                     paStart = NA, paLong = NA,
                      minNumObs = 100, minNumUncen = 50, fractMin = 0.75,
                      windowY = 7, windowQ = 2, windowS = 0.5, 
                      edgeAdjust = TRUE){
@@ -122,6 +137,19 @@ runPairs <- function(eList, year1, year2, windowSide,
   }
   
   localSample <- getSample(eList)
+  localDaily <- getDaily(eList)
+  
+  if(is.na(paStart)){
+    paStart <- eList$INFO$paStart
+  } else {
+    eList$INFO$paStart <- paStart
+  }
+  
+  if(is.na(paLong)){
+    paLong <- eList$INFO$paLong
+  } else {
+    eList$INFO$paLong <- paLong
+  }
   
   startEndSurface1 <- startEnd(paStart, paLong, year1)
   startEndSurface2 <- startEnd(paStart, paLong, year2)
@@ -134,14 +162,33 @@ runPairs <- function(eList, year1, year2, windowSide,
     stop("year1 is outside the Sample range")
   }
   
-  sampleStartDate <- if(is.na(sampleStartDate)) localSample$Date[1] else as.Date(sampleStartDate)
-  numSamples <- length(localSample$Date)
-  sampleEndDate <- if(is.na(sampleEndDate)) localSample$Date[numSamples] else as.Date(sampleEndDate)
+  if(is.na(sampleStartDate)){
+    sampleStartDate <- localSample$Date[1]
+  }  else {
+    sampleStartDate <- as.Date(sampleStartDate)
+  }
   
-  localDaily <- getDaily(eList)
-  QStartDate <- if(is.na(QStartDate)) localDaily$Date[1] else as.Date(QStartDate)
+  numSamples <- length(localSample$Date)
+  
+  if(is.na(sampleEndDate)){
+    sampleEndDate <- localSample$Date[numSamples]
+  }  else {
+    sampleEndDate <- as.Date(sampleEndDate)
+  }
+  
+  if(is.na(QStartDate)){
+    QStartDate <- localDaily$Date[1]
+  } else {
+    QStartDate <- as.Date(QStartDate)
+  }
+  
   numQDays <- length(localDaily$Date)
-  QEndDate <- if(is.na(QEndDate)) localDaily$Date[numQDays] else as.Date(QEndDate)
+  
+  if(is.na(QEndDate)){
+    QEndDate <- localDaily$Date[numQDays]
+  } else {
+    QEndDate <- as.Date(QEndDate)
+  }
   
   if (sampleStartDate > as.Date(startEndSurface1[[2]]) ){
     stop("Sample start is later than year2")

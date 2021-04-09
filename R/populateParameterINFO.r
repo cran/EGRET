@@ -9,7 +9,7 @@
 #' @return INFO dataframe
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(dataRetrieval)
 #' INFO <- readNWISsite('01594440')
 #' parameterCd <- "01075"
@@ -19,7 +19,7 @@
 #' INFO$paramShortName <- parameterData$srsname
 #' INFO$paramNumber <- parameterData$parameter_cd
 #' 
-#' INFO <- populateParameterINFO(parameterCd, INFO)
+#' INFO <- populateParameterINFO(parameterCd, INFO, interactive = FALSE)
 #' }
 populateParameterINFO <- function(parameterCd, INFO, interactive=TRUE){
   if (nzchar(parameterCd)){

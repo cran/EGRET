@@ -8,6 +8,8 @@
 #' ideal situation would show the two boxes roughly similar to each other or 
 #' the sample boxplot having median, upper quartile, and higher values being 
 #' slightly greater than in the boxplot of all days.
+#'
+#' Box widths are proportional to the square root of the number of observations (left box based on number of sampled days, right box based on total number of days in the record).
 #' 
 #' Data come from named list, which contains a Sample dataframe with the sample data, 
 #' a Daily dataframe with the daily flow data,
@@ -27,7 +29,7 @@
 #' @param customPar logical defaults to FALSE. If TRUE, par() should be set by user before calling this function 
 #' @param las numeric in {0,1,2,3}; the style of axis labels, see ?par
 #' @param usgsStyle logical option to use USGS style guidelines. Setting this option
-#' to TRUE does NOT guarantee USGS complience. It will only change automatically
+#' to TRUE does NOT guarantee USGS compliance. It will only change automatically
 #' generated labels. 
 #' @param \dots arbitrary graphical parameters that will be passed to genericEGRETDotPlot function (see ?par for options)
 #' @keywords graphics water-quality statistics
@@ -114,7 +116,7 @@ boxQTwice<-function(eList,
           ylim=c(yInfo$bottom,yInfo$top),
           main=plotTitle,cex=cex,ylab=yLabel,
           cex.main=cex.main,
-          cex.axis=cex.axis, las=las,yaxt = "n",yaxs="i",
+          cex.axis=cex.axis, las=las,yaxs="i",
           log=logScaleText,yaxt="n",
           ...)
   axis(2,tcl=tcl,las=las,at=yInfo$ticks,cex.axis=cex.axis,labels=yTicksLab)

@@ -5,11 +5,10 @@
 \title{Plot of Observed Concentration versus Time}
 \usage{
 plotConcTime(eList, qUnit = 2, yearStart = NA, yearEnd = NA,
-  qLower = NA, qUpper = NA, randomCensored = FALSE,
-  tinyPlot = FALSE, concMax = NA, concMin = NA, printTitle = TRUE,
-  logScale = FALSE, cex = 0.8, cex.axis = 1.1, cex.main = 1.1,
-  customPar = FALSE, col = "black", lwd = 1, usgsStyle = FALSE,
-  ...)
+  qLower = NA, qUpper = NA, randomCensored = FALSE, tinyPlot = FALSE,
+  concMax = NA, concMin = NA, printTitle = TRUE, logScale = FALSE,
+  cex = 0.8, cex.axis = 1.1, cex.main = 1.1, customPar = FALSE,
+  col = "black", lwd = 1, usgsStyle = FALSE, ...)
 }
 \arguments{
 \item{eList}{named list with at least the Sample and INFO dataframes}
@@ -35,7 +34,7 @@ plotConcTime(eList, qUnit = 2, yearStart = NA, yearEnd = NA,
 
 \item{printTitle}{logical variable if TRUE title is printed, if FALSE title is not printed (this is best for a multi-plot figure).}
 
-\item{logScale}{logical, default FALSE, FALSE creates a linear scale y-axis, TRUE creates a y-axis is in log scale.}
+\item{logScale}{logical. If TRUE concentration is plotted on a log axis, default FALSE.}
 
 \item{cex}{numerical value giving the amount by which plotting symbols should be magnified.}
 
@@ -51,7 +50,7 @@ plotConcTime(eList, qUnit = 2, yearStart = NA, yearEnd = NA,
 \item{lwd}{number line width.}
 
 \item{usgsStyle}{logical option to use USGS style guidelines. Setting this option
-to TRUE does NOT guarantee USGS complience. It will only change automatically
+to TRUE does NOT guarantee USGS compliance. It will only change automatically
 generated labels}
 
 \item{\dots}{arbitrary functions sent to the generic plotting function.  See ?par for details on possible parameters.}
@@ -67,6 +66,17 @@ Although there are a lot of optional arguments to this function, most are set to
 
 Data come from named list, which contains a Sample dataframe with the sample data, 
 and an INFO dataframe with metadata.
+}
+\details{
+The function has two possible ways to plot censored values (e.g. "less-than values").
+ 
+The default is to plot them as a vertical line that goes from the reporting limit down to the bottom of the graph.
+
+The alternative is to set randomCensored = TRUE.  In this case a random value is used for plotting the individual sample value.  This random value lies between the reporting limit and zero and it is distributed as a truncated log normal based on the fitted WRTDS model.
+
+The function makeAugmentedSample must be run first if randomCensored = TRUE.  Running makeAugmentedSample requires that modelEstimation has already been run.
+
+These random censored values are used to create more readable plots and are not used in any computations about the data set.  The random censored values are shown as open circles and the non-censored data are shown as filled dots.
 }
 \examples{
 eList <- Choptank_eList

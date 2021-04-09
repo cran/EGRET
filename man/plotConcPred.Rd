@@ -4,17 +4,17 @@
 \alias{plotConcPred}
 \title{Plot of Observed Concentration versus Estimated Concentration}
 \usage{
-plotConcPred(eList, concMax = NA, logScale = FALSE,
-  printTitle = TRUE, tinyPlot = FALSE, cex = 0.8, cex.axis = 1.1,
-  cex.main = 1.1, customPar = FALSE, col = "black", lwd = 1,
-  randomCensored = FALSE, usgsStyle = FALSE, ...)
+plotConcPred(eList, concMax = NA, logScale = FALSE, printTitle = TRUE,
+  tinyPlot = FALSE, cex = 0.8, cex.axis = 1.1, cex.main = 1.1,
+  customPar = FALSE, col = "black", lwd = 1, randomCensored = FALSE,
+  usgsStyle = FALSE, ...)
 }
 \arguments{
 \item{eList}{named list with at least the Sample and INFO dataframes}
 
 \item{concMax}{number specifying the maximum value to be used on the vertical axis, default is NA (which allows it to be set automatically by the data)}
 
-\item{logScale}{logical, default TRUE, TRUE indicates y axis is in log scale, "xy" indicates both x and y in log scale, "x" is only x}
+\item{logScale}{logical, default TRUE, TRUE indicates x and y axes are on a log scale. FALSE indicates both x and y are on an arithmetic scale.}
 
 \item{printTitle}{logical variable if TRUE title is printed, if FALSE not printed (this is best for a multi-plot figure)}
 
@@ -36,7 +36,7 @@ plotConcPred(eList, concMax = NA, logScale = FALSE,
 \item{randomCensored}{logical. Show censored values as randomized.}
 
 \item{usgsStyle}{logical option to use USGS style guidelines. Setting this option
-to TRUE does NOT guarantee USGS complience. It will only change automatically
+to TRUE does NOT guarantee USGS compliance. It will only change automatically
 generated labels}
 
 \item{\dots}{arbitrary graphical parameters that will be passed to genericEGRETDotPlot function (see ?par for options)}
@@ -51,10 +51,10 @@ Although there are a lot of optional arguments to this function, most are set to
 eList <- Choptank_eList
 # Water year:
 plotConcPred(eList)
-plotConcPred(eList, logScale=TRUE)
+
 # Graphs consisting of Jun-Aug
 eList <- setPA(eList, paStart=6,paLong=3)
-plotConcPred(eList, usgsStyle=TRUE)
+plotConcPred(eList)
 }
 \seealso{
 \code{\link{selectDays}}, \code{\link{genericEGRETDotPlot}}

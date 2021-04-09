@@ -171,20 +171,30 @@ run_WRTDS <- function(estY, estLQ,
   Sam <- data.frame(Sam)
   
   x <- tryCatch({
-    survModel<- survival::survreg(survival::Surv(log(ConcLow),log(ConcHigh),type="interval2") ~ 
-                         DecYear+LogQ+SinDY+CosDY,data=Sam,weights=weight,dist="gaus")
+    survModel <- survival::survreg(survival::Surv(log(ConcLow),log(ConcHigh),type="interval2") ~ 
+                                     DecYear+LogQ+SinDY+CosDY,data=Sam,weights=weight,dist="gaus")
   }, warning=function(w) {
-    return(NA)
+    
+    if(w$message == "Ran out of iterations and did not converge"){
+      Sam2 <- jitterSam(Sam)
+    } else {
+      Sam2 <- Sam
+    }
+    
+    survModel <- survival::survreg(survival::Surv(log(ConcLow),log(ConcHigh),type="interval2") ~ 
+                                     DecYear+LogQ+SinDY+CosDY,data=Sam2,weights=weight,dist="gaus")
+    
+    return(survModel)
   }, error=function(e) {
     message(e, "Error")
     return(NULL)
   })
   
-  if(exists("survModel")) {
+  if(class(x) == "survreg") {
     newdf<-data.frame(DecYear=estY,LogQ=estLQ,SinDY=sin(2*pi*estY),CosDY=cos(2*pi*estY))
     #   extract results at estimation point
-    yHat<-predict(survModel,newdf)
-    SE<-survModel$scale
+    yHat<-predict(x,newdf)
+    SE<-x$scale
     bias<-exp((SE^2)/2)
     survReg[1]<-yHat
     survReg[2]<-SE
@@ -195,4 +205,33 @@ run_WRTDS <- function(estY, estLQ,
     warningFlag <- 1
   }
   return(list(survReg=survReg, warningFlag=warningFlag))
+}
+
+#' jitter Sample
+#' 
+#' This function is used in cases where there are numerical problems with 
+#' the estimation of the WRTDS model.  This mostly happens during bootstrap 
+#' estimation or when the data sets are very large.  In order to reduce the 
+#' collinearity in the explanatory variables, some random noise is added to 
+#' the time and log discharge variables in the Sample data frame. 
+#' 
+#' @export
+#' @return SamR a data frame structured like the Sam data frame but with
+#'  the time and discharge variables modified by adding random jitter
+#' @param Sam data frame with at least columns DecYear and LogQ
+#' @param V a multiplier for the sd of the LogQ jitter. for example V = 0.02,
+#'  means that the sd of the LnQ jitter is 0.02*sdLQ
+#' @examples 
+#' eList <- Choptank_eList
+#' Sample_jitter <- jitterSam(eList$Sample)
+jitterSam <- function(Sam, V = 0.2) {
+  SamR <- Sam
+  n <- length(Sam$DecYear)
+  SamR$DecYear <- Sam$DecYear + rnorm(n,0,0.05)
+  SamR$SinDY <- sin(SamR$DecYear * 2 * pi)
+  SamR$CosDY <- cos(SamR$DecYear * 2 * pi)
+  sdLQ <- sd(Sam$LogQ)
+  s <- sdLQ * V
+  SamR$LogQ <- Sam$LogQ + rnorm(n,0,s)
+  return(SamR)
 }

@@ -5,8 +5,8 @@
 \title{Makes four graphs of streamflow statistics on a single page}
 \usage{
 plotFour(eList, yearStart = NA, yearEnd = NA, printTitle = TRUE,
-  runoff = FALSE, qUnit = 1, window = 15, cex = 0.8,
-  cex.axis = 1.2, cex.main = 1.2, col = "black", lwd = 1, ...)
+  runoff = FALSE, qUnit = 1, window = 15, cex = 0.8, cex.axis = 1.2,
+  cex.main = 1.2, col = "black", lwd = 1, ...)
 }
 \arguments{
 \item{eList}{named list with at least Daily and INFO dataframes}
@@ -31,21 +31,21 @@ plotFour(eList, yearStart = NA, yearEnd = NA, printTitle = TRUE,
 
 \item{col}{color of points on plot, see ?par 'Color Specification'}
 
-\item{lwd}{number line width}
+\item{lwd}{number line width. Default is 1.}
 
 \item{\dots}{arbitrary graphical parameters that will be passed to genericEGRETDotPlot function (see ?par for options)}
 }
 \description{
 Part of the flowHistory system.  The four statistics are 1-day maximum, annual mean, annual 7-day minimum, and the running standard deviation of the log daily discharge values.
  
- Although there are a lot of optional arguments to this function, most are set to a logical default.
+Although there are a lot of optional arguments to this function, most are set to a logical default.
  
 Data come from named list, which contains a Daily dataframe with the daily flow data,
-and an INFO dataframe with metadata.
+and an INFO dataframe with metadata. Each graph shows a loess smooth of the data that are plotted.
 }
 \examples{
 eList <- Choptank_eList
-\dontrun{
+\donttest{
 #Water year:
 plotFour(eList)
 # Graphs consisting of Jun-Aug

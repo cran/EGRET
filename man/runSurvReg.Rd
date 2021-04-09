@@ -10,8 +10,8 @@ runSurvReg(estPtYear, estPtLQ, DecLow, DecHigh, Sample, windowY = 7,
   verbose = TRUE, interactive = NULL, edgeAdjust = TRUE,
   run.parallel = FALSE)
 
-run_WRTDS(estY, estLQ, localSample, DecLow, DecHigh, minNumObs,
-  minNumUncen, windowY, windowQ, windowS, edgeAdjust)
+run_WRTDS(estY, estLQ, localSample, DecLow, DecHigh, minNumObs, minNumUncen,
+  windowY, windowQ, windowS, edgeAdjust)
 }
 \arguments{
 \item{estPtYear}{numeric vector of Decimal Year values at the estimation points}
