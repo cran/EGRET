@@ -126,13 +126,21 @@ runSeries <- function(eList, windowSide,
                                localSample$Date <= sampleEndDate, ]
   
   if(is.na(paStart)){
-    paStart <- eList$INFO$paStart
+    if(all(c("paStart") %in% names(eList$INFO))){
+      paStart <- eList$INFO$paStart 
+    } else {
+      paStart <- 10
+    }
   } else {
     eList$INFO$paStart <- paStart
   }
   
   if(is.na(paLong)){
-    paLong <- eList$INFO$paLong
+    if(all(c("paLong") %in% names(eList$INFO))){
+      paLong <- eList$INFO$paLong
+    } else {
+      paLong <- 12
+    }
   } else {
     eList$INFO$paLong <- paLong
   }
@@ -375,25 +383,25 @@ checkSurfaceSpan <- function(eList){
   postSurfaceFormat <- format(postSurface, digits = 2)
   
   if(preSurface > 2 & postSurface > 2){
-    message(paste0("\nThe surface you are using extends ", preSurfaceFormat , " years prior to the start,",
-                   "and ",postSurfaceFormat," years past the end of the data of the water quality data set.",
+    message(paste0("\nThe surface you are using extends ", preSurfaceFormat , " years prior to the start, ",
+                   "and ",postSurfaceFormat," years past the end of the data of the water quality data set. ",
                    "The surface is only reliable within the time period of the water quality data set.",
-                   "Extensions of a year or more should not be used to characterize trends.  However, the fact",
-                   "that there are such extensions, does not harm the reliability of the surface or the trend",
+                   "Extensions of a year or more should not be used to characterize trends.  However, the fact ",
+                   "that there are such extensions, does not harm the reliability of the surface or the trend ",
                    "results within the period for which there are water quality data"))
   } else if (preSurface > 2){
     message(paste0("\nThe surface you are using extends ",  preSurfaceFormat,
                    " years prior to the start of the water quality data set.",
-                   "The surface is only reliable within the time period of the water quality data set.",
-                   "Extensions of a year or more should not be used to characterize trends.  However, the fact",
-                   "that there are such extensions, does not harm the reliability of the surface or the trend",
+                   "The surface is only reliable within the time period of the water quality data set. ",
+                   "Extensions of a year or more should not be used to characterize trends.  However, the fact ",
+                   "that there are such extensions, does not harm the reliability of the surface or the trend ",
                    "results within the period for which there are water quality data"))           
   } else if (postSurface > 2){
     message(paste0("\nThe surface you are using extends ",  postSurfaceFormat,
                    " years past the end of the data of the water quality data set.",
                    "The surface is only reliable within the time period of the water quality data set.",
-                   "Extensions of a year or more should not be used to characterize trends.  However, the fact",
-                   "that there are such extensions, does not harm the reliability of the surface or the trend",
+                   "Extensions of a year or more should not be used to characterize trends.  However, the fact ",
+                   "that there are such extensions, does not harm the reliability of the surface or the trend ",
                    "results within the period for which there are water quality data")) 
   }
 }

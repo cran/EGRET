@@ -1,7 +1,7 @@
 Package: EGRET
 Type: Package
 Title: Exploration and Graphics for RivEr Trends
-Version: 3.0.6
+Version: 3.0.7
 Authors@R: c( person("Robert", "Hirsch", role = c("aut"),
     email = "rhirsch@usgs.gov", 
     comment=c(ORCID="0000-0002-4534-075X")),
@@ -36,9 +36,9 @@ Copyright: This software is in the public domain because it contains
         Interior. For more information, see the official USGS copyright
         policy at
         https://www.usgs.gov/visual-id/credit_usgs.html#copyright
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 NeedsCompilation: no
-Packaged: 2021-06-01 14:18:15 UTC; ldecicco
+Packaged: 2022-01-25 14:46:41 UTC; ldecicco
 Author: Robert Hirsch [aut] (<https://orcid.org/0000-0002-4534-075X>),
   Laura DeCicco [aut, cre] (<https://orcid.org/0000-0002-3915-9487>),
   Tim Cohn [ctb],
@@ -47,4 +47,4 @@ Author: Robert Hirsch [aut] (<https://orcid.org/0000-0002-4534-075X>),
   Jennifer Murphy [ctb]
 Maintainer: Laura DeCicco <ldecicco@usgs.gov>
 Repository: CRAN
-Date/Publication: 2021-06-01 14:50:02 UTC
+Date/Publication: 2022-01-25 15:12:42 UTC

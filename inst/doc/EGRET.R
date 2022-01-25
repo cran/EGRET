@@ -311,10 +311,10 @@ eListMerced <- setPA(eList,paStart=12,paLong=3)
 plotFlowSingle(eListMerced,istat=5,qMax=200)
 
 
-## ----plotFour, echo=TRUE, fig.cap="`plotFour(eListMerced, qUnit=3)`", out.width="100%"----
+## ----plotFour, echo=TRUE, fig.cap="plotFour(eListMerced, qUnit=3)", out.width="100%"----
 plotFour(eList, qUnit=3)
 
-## ----plotFourStats,echo=TRUE,out.width="100%", fig.cap="`plotFourStats(eListMerced, qUnit=3)`"----
+## ----plotFourStats,echo=TRUE,out.width="100%", fig.cap="plotFourStats(eListMerced, qUnit=3)"----
 plotFourStats(eList, qUnit=3)
 
 ## ----MississippiData, echo=TRUE,eval=FALSE------------------------------------
@@ -365,17 +365,17 @@ INFO <- getInfo(eList)
 
 
 ## ----plotBoxes, echo=TRUE, fig.cap="Concentration box plots"------------------
-boxConcMonth(eList)
-boxQTwice(eList,qUnit=1)
+  boxConcMonth(eList)
+  boxQTwice(eList,qUnit=1)
 
 ## ----plotConcTime,echo=TRUE, fig.cap="The relation of concentration vs time or discharge"----
-plotConcTime(eList)
-plotConcQ(eList, qUnit=1)
+  plotConcTime(eList)
+  plotConcQ(eList, qUnit=1)
 
 ## ----plotFluxQ,echo=TRUE, fig.cap="The relation of flux vs discharge"---------
-plotFluxQ(eList, fluxUnit=4)
+  plotFluxQ(eList, fluxUnit=4)
 
-## ----multiPlotDataOverview, echo=TRUE,out.width="100%", fig.cap="`multiPlotDataOverview(eList, qUnit=1)`"----
+## ----multiPlotDataOverview, echo=TRUE,out.width="100%", fig.cap="multiPlotDataOverview(eList, qUnit=1)"----
 multiPlotDataOverview(eList, qUnit=1)
 
 ## ----flowDuration, echo=TRUE--------------------------------------------------
@@ -428,7 +428,7 @@ plotResidQ(eList, qUnit=1)
 plotResidTime(eList)
 boxResidMonth(eList)
 
-## ----boxConcThree, echo=TRUE, fig.cap="Default `boxConcThree(eList)`"---------
+## ----boxConcThree, echo=TRUE, fig.cap="Default boxConcThree(eList)"-----------
 boxConcThree(eList)
 
 ## ----plotFluxHist, echo=TRUE, fig.cap="Concentration and flux history"--------
@@ -448,7 +448,7 @@ plotConcQSmooth(eList, date1, date2, date3, qBottom, qTop,
 plotConcQSmooth(eList, date1, date2, date3,
                 qBottom, qTop, legendTop = 0.5,logScale=TRUE)
 
-## ----plotConcTimeSmooth, echo=TRUE, fig.cap="`plotConcTimeSmooth(eList))`"----
+## ----plotConcTimeSmooth, echo=TRUE, fig.cap="plotConcTimeSmooth(eList)"-------
 q1 <- 2
 q2 <- 10
 q3 <- 20
@@ -462,15 +462,15 @@ plotConcTimeSmooth(eList, q1, q2, q3, centerDate,
                    yearStart, yearEnd, 
                    legendTop = 0.4,logScale=TRUE)
 
-## ----fluxBiasMulti, echo=TRUE, fig.cap="`fluxBiasMulti(eList, qUnit=1)`",fig.show='asis',fig.width=8, fig.height=10,fig.pos="h", out.width="100%"----
+## ----fluxBiasMulti, echo=TRUE, fig.cap="fluxBiasMulti(eList, qUnit=1)",fig.show='asis',fig.width=8, fig.height=10,fig.pos="h", out.width="100%"----
 fluxBiasMulti(eList, qUnit=1)
 
-## ----plotContours,out.width="100%",fig.height=5, echo=TRUE,fig.cap="`plotContours(eList)`"----
+## ----plotContours,out.width="100%",fig.height=5, echo=TRUE,fig.cap="plotContours(eList)"----
 clevel<-seq(0,2,0.2)
 plotContours(eList, yearStart=1980,yearEnd=2010,qBottom=0.5,qTop=20, 
              contourLevels = clevel)
 
-## ----plotDiffContours, echo=TRUE,out.width="100%",fig.height=5, fig.cap="`plotDiffContours(eList)`"----
+## ----plotDiffContours, echo=TRUE,out.width="100%",fig.height=5, fig.cap="plotDiffContours(eList)"----
 plotDiffContours(eList, year0=1990,year1=2010,
                  qBottom=0.5,qTop=20,maxDiff=0.6)
 

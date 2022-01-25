@@ -49,6 +49,11 @@ WRTDSKalman <- function(eList, rho = 0.90, niter = 200,
   # this part is to set up the array of runs of missing values
   localEList <- cleanUp(eList)
   localDaily <- populateDailySamp(localEList)
+  
+  if(sum(is.na(localDaily$trueConc)) == 0){
+    stop("There are known concentration values for every day in the Daily data frame.")
+  }
+  
   numDays <- length(localDaily$Date)
   numDaysP <- numDays + 1
   # set up DailyGen which will hold the daily generated flux values for all days and all iterations
@@ -193,6 +198,20 @@ randomSubset <- function(df, colName){
   return(subDF)
 }
 
+#' Merge concentration to Daily
+#' 
+#' Used for the WRTDS Kalman set of functions, this function
+#' merges the ConcAve into the Daily data frame, renaming
+#' it "trueConc", then calculates the "trueFlux", and "stdResid".
+#' 
+#' @param eList named list with the INFO, Daily, and Sample dataframes
+#' and surfaces matrix
+#' 
+#' @export
+#' @examples 
+#' eList <- Choptank_eList
+#' Daily2 <- populateDailySamp(eList)
+#' 
 populateDailySamp <- function(eList) {
 
   localSample <- eList$Sample
@@ -254,6 +273,10 @@ genmissing <- function(X1, XN, rho, N){
 #' eList must be run through \code{WRTDSKalman}.
 #' @param sideBySide logical. If \code{TRUE}, the two plots will be plotted
 #' side by side, otherwise, one by one vertically.
+#' @param fluxUnit number representing entry in pre-defined fluxUnit class array. \code{\link{printFluxUnitCheatSheet}}
+#' @param usgsStyle logical option to use USGS style guidelines. Setting this option
+#' to TRUE does NOT guarantee USGS compliance. It will only change automatically
+#' generated labels
 #' 
 #' @export
 #' @examples 
@@ -264,7 +287,8 @@ genmissing <- function(X1, XN, rho, N){
 #' 
 #' plotWRTDSKalman(eList, sideBySide = TRUE)
 #' 
-plotWRTDSKalman <- function(eList, sideBySide = FALSE) {
+plotWRTDSKalman <- function(eList, sideBySide = FALSE,
+                            fluxUnit = 9, usgsStyle = FALSE) {
 
   if(!all((c("GenFlux","GenConc") %in% names(eList$Daily)))){
     stop("This function requires running WRTDSKalman on eList")
@@ -280,6 +304,23 @@ plotWRTDSKalman <- function(eList, sideBySide = FALSE) {
     
   AnnualResults <- setupYears(eList$Daily)
   
+  if (is.numeric(fluxUnit)){
+    fluxUnit <- fluxConst[shortCode=fluxUnit][[1]]    
+  } else if (is.character(fluxUnit)){
+    fluxUnit <- fluxConst[fluxUnit][[1]]
+  }
+  
+  if(usgsStyle){
+    yLab <- fluxUnit@unitName[[1]]
+  } else {
+    yLab <- fluxUnit@shortName[[1]]
+  }
+  yLab <- trimws(yLab, which = "left")
+  unitFactorReturn <- fluxUnit@unitFactor
+
+  AnnualResults$Flux <- AnnualResults$Flux * unitFactorReturn
+  AnnualResults$GenFlux <- AnnualResults$GenFlux * unitFactorReturn
+  
   yMax <- 1.1 * max(AnnualResults$Flux, AnnualResults$GenFlux)
   nYears <- length(AnnualResults[,1])
   # first a plot of just the WRTDS estimate
@@ -292,8 +333,8 @@ plotWRTDSKalman <- function(eList, sideBySide = FALSE) {
     mainTitle <- paste(eList$INFO$shortName,eList$INFO$paramShortName,"\n",
                        setSeasonLabelByUser(paStartInput = paStart, paLongInput = paLong))
     par(mfrow=c(1,2), oma=c(0,0,2,0))
-    xlab <- "WRTDS annual flux, in metric tons"
-    ylab <- "WRTDSKalman annual flux, in metric tons"
+    xlab <- paste0("WRTDS annual flux, in ", yLab)
+    ylab <- paste0("WRTDSKalman annual flux, in ", yLab)
   } else {
     title1 <- paste(eList$INFO$shortName,eList$INFO$paramShortName,
                     "\nAnnual Flux Estimates: WRTDS in red, WRTDS-K in green\n",
@@ -301,21 +342,22 @@ plotWRTDSKalman <- function(eList, sideBySide = FALSE) {
     title2 <- paste(eList$INFO$shortName,eList$INFO$paramShortName,
                     "\nComparison of the two flux estimates\n",
                     setSeasonLabelByUser(paStartInput = paStart, paLongInput = paLong),sep="  ")
-    xlab <- "WRTDS estimate of annual flux, in metric tons"
-    ylab <- "WRTDSKalman estimate of annual flux, in metric tons"
+    xlab <- paste0("WRTDS estimate of annual flux, in ", yLab)
+    ylab <- paste0("WRTDSKalman estimate of annual flux, in ", yLab)
   }
 
   genericEGRETDotPlot(AnnualResults$DecYear, AnnualResults$Flux,
                       plotTitle =  title1, tinyPlot = sideBySide,
                       xlim = xlim, xaxs = "i",
                       ylim = c(0, yMax),  cex.main = 0.9,
-                      xlab = "", ylab = "Annual flux, metric tons",
+                      xlab = "", ylab = paste0("Annual flux, in ", yLab),
                       col = "red", cex = 1.4)
   points(AnnualResults$DecYear, AnnualResults$GenFlux, 
          col = "green", pch = 20, cex = 1.4)
   
   # scatter plot
-  genericEGRETDotPlot(AnnualResults$Flux, AnnualResults$GenFlux, 
+  genericEGRETDotPlot(AnnualResults$Flux, 
+                      AnnualResults$GenFlux, 
                       cex = 1.3, col = "red", 
                       xlim = c(0, yMax), 
                       ylim = c(0, yMax), tinyPlot = sideBySide,
@@ -327,6 +369,7 @@ plotWRTDSKalman <- function(eList, sideBySide = FALSE) {
 
   if(sideBySide){
     mtext(mainTitle, line = -1, side = 3, outer = TRUE, cex= 1)
+    par(mfrow=c(1,1), oma=c(0,0,0,0))
   }
 }
 
@@ -435,11 +478,7 @@ plotTimeSlice <- function(eList, start = NA, end = NA, conc = TRUE,
     y2 <- Daily$GenFlux * fluxFactor
     y3 <- Sample$rObserved * Sample$Q * fluxFactor *86.40
 
-    if(usgsStyle){
-      yLab <- fluxUnit@unitUSGS[[1]]
-    } else {
-      yLab <- fluxUnit@unitExpress[[1]]
-    }
+    yLab <- ifelse(usgsStyle,fluxUnit@unitUSGS,fluxUnit@unitExpress)
     
     plotTitle <- paste(name,"\nFlux, Black is WRTDS, Green is WRTDSKalman\nData in red, (rl in blue if <), Ratio of means is", fratio)
   }
