@@ -35,7 +35,7 @@
 #' resultSurvReg <- runSurvReg(estPtYear,estPtLQ,
 #'                             DecLow,DecHigh,Sample,
 #'                             run.parallel = FALSE)
-runSurvReg<-function(estPtYear,estPtLQ,DecLow,DecHigh,Sample, 
+runSurvReg <- function(estPtYear, estPtLQ, DecLow, DecHigh, Sample, 
                      windowY=7, windowQ=2, windowS=0.5,
                      minNumObs=100, minNumUncen=50, verbose = TRUE,interactive=NULL,
                      edgeAdjust=TRUE, run.parallel = FALSE) {
@@ -190,7 +190,7 @@ run_WRTDS <- function(estY, estLQ,
     return(NULL)
   })
   
-  if(class(x) == "survreg") {
+  if(inherits(x, "survreg")) {
     newdf<-data.frame(DecYear=estY,LogQ=estLQ,SinDY=sin(2*pi*estY),CosDY=cos(2*pi*estY))
     #   extract results at estimation point
     yHat<-predict(x,newdf)

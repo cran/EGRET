@@ -46,7 +46,7 @@ tableResults<-function(eList, qUnit = 2, fluxUnit = 9, localDaily = NA) {
   
   localAnnualResults <- setupYears(paStart=paStart,paLong=paLong, localDaily = localDaily)
   localAnnualResults <- localAnnualResults[rowSums(is.na(localAnnualResults[,c("Conc","Flux","FNConc","FNFlux")])) != 4,]
-  
+
   ################################################################################
   # I plan to make this a method, so we don't have to repeat it in every funciton:
   if (is.numeric(qUnit)){
@@ -80,20 +80,25 @@ tableResults<-function(eList, qUnit = 2, fluxUnit = 9, localDaily = NA) {
   cat("\n  ",localINFO$shortName,"\n  ",localINFO$paramShortName)
   cat("\n  ",periodName,"\n")
   
-  c1<-format(trunc(localAnnualResults$DecYear),width=7)
-  c2<-format(localAnnualResults$Q*qFactor,digits=3,width=9)
-  c3<-format(localAnnualResults$Conc,digits=3,width=9)
-  c4<-format(localAnnualResults$FNConc,digits=3,width=9)
-  c5<-format(localAnnualResults$Flux*fluxFactor,digits=3,width=9)
-  c6<-format(localAnnualResults$FNFlux*fluxFactor,digits=3,width=9)
+  period <- eList$INFO$paLong/12
   
-  if(all(c("GenFlux") %in% names(localAnnualResults))){
-    c7 <- format(localAnnualResults$GenFlux*fluxFactor,digits=3,width=9)
-    cat("\n   Year   Discharge    Conc    FN_Conc     Flux    FN_Flu   GenFlux")
-    cat("\n         ", qName, "         mg/L              ", fName, "\n\n")
-    results<-data.frame(c1,c2,c3,c4,c5,c6,c7)
+  c1 <- format(trunc(localAnnualResults$DecYear + period/2), width=7)
+  c2 <- format(localAnnualResults$Q*qFactor,digits=3, width=9)
+  c3 <- format(localAnnualResults$Conc,digits=3, width=9)
+  c4 <- format(localAnnualResults$FNConc,digits=3, width=9)
+  c5 <- format(localAnnualResults$Flux*fluxFactor, digits=3, width=9)
+  c6 <- format(localAnnualResults$FNFlux*fluxFactor, digits=3, width=9)
+  
+  if(all(c("GenFlux", "GenConc") %in% names(localAnnualResults))){
+    c8 <- format(localAnnualResults$GenFlux*fluxFactor,digits=3,width=9)
+    c7 <- format(localAnnualResults$GenConc, digits=3, width=9)
+    cat("\n   Year   Discharge    Conc    FN_Conc   GenConc     Flux    FN_Flux   GenFlux")
+    cat("\n            ", qName, "         mg/L             ", fName, "\n\n")
+    results<-data.frame(c1, c2, c3, c4, c7, c5, c6, c8)
     colnames(results) <- c("Year", paste0("Discharge [", qNameNoSpace, "]"),
-                           "Conc [mg/L]", "FN Conc [mg/L]", 
+                           "Conc [mg/L]", 
+                           "FN Conc [mg/L]", 
+                           "GenConc [mg/L]",
                            paste0("Flux [", fNameNoSpace, "]"), 
                            paste0("FN Flux [", fNameNoSpace, "]"),
                            paste0("GenFlux [", fNameNoSpace,"]")) 

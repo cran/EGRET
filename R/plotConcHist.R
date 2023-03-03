@@ -20,10 +20,13 @@
 #' @param yearEnd numeric is the calendar year just after the last estimated annual value to be plotted, default is NA (which allows it to be set automatically by the data)
 #' @param eList named list with at least the Daily and INFO dataframes
 #' @param concMax numeric. Maximum value of concentration to be plotted.
-#' @param printTitle logical variable if TRUE title is printed, if FALSE title is not printed (this is best for a multi-plot figure)
+#' @param printTitle logical variable if TRUE title is printed, if FALSE title is
+#' not printed (this is best for a multi-plot figure)
 #' @param plotFlowNorm logical variable if TRUE flow normalized line is plotted, if FALSE not plotted 
-#' @param plotAnnual logical variable if \code{TRUE}, annual concentration points from WRTDS output are plotted, if \code{FALSE} not plotted 
-#' @param plotGenConc logical variable. If \code{TRUE}, annual concentration points from WRTDS_K output are plotted, if \code{FALSE} not plotted 
+#' @param plotAnnual logical variable if \code{TRUE}, annual concentration points
+#' from WRTDS output are plotted, if \code{FALSE} not plotted 
+#' @param plotGenConc logical variable. If \code{TRUE}, annual concentration points
+#' from \code{WRTDSKalman} output are plotted, if \code{FALSE} not plotted 
 #' @param tinyPlot logical variable, if TRUE plot is designed to be plotted small, as a part of a multipart figure, default is FALSE
 #' @param cex numerical value giving the amount by which plotting symbols should be magnified
 #' @param cex.axis magnification to be used for axis annotation relative to the current setting of cex
@@ -37,6 +40,8 @@
 #' @param usgsStyle logical option to use USGS style guidelines. Setting this option
 #' to TRUE does NOT guarantee USGS compliance. It will only change automatically
 #' generated labels
+#' @param concLab object of concUnit class, or numeric represented the short code, 
+#' or character representing the descriptive name.
 #' @param \dots arbitrary graphical parameters that will be passed to genericEGRETDotPlot function (see ?par for options)
 #' @keywords graphics water-quality statistics
 #' @export
@@ -47,13 +52,21 @@
 #' eList <- Choptank_eList
 #' 
 #' plotConcHist(eList, yearStart, yearEnd)
-plotConcHist <- function(eList, yearStart = NA, yearEnd = NA, 
-                       concMax = NA, 
-                       printTitle = TRUE, 
-                       tinyPlot = FALSE, usgsStyle = FALSE,
-                       plotFlowNorm = TRUE, plotAnnual = TRUE, plotGenConc = FALSE,
-                       cex = 0.8, cex.axis = 1.1, cex.main = 1.1, lwd = 2, 
-                       col = "black", col.pred = "green", col.gen = "red", customPar = FALSE, ...){
+plotConcHist <- function(eList,
+                         yearStart = NA, 
+                         yearEnd = NA, 
+                         concMax = NA, 
+                         printTitle = TRUE, 
+                         tinyPlot = FALSE,
+                         usgsStyle = FALSE,
+                         plotFlowNorm = TRUE,
+                         plotAnnual = TRUE,
+                         plotGenConc = FALSE,
+                         cex = 0.8, cex.axis = 1.1, 
+                         cex.main = 1.1, lwd = 2, 
+                         col = "black", col.pred = "green",
+                         concLab = 1,
+                         col.gen = "red", customPar = FALSE, ...){
   
   localINFO <- getInfo(eList)
   localDaily <- getDaily(eList)
@@ -91,20 +104,32 @@ plotConcHist <- function(eList, yearStart = NA, yearEnd = NA,
     periodName <- paste(periodName,"*")
   }
 
+  if (is.numeric(concLab)){
+    concPrefix <- concConst[shortCode=concLab][[1]]    
+  } else if (is.character(concLab)){
+    concPrefix <- concConst[concLab][[1]]
+  } else {
+    concPrefix <- concLab
+  }
+  
   if(plotAnnual & plotGenConc & plotFlowNorm){  #all 3
-    title3 <- "\nMean (red = Kalman, black = WRTDS) & Flow-Normalized (line) Concentration" 
+    title3 <- "\nMean (red = Kalman, black = WRTDS) & Flow-Normalized (line)" 
   } else if (plotAnnual & plotGenConc & !plotFlowNorm){ # no flow-normalized
-    title3 <- "\nMean (red = Kalman, black = WRTDS) Concentration"
+    title3 <- "\nMean (red = Kalman, black = WRTDS)"
   } else if (!plotAnnual & !plotGenConc & plotFlowNorm){ # only flow-normalized
     title3 <- "\nFlow Normalized Concentration"
   } else if (plotFlowNorm & (plotGenConc | plotAnnual)){ # flow normalized with 1
-    title3 <- "\nMean (dots) & Flow-Normalized (line) Concentration"
+    title3 <- "\nMean (dots) & Flow-Normalized (line)"
   } else if (plotAnnual & !plotGenConc) {
-    title3 <- "\nMean Concentration"
+    title3 <- "\nMean"
   } else if (!plotAnnual & plotGenConc) {
-    title3 <- "\nMean Kalman Concentration"
+    title3 <- "\nMean Kalman"
   } else {
     title3 <- "\n"
+  }
+  
+  if(title3 != "\n"){
+    title3 <- paste(title3, concPrefix@longPrefix)
   }
   
   if(printTitle) {
@@ -116,20 +141,34 @@ plotConcHist <- function(eList, yearStart = NA, yearEnd = NA,
   }
   
   ##################
+  dataStart <- min(eList$Sample$DecYear, na.rm = TRUE)
+  dataStartPad <- dataStart - 0.5
   
   if(is.na(yearStart)){
-    yearStart <- floor(min(localAnnualResults$DecYear[!is.na(localAnnualResults$FNConc)], na.rm = TRUE))
+    yearStart <- dataStartPad
   } else {
-    yearStart <- floor(yearStart)
+    yearStart <- max(yearStart, dataStartPad)
+    
   }
+  
+  dataEnd <- max(eList$Sample$DecYear, na.rm = TRUE)
+  dataEndPad <- dataEnd + 0.5
   
   if(is.na(yearEnd)){
-    yearEnd <- ceiling(max(localAnnualResults$DecYear[!is.na(localAnnualResults$FNConc)], na.rm = TRUE))
+    yearEnd <- dataEndPad
   } else {
-    yearEnd <- floor(yearEnd) + 0.99
+    yearEnd <- min(yearEnd, dataEndPad)
   }
   
-  xInfo <- generalAxis(x=localAnnualResults$DecYear, minVal=yearStart, maxVal=yearEnd, padPercent=0.05, tinyPlot=tinyPlot)
+  localAnnualResults <- localAnnualResults[localAnnualResults$DecYear >= yearStart &
+                                             localAnnualResults$DecYear <= yearEnd, ]
+  
+  xInfo <- generalAxis(x = localAnnualResults$DecYear,
+                       minVal = yearStart,
+                       maxVal = yearEnd, 
+                       padPercent = 0.05,
+                       tinyPlot = tinyPlot, 
+                       concentration = FALSE)
   
   combinedY <- c(localAnnualResults$FNConc[localAnnualResults$DecYear > xInfo$bottom &
                                              localAnnualResults$DecYear < xInfo$top])
@@ -143,10 +182,12 @@ plotConcHist <- function(eList, yearStart = NA, yearEnd = NA,
   }
   
   yInfo <- generalAxis(x = combinedY, 
-                       minVal = 0, maxVal = concMax, 
-                       tinyPlot=tinyPlot,
-                       units=localINFO$param.units,
-                       usgsStyle = usgsStyle)
+                       minVal = 0, 
+                       maxVal = concMax, 
+                       tinyPlot = tinyPlot,
+                       units = localINFO$param.units,
+                       usgsStyle = usgsStyle, 
+                       concLab = concLab)
   
   genericEGRETDotPlot(x = NA, y = NA,
                       xTicks = xInfo$ticks, yTicks = yInfo$ticks, xDate = TRUE,

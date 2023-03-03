@@ -8,7 +8,8 @@ plotConcHist(eList, yearStart = NA, yearEnd = NA, concMax = NA,
   printTitle = TRUE, tinyPlot = FALSE, usgsStyle = FALSE,
   plotFlowNorm = TRUE, plotAnnual = TRUE, plotGenConc = FALSE,
   cex = 0.8, cex.axis = 1.1, cex.main = 1.1, lwd = 2, col = "black",
-  col.pred = "green", col.gen = "red", customPar = FALSE, ...)
+  col.pred = "green", concLab = 1, col.gen = "red", customPar = FALSE,
+  ...)
 }
 \arguments{
 \item{eList}{named list with at least the Daily and INFO dataframes}
@@ -19,7 +20,8 @@ plotConcHist(eList, yearStart = NA, yearEnd = NA, concMax = NA,
 
 \item{concMax}{numeric. Maximum value of concentration to be plotted.}
 
-\item{printTitle}{logical variable if TRUE title is printed, if FALSE title is not printed (this is best for a multi-plot figure)}
+\item{printTitle}{logical variable if TRUE title is printed, if FALSE title is
+not printed (this is best for a multi-plot figure)}
 
 \item{tinyPlot}{logical variable, if TRUE plot is designed to be plotted small, as a part of a multipart figure, default is FALSE}
 
@@ -29,9 +31,11 @@ generated labels}
 
 \item{plotFlowNorm}{logical variable if TRUE flow normalized line is plotted, if FALSE not plotted}
 
-\item{plotAnnual}{logical variable if \code{TRUE}, annual concentration points from WRTDS output are plotted, if \code{FALSE} not plotted}
+\item{plotAnnual}{logical variable if \code{TRUE}, annual concentration points
+from WRTDS output are plotted, if \code{FALSE} not plotted}
 
-\item{plotGenConc}{logical variable. If \code{TRUE}, annual concentration points from WRTDS_K output are plotted, if \code{FALSE} not plotted}
+\item{plotGenConc}{logical variable. If \code{TRUE}, annual concentration points
+from \code{WRTDSKalman} output are plotted, if \code{FALSE} not plotted}
 
 \item{cex}{numerical value giving the amount by which plotting symbols should be magnified}
 
@@ -44,6 +48,9 @@ generated labels}
 \item{col}{color of points on plot, see ?par 'Color Specification'}
 
 \item{col.pred}{color of flow normalized line on plot, see ?par 'Color Specification'}
+
+\item{concLab}{object of concUnit class, or numeric represented the short code, 
+or character representing the descriptive name.}
 
 \item{col.gen}{color of points for WRTDS_K output on plot, see ?par 'Color Specification'}
 

@@ -110,7 +110,7 @@ stitch <- function(eList,
   surface1End <- as.Date(sample1EndDate) + 1
   surface2Start <- as.Date(sample2StartDate) - 1
   
-  highLow <- decimalHighLow(Sample1)
+  highLow <- EGRET::decimalHighLow(Sample1)
   DecHigh <- highLow[["DecHigh"]]
   DecLow <- highLow[["DecLow"]]
   sliceIndex <- which(vectorYear >= decimalDate(surfaceStart) & 
@@ -133,12 +133,13 @@ stitch <- function(eList,
   }
   attr(surfaces1, "LogQ") <- vectorLogQ
   attr(surfaces1, "Year") <- Year
-  highLow <- decimalHighLow(Sample2)
+  highLow <- EGRET::decimalHighLow(Sample2)
   DecHigh <- highLow[["DecHigh"]]
   DecLow <- highLow[["DecLow"]]
   sliceIndex <- which(vectorYear >= decimalDate(surface2Start) & 
                         vectorYear <= decimalDate(surfaceEnd))
   Year <- vectorYear[c(sliceIndex[1] - 1, sliceIndex, tail(sliceIndex, n = 1) + 1)]
+  Year <- Year[!is.na(Year)]
   nVectorYear <- length(Year)
   Year2 <- Year
   estPtYear <- rep(Year, each = 14)
@@ -167,16 +168,17 @@ stitch <- function(eList,
     surfaces2Slice <- surfaces2[1:14, which((Year2 %in% Year1)), 1:3]
     surfacesMean <- (surfaces1Slice + surfaces2Slice)/2
     surfacesMean[, , 3] <- exp((surfacesMean[, , 2]^2)/2) * exp(surfacesMean[, , 1])
-    YearStart <- Year1[1]
-    YearEnd <- Year2[length(Year2)]
+    YearStart <- min(Year1, na.rm = TRUE)
+    YearEnd <- max(Year2, na.rm = TRUE)
     vectorYear <- seq(YearStart, YearEnd, stepYear)
     nVectorYear <- length(vectorYear)
     bottomYear <- YearStart
     surfaceTotal <- array(0, dim = c(14, nVectorYear, 3))
     for (i in 1:14) {
       for (j in 1:3) {
-        surfaceTotal[i, , j] <- c(surfaces1Unique[i,  , j], surfacesMean[i, , j], surfaces2Unique[i, 
-                                                                                              , j])
+        surfaceTotal[i, , j] <- c(surfaces1Unique[i,  , j], 
+                                  surfacesMean[i, , j],
+                                  surfaces2Unique[i, , j])
       }
     }
   }
@@ -200,8 +202,10 @@ stitch <- function(eList,
 
 #' decimalHighLow
 #' 
-#' decimalHighLow
-#' @param df data.frame with Date, DecYear, and Month columns
+#' decimalHighLow figures out the highest and lowest decimal year based on
+#' water year. The input is a data frame with columns Month and DecYear.
+#' 
+#' @param df data.frame with Month, DecYear, and Month columns
 #' @return list with DecHigh and DecLow (water year high/low decimal values)
 #' @export
 #' @examples 
@@ -212,7 +216,7 @@ stitch <- function(eList,
 #' DecLow <- highLow[["DecLow"]]
 decimalHighLow <- function(df){
   
-  n <- length(df$Date)
+  n <- nrow(df)
   DecLow <- trunc(df$DecYear[1]) - 0.25
   DecHigh <- trunc(df$DecYear[n]) + 0.75
   
