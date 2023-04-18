@@ -7,9 +7,9 @@ output:
     toc: true
     number_sections: true
     fig_caption: yes
-# bibliography: Exported_Items.bib
-# nocite: '@*'
-# link-citations: yes
+bibliography: Exported_Items.bib
+nocite: '@*'
+link-citations: yes
 vignette: >
   %\VignetteIndexEntry{Introduction to the EGRET package}
   %\VignetteSuggests{extrafont,knitr}
@@ -45,7 +45,6 @@ EGRET includes statistics and graphics for streamflow history, water quality tre
 
 For information on getting started in R, downloading and installing the package, see the [New to R](#new-to-r) section.
 
-The best ways to learn about the WRTDS approach is to read the User Guide and two journal articles, @hirsch_weighted_2010 and @sprague_nitrate_2011. These articles are available, for free, from the journals in which they were published. 
 
 This vignette assumes that you understand the concepts underlying WRTDS, and reading the relevant sections of the User Guide at least the first of these papers. Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.
 
@@ -1345,6 +1344,11 @@ postscript("fluxBiasMulti.ps", height=10,width=8)
 fluxBiasMulti(eList)
 dev.off()
 ```
+
+
+# Disclaimer
+
+This software has been approved for release by the U.S. Geological Survey (USGS). Although the software has been subjected to rigorous review, the USGS reserves the right to update the software as needed pursuant to further analysis and review. No warranty, expressed or implied, is made by the USGS or the U.S. Government as to the functionality of the software and related material nor shall the fact of release constitute any such warranty. Furthermore, the software is released on condition that neither the USGS nor the U.S. Government shall be held liable for any damages resulting from its authorized or unauthorized use.
 
 
 # Bibliography

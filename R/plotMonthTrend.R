@@ -6,6 +6,11 @@
 #' was increasing, the arrow is red and pointing up. If the trend was decreasing,
 #' the arrow is black and pointing down.
 #' 
+#' The flux values for each month are flow normalized monthly watershed yields 
+#' expressed as kg/month/km^2.  The concentrations are the mean flow normalized
+#' concentration, expressed in whatever concentration units the raw data are
+#' expressed as (typically mg/L). 
+#' 
 #' @param pairResults results from \code{runPairs}.
 #' @param yMax numeric. Upper limit for plot. Default is \code{NA},
 #' which will use the maximum of the data.
@@ -17,7 +22,10 @@
 #' @param printTitle logical variable if TRUE title is printed, if FALSE title is not printed (this is best for a multi-plot figure)
 #' @return Base R plot of monthly trends
 #' @param concLab object of concUnit class, or numeric represented the short code, 
-#' or character representing the descriptive name.
+#' or character representing the descriptive name. By default, this argument sets
+#' concentration labels to use either Concentration or Conc (for tiny plots). Units
+#' are taken from the eList$INFO$param.units. To use any other words than
+#' "Concentration" see \code{vignette(topic = "units", package = "EGRET")}.
 #' @param monthLab object of monthLabel class, or numeric represented the short code, 
 #' or character representing the descriptive name.
 #' @export
@@ -47,7 +55,7 @@
 #' }
 #'  
 plotMonthTrend <- function(pairResults, yMax = NA,
-                    arrowFactor = 1, flux = TRUE, 
+                    arrowFactor = 0.75, flux = TRUE, 
                     printTitle = TRUE,
                     concLab = 1, monthLab = 1){
   
@@ -110,10 +118,13 @@ plotMonthTrend <- function(pairResults, yMax = NA,
     monthAbb <- monthAbb[monthOrder]
   }
   
-  par(las = 1, tck = 0.02, xaxs = "i", yaxs = "i")
+  par(las = 1, tck = 0.02, xaxs = "i", yaxs = "i",
+      mar=c(5,6,4,2) + 0.1,mgp=c(3,0.5,0))
   plot(1:12, z1, xlim = c(0.5,12.5), ylim = c(0, yMax),
        xlab = "", ylab = "",
-       main = title, col = "black", axes = FALSE, cex.lab = 0.95)
+       main = title, col = "black", 
+       axes = FALSE, cex.lab = 0.95,
+       lwd = 2)
   title(ylab = ylab, line=2, cex.lab=1.2)
   axis(1, at = seq(1, 12), labels = monthAbb, tick = TRUE)
   axis(2, at = NULL, labels = TRUE, tick = TRUE)
@@ -124,7 +135,8 @@ plotMonthTrend <- function(pairResults, yMax = NA,
   par(new = TRUE)
   plot(1:12, z2, xlim = c(0.5,12.5), ylim = c(0, yMax),
        xlab = "", ylab = "",
-       main = "", col = "red", axes = FALSE)
+       main = "", col = "red", axes = FALSE,
+       lwd = 2)
   
   for(m in months){
     x0 <- m

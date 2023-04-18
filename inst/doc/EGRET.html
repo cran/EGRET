@@ -145,6 +145,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
 
 
 
+<style type="text/css">
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
+</style>
 
 <style type="text/css">body {
 background-color: #fff;
@@ -412,7 +434,8 @@ Input</a></li>
 <li><a href="#createWordTable" id="toc-createWordTable"><span class="toc-section-number">12</span> Creating tables in Microsoft™
 software from an R data frame</a></li>
 <li><a href="#savingPlots" id="toc-savingPlots"><span class="toc-section-number">13</span> Saving Plots</a></li>
-<li><a href="#bibliography" id="toc-bibliography"><span class="toc-section-number">14</span> Bibliography</a></li>
+<li><a href="#disclaimer" id="toc-disclaimer"><span class="toc-section-number">14</span> Disclaimer</a></li>
+<li><a href="#bibliography" id="toc-bibliography">Bibliography</a></li>
 </ul>
 </div>
 
@@ -421,14 +444,12 @@ software from an R data frame</a></li>
 <p>EGRET includes statistics and graphics for streamflow history, water
 quality trends, and the statistical modeling algorithm Weighted
 Regressions on Time, Discharge, and Season (WRTDS). Please see the
-official EGRET User Guide <span class="citation">@hirsch_user_2015</span> for more information on the
-EGRET package:</p>
+official EGRET User Guide <span class="citation">Robert M. Hirsch and De
+Cicco (<a href="#ref-hirsch_user_2015" role="doc-biblioref">2015</a>)</span> for more information on the EGRET
+package:</p>
 <p><a href="https://doi.org/10.3133/tm4A10">https://doi.org/10.3133/tm4A10</a></p>
 <p>For information on getting started in R, downloading and installing
 the package, see the <a href="#new-to-r">New to R</a> section.</p>
-<p>The best ways to learn about the WRTDS approach is to read the User
-Guide and two journal articles, <span class="citation">@hirsch_weighted_2010</span> and <span class="citation">@sprague_nitrate_2011</span>. These articles are
-available, for free, from the journals in which they were published.</p>
 <p>This vignette assumes that you understand the concepts underlying
 WRTDS, and reading the relevant sections of the User Guide at least the
 first of these papers. Any use of trade, firm, or product names is for
@@ -3306,8 +3327,59 @@ width eliminates R having to re-size the graphic:</p>
 <span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fluxBiasMulti</span>(eList)</span>
 <span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
 </div>
-<div id="bibliography" class="section level1" number="14">
-<h1><span class="header-section-number">14</span> Bibliography</h1>
+<div id="disclaimer" class="section level1" number="14">
+<h1><span class="header-section-number">14</span> Disclaimer</h1>
+<p>This software has been approved for release by the U.S. Geological
+Survey (USGS). Although the software has been subjected to rigorous
+review, the USGS reserves the right to update the software as needed
+pursuant to further analysis and review. No warranty, expressed or
+implied, is made by the USGS or the U.S. Government as to the
+functionality of the software and related material nor shall the fact of
+release constitute any such warranty. Furthermore, the software is
+released on condition that neither the USGS nor the U.S. Government
+shall be held liable for any damages resulting from its authorized or
+unauthorized use.</p>
+</div>
+<div id="bibliography" class="section level1 unnumbered">
+<h1 class="unnumbered">Bibliography</h1>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-choquette_tracking_2019" class="csl-entry">
+Choquette, Anne F, Robert M Hirsch, Jennifer C Murphy, LT Johnson, and
+RB Confesor Jr. 2019. <span>“Tracking Changes in Nutrient Delivery to
+Western <span>Lake</span> <span>Erie</span>: <span>Approaches</span> to
+Compensate for Variability and Trends in Streamflow.”</span> <em>Journal
+of Great Lakes Research</em> 45 (1): 21–39.
+</div>
+<div id="ref-hirsch_bootstrap_2015" class="csl-entry">
+Hirsch, Robert M, Stacey A Archfield, and Laura A De Cicco. 2015.
+<span>“A Bootstrap Method for Estimating Uncertainty of Water Quality
+Trends.”</span> <em>Environmental Modelling &amp; Software</em> 73:
+148–66.
+</div>
+<div id="ref-hirsch_user_2015" class="csl-entry">
+Hirsch, Robert M, and Laura A De Cicco. 2015. <span>“User Guide to
+<span>Exploration</span> and <span>Graphics</span> for
+<span>RivEr</span> <span>Trends</span> (<span>EGRET</span>) and <span class="nocase">dataRetrieval</span>: <span>R</span> Packages for
+Hydrologic Data.”</span> 2328-7055. US Geological Survey.
+</div>
+<div id="ref-hirsch_weighted_2010" class="csl-entry">
+Hirsch, Robert M., Douglas L. Moyer, and Stacey A. Archfield. 2010.
+<span>“Weighted <span>Regressions</span> on <span>Time</span>,
+<span>Discharge</span>, and <span>Season</span> (<span>WRTDS</span>),
+with an <span>Application</span> to <span>Chesapeake</span>
+<span>Bay</span> <span>River</span> <span>Inputs</span>1.”</span>
+<em>JAWRA Journal of the American Water Resources Association</em> 46
+(5): 857–80. <a href="https://doi.org/10.1111/j.1752-1688.2010.00482.x">https://doi.org/10.1111/j.1752-1688.2010.00482.x</a>.
+</div>
+<div id="ref-sprague_nitrate_2011" class="csl-entry">
+Sprague, Lori A., Robert M. Hirsch, and Brent T. Aulenbach. 2011.
+<span>“Nitrate in the <span>Mississippi</span> <span>River</span> and
+<span>Its</span> <span>Tributaries</span>, 1980 to 2008:
+<span>Are</span> <span>We</span> <span>Making</span>
+<span>Progress</span>?”</span> <em>Environmental Science &amp;
+Technology</em> 45 (17): 7209–16. <a href="https://doi.org/10.1021/es201221s">https://doi.org/10.1021/es201221s</a>.
+</div>
+</div>
 </div>
 
 

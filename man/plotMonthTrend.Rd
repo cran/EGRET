@@ -4,7 +4,7 @@
 \alias{plotMonthTrend}
 \title{Plot monthly trend result from runPairs}
 \usage{
-plotMonthTrend(pairResults, yMax = NA, arrowFactor = 1, flux = TRUE,
+plotMonthTrend(pairResults, yMax = NA, arrowFactor = 0.75, flux = TRUE,
   printTitle = TRUE, concLab = 1, monthLab = 1)
 }
 \arguments{
@@ -23,7 +23,10 @@ Default is \code{TRUE}.}
 \item{printTitle}{logical variable if TRUE title is printed, if FALSE title is not printed (this is best for a multi-plot figure)}
 
 \item{concLab}{object of concUnit class, or numeric represented the short code, 
-or character representing the descriptive name.}
+or character representing the descriptive name. By default, this argument sets
+concentration labels to use either Concentration or Conc (for tiny plots). Units
+are taken from the eList$INFO$param.units. To use any other words than
+"Concentration" see \code{vignette(topic = "units", package = "EGRET")}.}
 
 \item{monthLab}{object of monthLabel class, or numeric represented the short code, 
 or character representing the descriptive name.}
@@ -37,6 +40,12 @@ or flux is calculated from the \code{runPairs} function. This plotting
 function shows an arrow for each month. If the trend from year1 to year2 
 was increasing, the arrow is red and pointing up. If the trend was decreasing,
 the arrow is black and pointing down.
+}
+\details{
+The flux values for each month are flow normalized monthly watershed yields 
+expressed as kg/month/km^2.  The concentrations are the mean flow normalized
+concentration, expressed in whatever concentration units the raw data are
+expressed as (typically mg/L).
 }
 \examples{
 
