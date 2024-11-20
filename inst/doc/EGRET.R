@@ -14,174 +14,174 @@ knitr::opts_chunk$set(echo = TRUE,
 
 
 ## ----workflowFlowHistory, echo=TRUE,eval=FALSE--------------------------------
-#  library(EGRET)
-#  
-#  # Flow history analysis
-#  
-#  ############################
-#  # Gather discharge data:
-#  siteNumber <- "01491000" #Choptank River at Greensboro, MD
-#  startDate <- "" # Get earliest date
-#  endDate <- "" # Get latest date
-#  Daily <- readNWISDaily(siteNumber,"00060",startDate,endDate)
-#  # Gather site and parameter information:
-#  # Here user must input some values for
-#  # the default (interactive=TRUE)
-#  INFO <- readNWISInfo(siteNumber,"00060")
-#  INFO$shortName <- "Choptank River near Greensboro, MD"
-#  ############################
-#  
-#  ############################
-#  # Check flow history data:
-#  eList <- as.egret(INFO, Daily, NA, NA)
-#  plotFlowSingle(eList, istat=7,qUnit="thousandCfs")
-#  plotSDLogQ(eList)
-#  plotQTimeDaily(eList, qLower=1,qUnit=3)
-#  plotFour(eList, qUnit=3)
-#  plotFourStats(eList, qUnit=3)
-#  ############################
-#  
-#  # modify this for your own computer file structure:
-#  savePath<-"/Users/rhirsch/Desktop/"
-#  saveResults(savePath, eList)
-#  
+# library(EGRET)
+# 
+# # Flow history analysis
+# 
+# ############################
+# # Gather discharge data:
+# siteNumber <- "01491000" #Choptank River at Greensboro, MD
+# startDate <- "" # Get earliest date
+# endDate <- "" # Get latest date
+# Daily <- readNWISDaily(siteNumber,"00060",startDate,endDate)
+# # Gather site and parameter information:
+# # Here user must input some values for
+# # the default (interactive=TRUE)
+# INFO <- readNWISInfo(siteNumber,"00060")
+# INFO$shortName <- "Choptank River near Greensboro, MD"
+# ############################
+# 
+# ############################
+# # Check flow history data:
+# eList <- as.egret(INFO, Daily, NA, NA)
+# plotFlowSingle(eList, istat=7,qUnit="thousandCfs")
+# plotSDLogQ(eList)
+# plotQTimeDaily(eList, qLower=1,qUnit=3)
+# plotFour(eList, qUnit=3)
+# plotFourStats(eList, qUnit=3)
+# ############################
+# 
+# # modify this for your own computer file structure:
+# savePath<-"/Users/rhirsch/Desktop/"
+# saveResults(savePath, eList)
+# 
 
 ## ----workflowWaterQuality, echo=TRUE,eval=FALSE-------------------------------
-#  library(EGRET)
-#  
-#  ############################
-#  # Gather discharge data:
-#  siteNumber <- "01491000" #Choptank River near Greensboro, MD
-#  startDate <- "" #Gets earliest date
-#  endDate <- "2011-09-30"
-#  # Gather sample data:
-#  parameter_cd<-"00631" #5 digit USGS code
-#  Sample <- readNWISSample(siteNumber,parameter_cd,startDate,endDate)
-#  #Gets earliest date from Sample record:
-#  #This is just one of many ways to assure the Daily record
-#  #spans the Sample record
-#  startDate <- min(as.character(Sample$Date))
-#  # Gather discharge data:
-#  Daily <- readNWISDaily(siteNumber,"00060",startDate,endDate)
-#  # Gather site and parameter information:
-#  
-#  # Here user must input some values:
-#  INFO<- readNWISInfo(siteNumber,parameter_cd)
-#  INFO$shortName <- "Choptank River at Greensboro, MD"
-#  
-#  # Merge discharge with sample data:
-#  eList <- mergeReport(INFO, Daily, Sample)
-#  ############################
-#  
-#  ############################
-#  # Check sample data:
-#  boxConcMonth(eList)
-#  boxQTwice(eList)
-#  plotConcTime(eList)
-#  plotConcQ(eList)
-#  multiPlotDataOverview(eList)
-#  ############################
-#  
-#  ############################
-#  # Run WRTDS model:
-#  eList <- modelEstimation(eList)
-#  ############################
-#  
-#  ############################
-#  #Check model results:
-#  
-#  #Require Sample + INFO:
-#  plotConcTimeDaily(eList)
-#  plotFluxTimeDaily(eList)
-#  plotConcPred(eList)
-#  plotFluxPred(eList)
-#  plotResidPred(eList)
-#  plotResidQ(eList)
-#  plotResidTime(eList)
-#  boxResidMonth(eList)
-#  boxConcThree(eList)
-#  
-#  #Require Daily + INFO:
-#  plotConcHist(eList)
-#  plotFluxHist(eList)
-#  
-#  # Multi-line plots:
-#  date1 <- "1985-09-01"
-#  date2 <- "1997-09-0"
-#  date3 <- "2010-09-01"
-#  qBottom<-0.2
-#  qTop<-10
-#  plotConcQSmooth(eList, date1, date2, date3, qBottom, qTop,
-#                     concMax=2,legendTop = 0.8)
-#  q1 <- 2
-#  q2 <- 10
-#  q3 <- 20
-#  centerDate <- "07-01"
-#  yearEnd <- 1980
-#  yearStart <- 2010
-#  plotConcTimeSmooth(eList, q1, q2, q3, centerDate, yearStart, yearEnd, legendTop = 0.7)
-#  
-#  # Multi-plots:
-#  fluxBiasMulti(eList)
-#  
-#  #Contour plots:
-#  clevel<-seq(0,2,0.5)
-#  maxDiff<-0.8
-#  yearStart <- 1980
-#  yearEnd <- 2010
-#  
-#  plotContours(eList, yearStart,yearEnd,qBottom,qTop,
-#               contourLevels = clevel,qUnit=2)
-#  plotDiffContours(eList, yearStart,yearEnd,
-#                   qBottom,qTop,maxDiff,qUnit=2)
-#  
-#  # modify this for your own computer file structure:
-#  savePath<-"/Users/rhirsch/Desktop/"
-#  saveResults(savePath, eList)
+# library(EGRET)
+# 
+# ############################
+# # Gather discharge data:
+# siteNumber <- "01491000" #Choptank River near Greensboro, MD
+# startDate <- "" #Gets earliest date
+# endDate <- "2011-09-30"
+# # Gather sample data:
+# parameter_cd<-"00631" #5 digit USGS code
+# Sample <- readNWISSample(siteNumber,parameter_cd,startDate,endDate)
+# #Gets earliest date from Sample record:
+# #This is just one of many ways to assure the Daily record
+# #spans the Sample record
+# startDate <- min(as.character(Sample$Date))
+# # Gather discharge data:
+# Daily <- readNWISDaily(siteNumber,"00060",startDate,endDate)
+# # Gather site and parameter information:
+# 
+# # Here user must input some values:
+# INFO<- readNWISInfo(siteNumber,parameter_cd)
+# INFO$shortName <- "Choptank River at Greensboro, MD"
+# 
+# # Merge discharge with sample data:
+# eList <- mergeReport(INFO, Daily, Sample)
+# ############################
+# 
+# ############################
+# # Check sample data:
+# boxConcMonth(eList)
+# boxQTwice(eList)
+# plotConcTime(eList)
+# plotConcQ(eList)
+# multiPlotDataOverview(eList)
+# ############################
+# 
+# ############################
+# # Run WRTDS model:
+# eList <- modelEstimation(eList)
+# ############################
+# 
+# ############################
+# #Check model results:
+# 
+# #Require Sample + INFO:
+# plotConcTimeDaily(eList)
+# plotFluxTimeDaily(eList)
+# plotConcPred(eList)
+# plotFluxPred(eList)
+# plotResidPred(eList)
+# plotResidQ(eList)
+# plotResidTime(eList)
+# boxResidMonth(eList)
+# boxConcThree(eList)
+# 
+# #Require Daily + INFO:
+# plotConcHist(eList)
+# plotFluxHist(eList)
+# 
+# # Multi-line plots:
+# date1 <- "1985-09-01"
+# date2 <- "1997-09-0"
+# date3 <- "2010-09-01"
+# qBottom<-0.2
+# qTop<-10
+# plotConcQSmooth(eList, date1, date2, date3, qBottom, qTop,
+#                    concMax=2,legendTop = 0.8)
+# q1 <- 2
+# q2 <- 10
+# q3 <- 20
+# centerDate <- "07-01"
+# yearEnd <- 1980
+# yearStart <- 2010
+# plotConcTimeSmooth(eList, q1, q2, q3, centerDate, yearStart, yearEnd, legendTop = 0.7)
+# 
+# # Multi-plots:
+# fluxBiasMulti(eList)
+# 
+# #Contour plots:
+# clevel<-seq(0,2,0.5)
+# maxDiff<-0.8
+# yearStart <- 1980
+# yearEnd <- 2010
+# 
+# plotContours(eList, yearStart,yearEnd,qBottom,qTop,
+#              contourLevels = clevel,qUnit=2)
+# plotDiffContours(eList, yearStart,yearEnd,
+#                  qBottom,qTop,maxDiff,qUnit=2)
+# 
+# # modify this for your own computer file structure:
+# savePath<-"/Users/rhirsch/Desktop/"
+# saveResults(savePath, eList)
 
 ## ----openDataRetrieval, eval=FALSE--------------------------------------------
-#  library(dataRetrieval)
-#  vignette("dataRetrieval")
+# library(dataRetrieval)
+# vignette("dataRetrieval")
 
 ## ----openlibraries, echo=TRUE,eval=FALSE--------------------------------------
-#  library(EGRET)
+# library(EGRET)
 
 ## ----firstExample, echo=TRUE, eval=FALSE--------------------------------------
-#  siteNumber <- "01491000"
-#  startDate <- "2000-01-01"
-#  endDate <- "2013-01-01"
-#  # This call will get NWIS (ft3/s) data , and convert it to m3/s:
-#  Daily <- readNWISDaily(siteNumber, "00060", startDate, endDate)
+# siteNumber <- "01491000"
+# startDate <- "2000-01-01"
+# endDate <- "2013-01-01"
+# # This call will get NWIS (ft3/s) data , and convert it to m3/s:
+# Daily <- readNWISDaily(siteNumber, "00060", startDate, endDate)
 
 ## ----openDaily, eval = FALSE--------------------------------------------------
-#  fileName <- "ChoptankRiverFlow.txt"
-#  filePath <-  "C:/RData/"
-#  Daily <- readUserDaily(filePath,fileName,
-#                      separator="\t")
+# fileName <- "ChoptankRiverFlow.txt"
+# filePath <-  "C:/RData/"
+# Daily <- readUserDaily(filePath,fileName,
+#                     separator="\t")
 
 ## ----secondExample,echo=TRUE,eval=FALSE---------------------------------------
-#  siteNumber <- "01491000"
-#  parameterCd <- "00618"
-#  Sample <-readNWISSample(siteNumber,parameterCd,
-#        startDate, endDate)
+# siteNumber <- "01491000"
+# parameterCd <- "00618"
+# Sample <-readNWISSample(siteNumber,parameterCd,
+#       startDate, endDate)
 
 ## ----STORET,echo=TRUE,eval=FALSE----------------------------------------------
-#  site <- 'WIDNR_WQX-10032762'
-#  characteristicName <- 'Specific conductance'
-#  Sample <-readWQPSample(site,characteristicName,
-#        startDate, endDate)
+# site <- 'WIDNR_WQX-10032762'
+# characteristicName <- 'Specific conductance'
+# Sample <-readWQPSample(site,characteristicName,
+#       startDate, endDate)
 
 ## ----openSample, eval = FALSE-------------------------------------------------
-#  fileName <- "ChoptankRiverNitrate.csv"
-#  filePath <-  "C:/RData/"
-#  Sample <- readUserSample(filePath,fileName,
-#                                  separator=",")
+# fileName <- "ChoptankRiverNitrate.csv"
+# filePath <-  "C:/RData/"
+# Sample <- readUserSample(filePath,fileName,
+#                                 separator=",")
 
 ## ----openSample2, eval = FALSE------------------------------------------------
-#  fileName <- "ChoptankPhosphorus.txt"
-#  filePath <-  "C:/RData/"
-#  Sample <-readUserSample(filePath,fileName,
-#                                  separator="\t")
+# fileName <- "ChoptankPhosphorus.txt"
+# filePath <-  "C:/RData/"
+# Sample <-readUserSample(filePath,fileName,
+#                                 separator="\t")
 
 ## ----label=tab:exampleComplexQW, echo=FALSE, eval=TRUE,results='asis'---------
 cdate <- c("2003-02-15","2003-06-30","2004-09-15","2005-01-30","2005-05-30","2005-10-30")
@@ -206,57 +206,57 @@ knitr::kable(DF,  caption="Example data",
   Sample
 
 ## ----ThirdExample, eval=FALSE-------------------------------------------------
-#  parameterCd <- "00618"
-#  siteNumber <- "01491000"
-#  INFO <- readNWISInfo(siteNumber,parameterCd, interactive=FALSE)
+# parameterCd <- "00618"
+# siteNumber <- "01491000"
+# INFO <- readNWISInfo(siteNumber,parameterCd, interactive=FALSE)
 
 ## ----WQPInfo, eval=FALSE------------------------------------------------------
-#  parameterCd <- "00618"
-#  INFO_WQP <- readWQPInfo("USGS-01491000",parameterCd)
+# parameterCd <- "00618"
+# INFO_WQP <- readWQPInfo("USGS-01491000",parameterCd)
 
 ## ----addInfoCustom, eval=FALSE, echo=TRUE-------------------------------------
-#  
-#  fileName <- "INFO.csv"
-#  filePath <- "C:/RData/"
-#  
-#  INFO <- readUserInfo(filePath, fileName)
-#  
+# 
+# fileName <- "INFO.csv"
+# filePath <- "C:/RData/"
+# 
+# INFO <- readUserInfo(filePath, fileName)
+# 
 
 ## ----addInfo, eval=FALSE, echo=TRUE-------------------------------------------
-#  
-#  INFO$riverInfo <- "Major tributary of the Chesapeake Bay"
-#  INFO$GreensboroPopulation <- 1931
-#  
+# 
+# INFO$riverInfo <- "Major tributary of the Chesapeake Bay"
+# INFO$GreensboroPopulation <- 1931
+# 
 
 ## ----mergeExample, eval=FALSE-------------------------------------------------
-#  siteNumber <- "01491000"
-#  parameterCd <- "00631"  # Nitrate
-#  startDate <- "2000-01-01"
-#  endDate <- "2013-01-01"
-#  
-#  Daily <- readNWISDaily(siteNumber, "00060", startDate, endDate)
-#  Sample <- readNWISSample(siteNumber,parameterCd, startDate, endDate)
-#  INFO <- readNWISInfo(siteNumber, parameterCd)
-#  
-#  eList <- mergeReport(INFO, Daily,Sample)
+# siteNumber <- "01491000"
+# parameterCd <- "00631"  # Nitrate
+# startDate <- "2000-01-01"
+# endDate <- "2013-01-01"
+# 
+# Daily <- readNWISDaily(siteNumber, "00060", startDate, endDate)
+# Sample <- readNWISSample(siteNumber,parameterCd, startDate, endDate)
+# INFO <- readNWISInfo(siteNumber, parameterCd)
+# 
+# eList <- mergeReport(INFO, Daily,Sample)
 
 ## ----egretObedit, echo=TRUE, eval=FALSE---------------------------------------
-#  eListNew <- as.egret(INFO, Daily, Sample, surfaces)
-#  #To pull out the INFO data frame:
-#  INFO <- getInfo(eListNew)
-#  #Edit the INFO data frame:
-#  INFO$importantNews <- "New EGRET workflow started"
-#  #Put new data frame in eListNew
-#  eListNew$INFO <- INFO
-#  #To pull out Daily:
-#  Daily <- getDaily(eListNew)
-#  #Edit for some reason:
-#  DailyNew <- Daily[Daily$DecYear > 1985,]
-#  #Put new Daily data frame back in eListNew:
-#  eListNew$Daily <- DailyNew
-#  #To create a whole new egret object:
-#  eList_2 <- as.egret(INFO, DailyNew, getSample(eListNew), NA)
-#  
+# eListNew <- as.egret(INFO, Daily, Sample, surfaces)
+# #To pull out the INFO data frame:
+# INFO <- getInfo(eListNew)
+# #Edit the INFO data frame:
+# INFO$importantNews <- "New EGRET workflow started"
+# #Put new data frame in eListNew
+# eListNew$INFO <- INFO
+# #To pull out Daily:
+# Daily <- getDaily(eListNew)
+# #Edit for some reason:
+# DailyNew <- Daily[Daily$DecYear > 1985,]
+# #Put new Daily data frame back in eListNew:
+# eListNew$Daily <- DailyNew
+# #To create a whole new egret object:
+# eList_2 <- as.egret(INFO, DailyNew, getSample(eListNew), NA)
+# 
 
 ## ----cheatSheets,echo=TRUE,eval=TRUE,results='markup'-------------------------
 printqUnitCheatSheet()
@@ -265,15 +265,15 @@ printqUnitCheatSheet()
 printFluxUnitCheatSheet()
 
 ## ----flowHistory,echo=TRUE,eval=FALSE-----------------------------------------
-#  siteNumber <- "14105700"
-#  startDate <- ""
-#  endDate <- ""
-#  
-#  Daily <- readNWISDaily(siteNumber,"00060",startDate,endDate)
-#  INFO <- readNWISInfo(siteNumber,"",interactive=FALSE)
-#  INFO$shortName <- "Columbia River at The Dalles, OR"
-#  
-#  eList <- as.egret(INFO, Daily, NA, NA)
+# siteNumber <- "14105700"
+# startDate <- ""
+# endDate <- ""
+# 
+# Daily <- readNWISDaily(siteNumber,"00060",startDate,endDate)
+# INFO <- readNWISInfo(siteNumber,"",interactive=FALSE)
+# INFO$shortName <- "Columbia River at The Dalles, OR"
+# 
+# eList <- as.egret(INFO, Daily, NA, NA)
 
 ## ----flowHistoryLoad,echo=FALSE-----------------------------------------------
 fileName <- "eListColumbia.RData"
@@ -281,7 +281,7 @@ load(fileName)
 eList <- eListColumbia
 
 ## ----newChunckWinter, echo=TRUE,eval=FALSE------------------------------------
-#  eList <- setPA(eList,paStart=12,paLong=3)
+# eList <- setPA(eList,paStart=12,paLong=3)
 
 ## ----newChunck, echo=TRUE-----------------------------------------------------
 eList <- setPA(eList)
@@ -291,12 +291,12 @@ plotFlowSingle(eList, istat=5,qUnit="thousandCfs")
 plotSDLogQ(eList)
 
 ## ----Merced, echo=TRUE,eval=FALSE---------------------------------------------
-#  # Merced River at Happy Isles Bridge, CA:
-#  siteNumber<-"11264500"
-#  Daily <-readNWISDaily(siteNumber,"00060",startDate="",endDate="")
-#  INFO <- readNWISInfo(siteNumber,"",interactive=FALSE)
-#  INFO$shortName <- "Merced River at Happy Isles Bridge, CA"
-#  eList <- as.egret(INFO, Daily, NA, NA)
+# # Merced River at Happy Isles Bridge, CA:
+# siteNumber<-"11264500"
+# Daily <-readNWISDaily(siteNumber,"00060",startDate="",endDate="")
+# INFO <- readNWISInfo(siteNumber,"",interactive=FALSE)
+# INFO$shortName <- "Merced River at Happy Isles Bridge, CA"
+# eList <- as.egret(INFO, Daily, NA, NA)
 
 ## ----Merceddata, echo=FALSE---------------------------------------------------
 fileName <- "eListMerced.RData"
@@ -318,12 +318,12 @@ plotFour(eList, qUnit=3)
 plotFourStats(eList, qUnit=3)
 
 ## ----MississippiData, echo=TRUE,eval=FALSE------------------------------------
-#  #Mississippi River at Keokuk Iowa:
-#  siteNumber<-"05474500"
-#  Daily <-readNWISDaily(siteNumber,"00060",startDate="",endDate="")
-#  INFO <- readNWISInfo(siteNumber,"",interactive=FALSE)
-#  INFO$shortName <- "Mississippi River at Keokuk Iowa"
-#  eList <- as.egret(INFO, Daily, NA, NA)
+# #Mississippi River at Keokuk Iowa:
+# siteNumber<-"05474500"
+# Daily <-readNWISDaily(siteNumber,"00060",startDate="",endDate="")
+# INFO <- readNWISInfo(siteNumber,"",interactive=FALSE)
+# INFO$shortName <- "Mississippi River at Keokuk Iowa"
+# eList <- as.egret(INFO, Daily, NA, NA)
 
 ## ----MissDataRetrieval, echo=FALSE--------------------------------------------
 fileName <- "eListMiss.RData"
@@ -335,23 +335,23 @@ plotQTimeDaily(eList, qUnit=3,qLower=300)
 
 
 ## ----printSeries, eval=FALSE,echo=TRUE----------------------------------------
-#  seriesResult <- printSeries(eList, istat=3, qUnit=3)
+# seriesResult <- printSeries(eList, istat=3, qUnit=3)
 
 ## ----tfc, echo=TRUE-----------------------------------------------------------
 tableFlowChange(eList, istat=3, qUnit=3,yearPoints=c(1890,1950,2010))
 
 ## ----wrtds1,eval=FALSE,echo=TRUE----------------------------------------------
-#  #Choptank River at Greensboro, MD:
-#  siteNumber <- "01491000"
-#  startDate <- "1979-10-01"
-#  endDate <- "2011-09-30"
-#  param<-"00631"
-#  Daily <- readNWISDaily(siteNumber,"00060",startDate,endDate)
-#  INFO<- readNWISInfo(siteNumber,param,interactive=FALSE)
-#  INFO$shortName <- "Choptank River"
-#  
-#  Sample <- readNWISSample(siteNumber,param,startDate,endDate)
-#  eList <- mergeReport(INFO, Daily, Sample)
+# #Choptank River at Greensboro, MD:
+# siteNumber <- "01491000"
+# startDate <- "1979-10-01"
+# endDate <- "2011-09-30"
+# param<-"00631"
+# Daily <- readNWISDaily(siteNumber,"00060",startDate,endDate)
+# INFO<- readNWISInfo(siteNumber,param,interactive=FALSE)
+# INFO$shortName <- "Choptank River"
+# 
+# Sample <- readNWISSample(siteNumber,param,startDate,endDate)
+# eList <- mergeReport(INFO, Daily, Sample)
 
 ## ----wrtds2,eval=TRUE,echo=FALSE----------------------------------------------
 siteNumber <- "01491000" #Choptank River at Greensboro, MD
@@ -384,20 +384,20 @@ flowDuration(eList, qUnit=1)
 flowDuration(eList, qUnit=1, centerDate="09-30", span=30)
 
 ## ----wrtds3, eval=FALSE, echo=TRUE--------------------------------------------
-#  eList <- modelEstimation(eList)
+# eList <- modelEstimation(eList)
 
 ## ----wrtds5, eval=FALSE, echo=TRUE--------------------------------------------
-#  #An example directory name
-#  savePath <- "C:/Users/egretUser/WRTDS_Output/"
-#  saveResults(savePath, eList)
+# #An example directory name
+# savePath <- "C:/Users/egretUser/WRTDS_Output/"
+# saveResults(savePath, eList)
 
 ## ----wrtds8, eval=FALSE, echo=TRUE--------------------------------------------
-#  loadPath <- "C:/Users/egretUser/WRTDS_Output/"
-#  staAbbrev <- "Chop"
-#  constitAbbrev <- "NO3"
-#  pathToFile <- paste0(loadPath,staAbbrev,".",
-#                      constitAbbrev,".RData")
-#  load(pathToFile)
+# loadPath <- "C:/Users/egretUser/WRTDS_Output/"
+# staAbbrev <- "Chop"
+# constitAbbrev <- "NO3"
+# pathToFile <- paste0(loadPath,staAbbrev,".",
+#                     constitAbbrev,".RData")
+# load(pathToFile)
 
 ## ----getChopData1,echo=FALSE,eval=TRUE----------------------------------------
 # Sample <- getSample(eList)
@@ -475,8 +475,8 @@ plotDiffContours(eList, year0=1990,year1=2010,
                  qBottom=0.5,qTop=20,maxDiff=0.6)
 
 ## ----tableResults1, echo=TRUE, eval=FALSE-------------------------------------
-#  tableResults(eList)
-#  returnDF <- tableResults(eList)
+# tableResults(eList)
+# returnDF <- tableResults(eList)
 
 ## ----tableResults2, echo=FALSE, eval=TRUE,results='hide'----------------------
 returnDF <- tableResults(eList)
@@ -570,55 +570,55 @@ plotConcHist(eList, tinyPlot=TRUE,printTitle=FALSE,concMax=3,
 mtext("Custom multi-pane graph using customPar", outer=TRUE, font=2)
 
 ## ----helpFunc,eval = FALSE----------------------------------------------------
-#  ?plotConcQ
+# ?plotConcQ
 
 ## ----rawFunc,eval = FALSE-----------------------------------------------------
-#  plotConcQ
+# plotConcQ
 
 ## ----installFromCran,eval = FALSE---------------------------------------------
-#  install.packages("EGRET")
+# install.packages("EGRET")
 
 ## ----openLibraryTest, eval=FALSE----------------------------------------------
-#  library(EGRET)
+# library(EGRET)
 
 ## ----label=getSiteApp, echo=TRUE,eval=TRUE------------------------------------
 tableData <- tableResults(eList)
 
 ## ----label=saveData, echo=TRUE, eval=FALSE------------------------------------
-#  write.table(tableData, file="tableData.tsv",sep="\t",
-#              row.names = FALSE,quote=FALSE)
+# write.table(tableData, file="tableData.tsv",sep="\t",
+#             row.names = FALSE,quote=FALSE)
 
 ## ----getTable, echo = FALSE---------------------------------------------------
 knitr::include_graphics("table1.png")
 
 ## ----label=savePlots, echo=TRUE, eval=FALSE-----------------------------------
-#  jpeg("plotFlowSingle.jpg")
-#  plotFlowSingle(eList, 1)
-#  dev.off()
-#  
-#  png("plotFlowSingle.png")
-#  plotFlowSingle(eList,1)
-#  dev.off()
-#  
-#  pdf("plotFlowSingle.pdf")
-#  plotFlowSingle(eList,1)
-#  dev.off()
-#  
-#  postscript("plotFlowSingle.ps")
-#  plotFlowSingle(eList,1)
-#  dev.off()
-#  
-#  #Many plots saved to one pdf:
-#  pdf("manyPlots.pdf")
-#  plotFlowSingle(eList,1)
-#  plotFlowSingle(eList,2)
-#  plotFlowSingle(eList,3)
-#  plotFlowSingle(eList,4)
-#  dev.off()
-#  
+# jpeg("plotFlowSingle.jpg")
+# plotFlowSingle(eList, 1)
+# dev.off()
+# 
+# png("plotFlowSingle.png")
+# plotFlowSingle(eList,1)
+# dev.off()
+# 
+# pdf("plotFlowSingle.pdf")
+# plotFlowSingle(eList,1)
+# dev.off()
+# 
+# postscript("plotFlowSingle.ps")
+# plotFlowSingle(eList,1)
+# dev.off()
+# 
+# #Many plots saved to one pdf:
+# pdf("manyPlots.pdf")
+# plotFlowSingle(eList,1)
+# plotFlowSingle(eList,2)
+# plotFlowSingle(eList,3)
+# plotFlowSingle(eList,4)
+# dev.off()
+# 
 
 ## ----label=savePlots2, echo=TRUE, eval=FALSE----------------------------------
-#  postscript("fluxBiasMulti.ps", height=10,width=8)
-#  fluxBiasMulti(eList)
-#  dev.off()
+# postscript("fluxBiasMulti.ps", height=10,width=8)
+# fluxBiasMulti(eList)
+# dev.off()
 

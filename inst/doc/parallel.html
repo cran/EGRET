@@ -51,7 +51,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -62,7 +62,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -372,8 +372,8 @@ newer computers are multi-core. To check how many cores your computer
 has, use the <code>detectCores()</code> function in the
 <code>parallel</code> packages (which is shipped with the base R
 installation):</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">detectCores</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">detectCores</span>()</span></code></pre></div>
 <pre><code>## [1] 12</code></pre>
 <p>There is some overhead involved in going from serial to parallel
 computing, so you should not expect a 1:1 speed-up. If your computer
@@ -412,32 +412,32 @@ completed, you need to stop the cluster registration with the
 <code>stopCluster</code> function.</p>
 <p>We will now show 3 examples using the “Choptank River” example
 data:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(EGRET)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>eList <span class="ot">&lt;-</span> Choptank_eList</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>nCores <span class="ot">&lt;-</span> <span class="fu">detectCores</span>(<span class="at">logical =</span> <span class="cn">FALSE</span>) <span class="sc">-</span> <span class="dv">1</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(EGRET)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>eList <span class="ot">&lt;-</span> Choptank_eList</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>nCores <span class="ot">&lt;-</span> <span class="fu">detectCores</span>(<span class="at">logical =</span> <span class="cn">FALSE</span>) <span class="sc">-</span> <span class="dv">1</span></span></code></pre></div>
 <div id="doparellel" class="section level3">
 <h3>doParellel</h3>
 <p>The most generalized workflow uses the <code>doParallel</code>
 package:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(doParallel)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>cl <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(nCores)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">registerDoParallel</span>(cl)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>eList <span class="ot">&lt;-</span> <span class="fu">modelEstimation</span>(eList, <span class="at">verbose =</span> <span class="cn">FALSE</span>, <span class="at">run.parallel =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">stopCluster</span>(cl)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(doParallel)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>cl <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(nCores)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="fu">registerDoParallel</span>(cl)</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>eList <span class="ot">&lt;-</span> <span class="fu">modelEstimation</span>(eList, <span class="at">verbose =</span> <span class="cn">FALSE</span>, <span class="at">run.parallel =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="fu">stopCluster</span>(cl)</span></code></pre></div>
 </div>
 <div id="domc" class="section level3">
 <h3>doMC</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(doMC)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>cl <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(nCores)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">registerDoMC</span>(cl)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>eList <span class="ot">&lt;-</span> <span class="fu">modelEstimation</span>(eList, <span class="at">verbose =</span> <span class="cn">FALSE</span>, <span class="at">run.parallel =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">stopCluster</span>(cl)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">library</span>(doMC)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>cl <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(nCores)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fu">registerDoMC</span>(cl)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>eList <span class="ot">&lt;-</span> <span class="fu">modelEstimation</span>(eList, <span class="at">verbose =</span> <span class="cn">FALSE</span>, <span class="at">run.parallel =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="fu">stopCluster</span>(cl)</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -449,25 +449,25 @@ if running the code in parallel makes sense on your system. While
 significantly more robust benchmark testing is available from several R
 packages (see <code>microbenchmark</code> for example), a very simple
 test can be done with the <code>system.time</code> function:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(doParallel)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(EGRET)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>eList <span class="ot">&lt;-</span> Choptank_eList</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>nCores <span class="ot">&lt;-</span> <span class="fu">detectCores</span>(<span class="at">logical =</span> <span class="cn">FALSE</span>) <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">system.time</span>({</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  cl <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(nCores)</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">registerDoParallel</span>(cl)</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  eList <span class="ot">&lt;-</span> <span class="fu">modelEstimation</span>(eList, <span class="at">verbose =</span> <span class="cn">FALSE</span>, <span class="at">run.parallel =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopCluster</span>(cl)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">library</span>(doParallel)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">library</span>(EGRET)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>eList <span class="ot">&lt;-</span> Choptank_eList</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>nCores <span class="ot">&lt;-</span> <span class="fu">detectCores</span>(<span class="at">logical =</span> <span class="cn">FALSE</span>) <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="fu">system.time</span>({</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  cl <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(nCores)</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  <span class="fu">registerDoParallel</span>(cl)</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>  eList <span class="ot">&lt;-</span> <span class="fu">modelEstimation</span>(eList, <span class="at">verbose =</span> <span class="cn">FALSE</span>, <span class="at">run.parallel =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>  <span class="fu">stopCluster</span>(cl)</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>})</span></code></pre></div>
 <pre><code>user  system elapsed 
    9.11    0.95   33.34</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">system.time</span>({</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  eList <span class="ot">&lt;-</span> <span class="fu">modelEstimation</span>(eList, <span class="at">verbose =</span> <span class="cn">FALSE</span>, <span class="at">run.parallel =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">system.time</span>({</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  eList <span class="ot">&lt;-</span> <span class="fu">modelEstimation</span>(eList, <span class="at">verbose =</span> <span class="cn">FALSE</span>, <span class="at">run.parallel =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>})</span></code></pre></div>
 <pre><code>   user  system elapsed 
   60.05    0.05   60.51 </code></pre>
 <p>If the timing of the parallel code is not significantly faster (or

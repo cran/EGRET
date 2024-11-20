@@ -11,20 +11,20 @@ including the water-quality method Weighted Regressions on Time,
 Discharge, and Season (WRTDS).
 
 Look for new and improved documentation here:
-<https://rconnect.usgs.gov/EGRET/>
+<https://doi-usgs.github.io/EGRET/>
 
 The link for the official USGS publication user guide is here:
 
 <https://pubs.usgs.gov/tm/04/a10/>
 
-A companion package [`EGRETci`](https://rconnect.usgs.gov/EGRETci/)
+A companion package [`EGRETci`](https://doi-usgs.github.io/EGRETci/)
 implements a set of approaches to the analysis of uncertainty associated
 with WRTDS trend analysis.
 
 If you are familiar with the traditional `EGRET` workflow, check out the
-[Overview and
-Updates](https://rconnect.usgs.gov/EGRET/articles/Overview.html) to see
-how all the latest updates relate.
+\[Overview and
+Updates\](<https://doi-usgs.github.io/EGRET/articles/Overview.html> to
+see how all the latest updates relate.
 
 Recent introduction to WRTDS and the `EGRET` package at the 12th
 National Monitoring Conference April 19, 2021:
@@ -75,14 +75,24 @@ quality trends, and the statistical modeling algorithm Weighted
 Regressions on Time, Discharge, and Season (WRTDS). Please see the
 official EGRET User Guide for more information on the `EGRET` package:
 
-<https://doi.org/10.3133/tm4A10>
+<https://doi.org/10.3133/tm4A10> The best ways to learn about the WRTDS
+approach is to read the User Guide and two journal articles. These
+articles are available, for free, from the journals in which they were
+published. The first relates to nitrate and total phosphorus data for 9
+rivers draining to Chesapeake Bay. The URL is:
+
+<https://onlinelibrary.wiley.com/doi/full/10.1111/j.1752-1688.2010.00482.x>.
+
+The second is an application to nitrate data for 8 monitoring sites on
+the Mississippi River or its major tributaries. The URL is:
+
+<https://pubs.acs.org/doi/abs/10.1021/es201221s>
 
 For a thorough discussion of the generalized flow normalization method
 implemented in the EGRET enhancements, see the paper: “Tracking changes
 in nutrient delivery to western Lake Erie: Approaches to compensate for
-variability and trends in streamflow”:
-
-(<https://www.sciencedirect.com/science/article/pii/S0380133018302235>).
+variability and trends in streamflow”
+(<doi:10.1016/j.jglr.2018.11.012>).
 
 ## Sample Workflow
 
@@ -316,11 +326,13 @@ siteID <- "01491000" #Choptank River at Greensboro, MD
 startDate <- "" # Get earliest date
 endDate <- "" # Get latest date
 Daily <- readNWISDaily(siteID, "00060", startDate, endDate)
-#> There are 27501 data points, and 27501 days.
+#> GET: https://waterservices.usgs.gov/nwis/dv/?site=01491000&format=rdb,1.0&ParameterCd=00060&StatCd=00003&startDT=1851-01-01
+#> There are 28082 data points, and 28082 days.
 # Gather site and parameter information:
 # Here user must input some values for
 # the default (interactive=TRUE)
 INFO <- readNWISInfo(siteID, "00060")
+#> GET: https://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&format=rdb&site=01491000
 #> Your site for streamflow data is:
 #>  01491000 .
 #> Your site name is CHOPTANK RIVER NEAR GREENSBORO, MD 
@@ -386,101 +398,6 @@ plotFourStats(eList, qUnit=3)
 
 ![](man/figures/README-plotFours-2.png)
 
-## Model Archive
-
-When using the `WRTDS` model, it is important to be able to reproduce
-the results in the future. The following version of R and package
-dependencies were used most recently to pass the embedded tests within
-this package. There is no guarantee of reproducible results using future
-versions of R or updated versions of package dependencies; however, we
-will make diligent efforts to test and update future modeling
-environments.
-
-``` r
-sessioninfo::session_info()
-#> ─ Session info ───────────────────────────────────────────────────────────────
-#>  setting  value
-#>  version  R version 4.2.3 (2023-03-15 ucrt)
-#>  os       Windows 10 x64 (build 19045)
-#>  system   x86_64, mingw32
-#>  ui       RTerm
-#>  language (EN)
-#>  collate  English_United States.utf8
-#>  ctype    English_United States.utf8
-#>  tz       America/Chicago
-#>  date     2023-04-18
-#>  pandoc   2.19.2 @ C:/Program Files/RStudio/resources/app/bin/quarto/bin/tools/ (via rmarkdown)
-#> 
-#> ─ Packages ───────────────────────────────────────────────────────────────────
-#>  package       * version date (UTC) lib source
-#>  bit             4.0.5   2022-11-15 [1] CRAN (R 4.2.2)
-#>  bit64           4.0.5   2020-08-30 [1] CRAN (R 4.2.2)
-#>  class           7.3-21  2023-01-23 [2] CRAN (R 4.2.3)
-#>  classInt        0.4-9   2023-02-28 [1] CRAN (R 4.2.2)
-#>  cli             3.6.1   2023-03-23 [1] CRAN (R 4.2.3)
-#>  colorspace      2.1-0   2023-01-23 [1] CRAN (R 4.2.2)
-#>  crayon          1.5.2   2022-09-29 [1] CRAN (R 4.2.1)
-#>  curl            5.0.0   2023-01-12 [1] CRAN (R 4.2.2)
-#>  dataRetrieval   2.7.12  2023-04-11 [1] Github (DOI-USGS/dataRetrieval@60483d2)
-#>  DBI             1.1.3   2022-06-18 [1] CRAN (R 4.2.1)
-#>  digest          0.6.31  2022-12-11 [1] CRAN (R 4.2.2)
-#>  dotCall64       1.0-2   2022-10-03 [1] CRAN (R 4.2.1)
-#>  dplyr           1.1.1   2023-03-22 [1] CRAN (R 4.2.3)
-#>  e1071           1.7-13  2023-02-01 [1] CRAN (R 4.2.2)
-#>  EGRET         * 3.0.9   2023-04-16 [1] Github (DOI-USGS/EGRET@57fd93f)
-#>  evaluate        0.20    2023-01-17 [1] CRAN (R 4.2.2)
-#>  fansi           1.0.4   2023-01-22 [1] CRAN (R 4.2.2)
-#>  fastmap         1.1.1   2023-02-24 [1] CRAN (R 4.2.2)
-#>  fields          14.1    2022-08-12 [1] CRAN (R 4.2.1)
-#>  generics        0.1.3   2022-07-05 [1] CRAN (R 4.2.1)
-#>  ggplot2         3.4.2   2023-04-03 [1] CRAN (R 4.2.3)
-#>  glue            1.6.2   2022-02-24 [1] CRAN (R 4.1.3)
-#>  gridExtra       2.3     2017-09-09 [1] CRAN (R 4.2.1)
-#>  gtable          0.3.3   2023-03-21 [1] CRAN (R 4.2.3)
-#>  highr           0.10    2022-12-22 [1] CRAN (R 4.2.2)
-#>  hms             1.1.3   2023-03-21 [1] CRAN (R 4.2.3)
-#>  htmltools       0.5.5   2023-03-23 [1] CRAN (R 4.2.3)
-#>  httr            1.4.5   2023-02-24 [1] CRAN (R 4.2.2)
-#>  KernSmooth      2.23-20 2021-05-03 [2] CRAN (R 4.2.3)
-#>  knitr           1.42    2023-01-25 [1] CRAN (R 4.2.2)
-#>  lattice         0.20-45 2021-09-22 [2] CRAN (R 4.2.3)
-#>  lifecycle       1.0.3   2022-10-07 [1] CRAN (R 4.2.1)
-#>  magrittr        2.0.3   2022-03-30 [1] CRAN (R 4.1.3)
-#>  maps            3.4.1   2022-10-30 [1] CRAN (R 4.2.2)
-#>  Matrix          1.5-4   2023-04-04 [1] CRAN (R 4.2.3)
-#>  munsell         0.5.0   2018-06-12 [1] CRAN (R 4.2.1)
-#>  pillar          1.9.0   2023-03-22 [1] CRAN (R 4.2.3)
-#>  pkgconfig       2.0.3   2019-09-22 [1] CRAN (R 4.2.1)
-#>  proxy           0.4-27  2022-06-09 [1] CRAN (R 4.2.1)
-#>  R6              2.5.1   2021-08-19 [1] CRAN (R 4.2.1)
-#>  Rcpp            1.0.10  2023-01-22 [1] CRAN (R 4.2.2)
-#>  readr           2.1.4   2023-02-10 [1] CRAN (R 4.2.2)
-#>  rlang           1.1.0   2023-03-14 [1] CRAN (R 4.2.3)
-#>  rmarkdown       2.21    2023-03-26 [1] CRAN (R 4.2.3)
-#>  rstudioapi      0.14    2022-08-22 [1] CRAN (R 4.2.1)
-#>  scales          1.2.1   2022-08-20 [1] CRAN (R 4.2.1)
-#>  sessioninfo     1.2.2   2021-12-06 [1] CRAN (R 4.2.1)
-#>  sf              1.0-12  2023-03-19 [1] CRAN (R 4.2.3)
-#>  spam            2.9-1   2022-08-07 [1] CRAN (R 4.2.1)
-#>  survival        3.5-5   2023-03-12 [1] CRAN (R 4.2.3)
-#>  tibble          3.2.1   2023-03-20 [1] CRAN (R 4.2.3)
-#>  tidyselect      1.2.0   2022-10-10 [1] CRAN (R 4.2.1)
-#>  tzdb            0.3.0   2022-03-28 [1] CRAN (R 4.2.1)
-#>  units           0.8-1   2022-12-10 [1] CRAN (R 4.2.2)
-#>  utf8            1.2.3   2023-01-31 [1] CRAN (R 4.2.2)
-#>  vctrs           0.6.1   2023-03-22 [1] CRAN (R 4.2.3)
-#>  viridis         0.6.2   2021-10-13 [1] CRAN (R 4.2.1)
-#>  viridisLite     0.4.1   2022-08-22 [1] CRAN (R 4.2.1)
-#>  vroom           1.6.1   2023-01-22 [1] CRAN (R 4.2.2)
-#>  xfun            0.38    2023-03-24 [1] CRAN (R 4.2.3)
-#>  yaml            2.3.7   2023-01-23 [1] CRAN (R 4.2.2)
-#> 
-#>  [1] C:/Users/ldecicco/Documents/R/win-library/4.2
-#>  [2] C:/Program Files/R/R-4.2.3/library
-#> 
-#> ──────────────────────────────────────────────────────────────────────────────
-```
-
 ## Reporting bugs
 
 Please consider reporting bugs and asking questions on the Issues page:
@@ -493,13 +410,6 @@ Please email questions, comments, and feedback to:
 
 Additionally, to subscribe to an email list concerning updates to these
 R packages, please send a request to <egret_comments@usgs.gov>.
-
-## Code of Conduct
-
-We want to encourage a warm, welcoming, and safe environment for
-contributing to this project. See the [code of
-conduct](https://code.usgs.gov/water/EGRET/-/blob/main/CONDUCT.md) for
-more information.
 
 ## Package Support
 
@@ -520,11 +430,10 @@ date.
 
 ``` r
 citation(package = "EGRET")
-#> 
 #> To cite EGRET in publications, please use:
 #> 
-#>   Hirsch, R.M., De Cicco, L.A., Murphy, J., 2023, Exploration and
-#>   Graphics for RivEr Trends (EGRET), version 3.0.9,
+#>   Hirsch, R.M., De Cicco, L.A., Murphy, J., 2024, Exploration and
+#>   Graphics for RivEr Trends (EGRET), version 3.0.10,
 #>   doi:10.5066/P9CC9JEX
 #> 
 #> A BibTeX entry for LaTeX users is
@@ -533,7 +442,7 @@ citation(package = "EGRET")
 #>     author = {Robert Hirsch and Laura DeCicco and Jennifer Murphy},
 #>     title = {Exploration and Graphics for RivEr Trends (EGRET)},
 #>     publisher = {U.S. Geological Survey},
-#>     year = {2023},
+#>     year = {2024},
 #>     url = {https://pubs.usgs.gov/tm/04/a10/},
 #>   }
 ```
@@ -542,7 +451,7 @@ citation(package = "EGRET")
 
 See this list for WRTDS applications in print:
 
-<https://rconnect.usgs.gov/EGRET/articles/References_WRTDS.html>
+<https://doi-usgs.github.io/EGRET/articles/References_WRTDS.html>
 
 # Disclaimer
 

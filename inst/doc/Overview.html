@@ -281,9 +281,9 @@ results computed in EGRET. EGRETci is tightly linked to EGRET, such that
 output dataframes or other objects produced by EGRET serve as inputs to
 functions in EGRETci. Throughout this EGRET Update and Overview we will
 make mention of the relevant functions of EGRETci. There is a home page
-for <a href="https://rconnect.usgs.gov/EGRETci/">EGRETci</a>. At the end
-of this document there is a brief description in the recent changes that
-have been made to EGRETci.</p>
+for <a href="https://doi-usgs.github.io/EGRETci/">EGRETci</a>. At the
+end of this document there is a brief description in the recent changes
+that have been made to EGRETci.</p>
 </div>
 <div id="general-introduction-to-the-egret-package" class="section level1">
 <h1>General Introduction to the EGRET package</h1>
@@ -323,7 +323,7 @@ discharge data covering the entire time period being analyzed.</p>
 </div>
 <div id="egret-overview-and-data-entry" class="section level1">
 <h1>1. EGRET overview and data entry</h1>
-<p>These topics are covered extensively both in the <a href="https://rconnect.usgs.gov/EGRET/">Introduction to the EGRET
+<p>These topics are covered extensively both in the <a href="https://doi-usgs.github.io/EGRET/">Introduction to the EGRET
 package</a> and in more detail in the <a href="https://pubs.usgs.gov/tm/04/a10/pdf/tm4A10.pdf">EGRET User
 Guide</a>.</p>
 </div>
@@ -332,17 +332,16 @@ Guide</a>.</p>
 <p>EGRET has many tabular and graphical approaches to exploring trends
 in discharge. These are described in the Flow History component (pages
 15 - 28) of the <a href="https://pubs.usgs.gov/tm/04/a10/pdf/tm4A10.pdf">EGRET User
-Guide</a>(pages 15 – 28) and section 5 of <a href="https://rconnect.usgs.gov/EGRET/">Introduction to the EGRET
-package</a>.</p>
+Guide</a>(pages 15 – 28) and section 5 of <a href="https://doi-usgs.github.io/EGRET/articles/EGRET.html">Introduction
+to the EGRET package</a>.</p>
 <p>In addition, a script is available with some new capabilities. It is
-called <a href="https://rconnect.usgs.gov/EGRET/articles/streamflow_trend.html">Daily
+called <a href="https://doi-usgs.github.io/EGRET/articles/streamflow_trend.html">Daily
 Streamflow Trend Analysis</a>. This script includes the graphical
 technique for exploring trends across the entire frequency distribution:
 “The Quantile Kendall Plot”. This technique is described in <a href="https://doi.org/10.1016/j.jglr.2018.11.012">Choquette et al.,
-2019</a>. One new function, called <a href="https://rconnect.usgs.gov/EGRET/reference/cumQdate.html">cumQdate(
-)</a> has been added to the EGRET package, it is designed to describe
-trends in the timing of annual runoff. Examples of its application are
-in <a href="https://rconnect.usgs.gov/EGRET/articles/Annual_Hydrograph_Timing.html">Annual
+2019</a>. One new function, called <code>cumQdate</code> has been added
+to the EGRET package, it is designed to describe trends in the timing of
+annual runoff. Examples of its application are in <a href="https://doi-usgs.github.io/EGRET/articles/Annual_Hydrograph_Timing.html">Annual
 Hydrograph Timing</a>.</p>
 </div>
 <div id="describing-water-quality-without-using-the-wrtds-model." class="section level1">
@@ -350,7 +349,7 @@ Hydrograph Timing</a>.</p>
 <p>In some situations, the analyst may want to simply display a set of
 water quality data without any use of models or modeling assumptions.
 This can be a useful addition to showing results derived from the WRTDS
-statistical model. These are described in section 6 of <a href="https://rconnect.usgs.gov/EGRET/">Introduction to the EGRET
+statistical model. These are described in section 6 of <a href="https://doi-usgs.github.io/EGRET/">Introduction to the EGRET
 package</a> as well as on pages 29 -37 of the <a href="https://pubs.usgs.gov/tm/04/a10/pdf/tm4A10.pdf">EGRET User
 Guide</a>.</p>
 <div id="improved-graphical-treatment-of-censored-data." class="section level3">
@@ -365,23 +364,23 @@ showing the data even though it is a more honest approach than simply
 representing them by plotting them at their reporting limit. The
 vertical lines tend to draw a great amount of attention to the less-than
 values.</p>
-<p>The enhancement now in the EGRET package is called <a href="https://rconnect.usgs.gov/EGRET/articles/rResid.html">Random
+<p>The enhancement now in the EGRET package is called <a href="https://doi-usgs.github.io/EGRET/articles/rResid.html">Random
 Residuals</a>. What is done here is to take each censored value in the
 data set and randomly select a value that lies between the reporting
 limit and zero and show it on various plots as an open circle (as
 opposed to actual measured values, which are shown as a closed
 circle).</p>
-<p>The function that accomplishes this is called <a href="https://rconnect.usgs.gov/EGRET/reference/makeAugmentedSample.html">makeAugmentedSample(
-)</a>. These random values are not used in computing any of the WRTDS
-results (trends, mean concentrations or fluxes) but are only used for
-graphical representations. They are very valuable for visual
-presentation but have the drawbacks that: 1) there is no unique
-“correct” representation of the data. Multiple implementations will
-result in different random values. 2) the graphs of the data are no
-longer free from the influence of any statistical model, the computation
-of these random values depends on an assumption about the distribution
-of the true value below the reporting limit, and that is based on the
-assumptions of the fitted WRTDS model.</p>
+<p>The function that accomplishes this is called
+<code>makeAugmentedSample()</code>. These random values are not used in
+computing any of the WRTDS results (trends, mean concentrations or
+fluxes) but are only used for graphical representations. They are very
+valuable for visual presentation but have the drawbacks that: 1) there
+is no unique “correct” representation of the data. Multiple
+implementations will result in different random values. 2) the graphs of
+the data are no longer free from the influence of any statistical model,
+the computation of these random values depends on an assumption about
+the distribution of the true value below the reporting limit, and that
+is based on the assumptions of the fitted WRTDS model.</p>
 <p>Having said that, we should recognize that the purpose of many of
 these graphs of the data is to present a general idea of how the data
 behave (as a function of time or of discharge) and this approach will
@@ -408,7 +407,11 @@ something like: “What’s our best estimate of the flux of total
 phosphorus into the lake during the month of May 2020?” or “What’s our
 best estimate of the chloride concentration on February 2, 2019?” For
 these kinds of estimates we can use a new method called “WRTDS Kalman”
-or <a href="https://rconnect.usgs.gov/EGRET/articles/WRTDSK.html">WRTDS_K</a>.</p>
+or <a href="https://doi-usgs.github.io/EGRET/articles/WRTDSK.html">WRTDS_K</a>.
+In addition there are two publications that describe the concept and the
+mathematics. <a href="https://pubs.usgs.gov/publication/sir20195084">Lee, Hirsch and
+Crawford, 2019</a> and <a href="https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2019WR025338">Zhang
+and Hirsch, 2019</a>.</p>
 <p>WRTDS_K is based on this simple idea. On any given sampled day, the
 measured concentration will almost certainly differ from the value that
 WRTDS would predict. The measured value is always a better value to use
@@ -422,17 +425,16 @@ the method uses an auto-regressive, lag-one day, stochastic model to
 make these estimates of concentration (and hence flux) for each day in
 the record.</p>
 <p>The new functions in <code>EGRET</code> that are used in this process
-are <a href="https://rconnect.usgs.gov/EGRET/reference/wrtdsK.html">WRTDSKalman(
-)</a>, <a href="https://rconnect.usgs.gov/EGRET/reference/plotWRTDSKalman.html">plotWRTDSKalman(
-)</a>, and <a href="https://rconnect.usgs.gov/EGRET/reference/plotTimeSlice.html">plotTimeSlice(
-)</a>. The <code>EGRETci</code> package also has new capabilities to
-estimate the uncertainty of these WRTDS_K estimates. See <a href="https://rconnect.usgs.gov/EGRETci/articles/prediction.html">Graphics
+are <code>WRTDSKalman()</code>, <code>plotWRTDSKalman()</code>, and
+<code>plotTimeSlice()</code>. The <code>EGRETci</code> package also has
+new capabilities to estimate the uncertainty of these WRTDS_K estimates.
+See <a href="https://doi-usgs.github.io/EGRETci/articles/prediction.html">Graphics
 for Prediction Intervals</a>.</p>
 </div>
 <div id="analysis-of-water-quality-trends-using-wrtds." class="section level1">
 <h1>5. Analysis of water quality trends using WRTDS.</h1>
 <p>This topic is discussed extensively in the <a href="https://pubs.usgs.gov/tm/04/a10/pdf/tm4A10.pdf">EGRET User
-Guide</a> (pages 38-78) and in the “WRTDS results” section of <a href="https://rconnect.usgs.gov/EGRET/articles/EGRET.html#wrtds-results">Introduction
+Guide</a> (pages 38-78) and in the “WRTDS results” section of <a href="https://doi-usgs.github.io/EGRET/articles/EGRET.html#wrtdsResults">Introduction
 to the EGRET package</a>. All of these descriptions of the WRTDS flow
 normalization method are built on the assumption that for any given day
 of the year, the probability distribution of discharge is stationary
@@ -466,23 +468,20 @@ which was the original assumption.</p>
 <h3>5a. Trends based on Stationary Flow Normalization (SFN).</h3>
 <p>The concepts and functions from earlier versions of the EGRET
 software remain in the new version as they were. The primary function
-for doing these analyses continues to be <a href="https://rconnect.usgs.gov/EGRET/reference/modelEstimation.html">modelEstimation(
-)</a> and the functions for viewing trend results continue to be <a href="https://rconnect.usgs.gov/EGRET/reference/plotConcHist.html">plotConcHist(
-)</a>, <a href="https://rconnect.usgs.gov/EGRET/reference/plotFluxHist.html">plotFluxHist(
-)</a>, <a href="https://rconnect.usgs.gov/EGRET/reference/tableChange.html">tableChange(
-)</a>, <a href="https://rconnect.usgs.gov/EGRET/reference/tableResults.html">tableResulsts(
-)</a>, <a href="https://rconnect.usgs.gov/EGRET/reference/plotContours.html">plotContours(
-)</a>, and <a href="https://rconnect.usgs.gov/EGRET/reference/plotDiffContours.html">plotDiffContours(
-)</a>. When the water quality data set is shorter than about 20 years
-the SFN approach is really the only viable approach. A time period this
-short is just simply not amenable to characterizing the magnitude and
-nature of the discharge trend. Also, when the data sets are longer than
-20 years and evaluation of the discharge record does not reveal any
-substantial monotonic trend over the record, the Stationary Flow
-Normalization approach should be the preferred approach. Trends in
-discharge that are in the range of 10% change over the period of the
-water quality record should use SFN. EGRET contains tools that can
-quantify <a href="https://rconnect.usgs.gov/EGRET/articles/streamflow_trend.html">streamflow
+for doing these analyses continues to be <code>modelEstimation()</code>
+and the functions for viewing trend results continue to be
+<code>plotConcHist()</code>, <code>plotFluxHist()</code>,
+<code>tableChange()</code>, <code>tableResulsts()</code>,
+<code>plotContours()</code>, and <code>plotDiffContours()</code>. When
+the water quality data set is shorter than about 20 years the SFN
+approach is really the only viable approach. A time period this short is
+just simply not amenable to characterizing the magnitude and nature of
+the discharge trend. Also, when the data sets are longer than 20 years
+and evaluation of the discharge record does not reveal any substantial
+monotonic trend over the record, the Stationary Flow Normalization
+approach should be the preferred approach. Trends in discharge that are
+in the range of 10% change over the period of the water quality record
+should use SFN. EGRET contains tools that can quantify <a href="https://doi-usgs.github.io/EGRET/articles/streamflow_trend.html">streamflow
 trends</a>.</p>
 <p>There has been some new functionality added for trend analysis added
 to EGRET that can provide flexibility to undertake Generalized Flow
@@ -490,56 +489,53 @@ Normalization (addressed in section 5b. below) but can also enable the
 analyst to ask some more specific questions about the trend. These three
 new functions are the following:</p>
 <div id="ai.-runpairs" class="section level4">
-<h4>5ai. runPairs( )</h4>
-<p><a href="https://rconnect.usgs.gov/EGRET/reference/runPairs.html">runPairs(
-)</a> is designed to address the specific question of how much has the
-flow-normalized concentration or flow-normalized flux changed from some
-selected starting year to some selected ending year. The exact same
-information can be gleaned from <a href="https://rconnect.usgs.gov/EGRET/reference/modelEstimation.html">modelEstimation(
-)</a> and then <a href="https://rconnect.usgs.gov/EGRET/reference/tableChange.html">tableChange(
-)</a>. The advantage of runPairs( ) is that the analysis can take
+<h4>5ai. runPairs</h4>
+<p><code>runPairs()</code> is designed to address the specific question
+of how much has the flow-normalized concentration or flow-normalized
+flux changed from some selected starting year to some selected ending
+year. The exact same information can be gleaned from
+<code>modelEstimation()</code> and then <code>tableChange()</code>. The
+advantage of <code>runPairs()</code> is that the analysis can take
 significantly less computer time, because it is not attempting to
 statistically model all the years between the starting and ending year.
-The output of runPairs( ) can then be used as input to <a href="https://rconnect.usgs.gov/EGRETci/reference/runPairsBoot.html">runPairsBoot(
-)</a> in the EGRETci package to evaluate the uncertainty of the
-trend.</p>
+The output of <code>runPairs()</code> can then be used as input to <a href="https://doi-usgs.github.io/EGRETci/reference/runPairsBoot.html">EGRETci::runPairsBoot()</a>
+in the EGRETci package to evaluate the uncertainty of the trend.</p>
 </div>
 <div id="aii.-rungroups" class="section level4">
-<h4>5aii. runGroups( )</h4>
+<h4>5aii. runGroups</h4>
 <p>The concept in group analysis is that we wish to compare not just two
-different years as we did in runPairs( ) but rather, to compare one
-group of years to another group of years. For example, there may be a
-strategy for nutrient reduction that calls for decreases in average
-concentrations, or average fluxes, for some period after the strategy
-went into effect compared to the time before it went into effect. Or
-perhaps we want to evaluate the consequences of a large investment in
-pollution control that went into effect fairly abruptly at some point in
-time and we want to do a “before and after” analysis. The evaluations of
-trends for these kinds of analyses can’t be gleaned from
-modelEstimation( ) or runPairs( ). See <a href="https://rconnect.usgs.gov/EGRET/reference/runGroups.html">runGroups(
-)</a> for details about the function. Also, the outputs of runGroups( )
-can be used as input to <a href="https://rconnect.usgs.gov/EGRETci/reference/runGroupsBoot.html">runGroupsBoot(
-)</a> in the EGRETci package to evaluate the uncertainty of the
-trend.</p>
+different years as we did in <code>runPairs()</code> but rather, to
+compare one group of years to another group of years. For example, there
+may be a strategy for nutrient reduction that calls for decreases in
+average concentrations, or average fluxes, for some period after the
+strategy went into effect compared to the time before it went into
+effect. Or perhaps we want to evaluate the consequences of a large
+investment in pollution control that went into effect fairly abruptly at
+some point in time and we want to do a “before and after” analysis. The
+evaluations of trends for these kinds of analyses can’t be gleaned from
+<code>modelEstimation()</code> or <code>runPairs()</code>. See
+<code>runGroups()</code> for details about the function. Also, the
+outputs of <code>runGroups</code> can be used as input to <a href="https://doi-usgs.github.io/EGRETci/reference/runGroupsBoot.html">EGRETci::runGroupsBoot()</a>
+in the EGRETci package to evaluate the uncertainty of the trend.</p>
 </div>
 <div id="aiii.-runseries" class="section level4">
-<h4>5aiii. runSeries( )</h4>
+<h4>5aiii. runSeries</h4>
 <p>This function produces annual flow-normalized concentrations and
 fluxes for the entire period being analyzed. This function produces the
-same type of output as modelEstimation( ). It simply has more options
-available to it than modelEstimation( ). See <a href="https://rconnect.usgs.gov/EGRET/reference/runSeries.html">runSeries(
-)</a> for details about the function. The outputs of runSeries( ) can be
-used in conjunction with <a href="https://rconnect.usgs.gov/EGRETci/reference/ciCalculations.html">ciCalculations(
-)</a> and <a href="https://rconnect.usgs.gov/EGRETci/reference/plotConcHistBoot.html">plotConcHistBoot(
-)</a>, and <a href="https://rconnect.usgs.gov/EGRETci/reference/plotFluxHistBoot.html">plotFluxHistBoot(
-)</a> in the EGRETci package to show confidence intervals on the annual
+same type of output as <code>modelEstimation()</code>. It simply has
+more options available to it than <code>modelEstimation()</code>. See
+<code>runSeries()</code> for details about the function. The outputs of
+<code>runSeries</code> can be used in conjunction with <a href="https://doi-usgs.github.io/EGRETci/reference/ciCalculations.html">EGRETci::ciCalculations()</a>
+and <a href="https://doi-usgs.github.io/EGRETci/reference/plotConcHistBoot.html">EGRETci::plotConcHistBoot()</a>,
+and <a href="https://doi-usgs.github.io/EGRETci/reference/plotFluxHistBoot.html">EGRETci::plotFluxHistBoot()</a>
+in the EGRETci package to show confidence intervals on the annual
 flow-normalized values.</p>
 </div>
 </div>
 <div id="b.-trends-based-on-generalized-flow-normalization-gfn" class="section level3">
 <h3>5b. Trends based on Generalized Flow Normalization (GFN)</h3>
 <p>As discussed above, GFN is designed to account for the role of trends
-in discharge in the analysis of trends in concentration or flux. See <a href="https://rconnect.usgs.gov/EGRET/articles/Enhancements.html#generalized-flow-normalization-gfn-">GFN
+in discharge in the analysis of trends in concentration or flux. See <a href="https://doi-usgs.github.io/EGRET/articles/Enhancements.html#generalized-flow-normalization-gfn">GFN
 approach</a> for details about how it is implemented. The discussion of
 the motivations and the mathematics of it are in <a href="https://doi.org/10.1016/j.jglr.2018.11.012">Choquette, et
 al. (2019)</a>. When GFN is used, any trends that are reported are
@@ -556,15 +552,12 @@ the data should be prepared for SFN, where it is suggested that the
 daily discharge record extend no more than a year before the first water
 quality sample and no more than a year after the last water quality
 sample. The functions used for GFN are the same three functions
-mentioned above: <a href="https://rconnect.usgs.gov/EGRET/reference/runPairs.html">runPairs(
-)</a>, <a href="https://rconnect.usgs.gov/EGRET/reference/runGroups.html">runGroups(
-)</a>, and <a href="https://rconnect.usgs.gov/EGRET/reference/runSeries.html">runSeries(
-)</a>. Each of these functions contains arguments that are used to
-implement GFN. Uncertainty analysis for these functions can be found in
-EGRETci in the functions <a href="https://rconnect.usgs.gov/EGRETci/reference/runPairsBoot.html">runPairsBoot(
-)</a>, <a href="https://rconnect.usgs.gov/EGRETci/reference/runGroupsBoot.html">runGroupsBoot(
-)</a>, and <a href="https://rconnect.usgs.gov/EGRETci/reference/ciCalculations.html">ciCalculations(
-)</a>.</p>
+mentioned above: <code>runPairs()</code>, <code>runGroups()</code>, and
+<code>runSeries()</code>. Each of these functions contains arguments
+that are used to implement GFN. Uncertainty analysis for these functions
+can be found in EGRETci in the functions <a href="https://doi-usgs.github.io/EGRETci/reference/runPairsBoot.html">EGRETci::runPairsBoot()</a>,
+<a href="https://doi-usgs.github.io/EGRETci/reference/runGroupsBoot.html">EGRETci::runGroupsBoot()</a>,
+and <a href="https://doi-usgs.github.io/EGRETci/reference/ciCalculations.html">EGRETci::ciCalculations()</a>.</p>
 </div>
 <div id="c.-generalized-flow-normalization-with-a-flow-break." class="section level3">
 <h3>5c. Generalized flow normalization with a flow break.</h3>
@@ -573,7 +566,7 @@ engineered action that results in a change in the probability
 distribution of streamflow at some particular time. The new EGRET code
 allows us to treat discharge as stationary within each of two periods in
 the record but allows the distribution for the first period to be
-different from the second period. We call this a <a href="https://rconnect.usgs.gov/EGRET/articles/Enhancements.html#abrupt-change-in-the-discharge-distribution-1">flow
+different from the second period. We call this a <a href="https://doi-usgs.github.io/EGRET/articles/Enhancements.html#abrupt-change-in-the-discharge-distribution">flow
 break</a>. The most obvious examples would be the completion of a dam
 upstream of the monitoring site. This needs to be a dam that has a clear
 impact on discharges at the monitoring site (e.g. decreasing the peak
@@ -590,14 +583,15 @@ action. Even a large dam or diversion, if it only affects the flows from
 less than half of the watershed area, is probably not a good reason to
 use this feature. An abrupt change in streamflow conditions that has no
 clear human driver should not be the basis for using this approach.
-Again the same three trend functions mentioned above (runPairs( ),
-runGroups( ), and runSeries( ) ) all have arguments that make it
-possible to include a flow break in the analysis.</p>
+Again the same three trend functions mentioned above
+(<code>runPairs()</code>, <code>runGroups()</code>, and
+<code>runSeries()</code>) all have arguments that make it possible to
+include a flow break in the analysis.</p>
 </div>
 </div>
 <div id="abrupt-change-in-water-quality." class="section level1">
 <h1>6. Abrupt change in water quality.</h1>
-<p>We refer to this as the <strong>wall</strong>. The idea of the <a href="https://rconnect.usgs.gov/EGRET/articles/Enhancements.html#the-wall-">wall</a>
+<p>We refer to this as the <strong>wall</strong>. The idea of the <a href="https://doi-usgs.github.io/EGRET/articles/Enhancements.html#the-wall">wall</a>
 is to appropriately handle events that you believe would result in a
 sharp discontinuity in the way that concentrations behave as a function
 of discharge, year, and season. WRTDS was designed with a working
@@ -634,28 +628,28 @@ time. What this means is that estimates of the concentration for any
 time, discharge and season, that lies prior to the time of the wall, is
 estimated only from data collected before the wall. Conversely the
 estimates after the wall are only based on data collected after the
-wall. The result of this process is that the contour surface seen in <a href="https://rconnect.usgs.gov/EGRET/reference/plotContours.html">plotContours(
-)</a> can have a sharp break at a vertical line where the wall is
-located.</p>
+wall. The result of this process is that the contour surface seen in
+<code>plotContours()</code> can have a sharp break at a vertical line
+where the wall is located.</p>
 <p>The idea of using this as a way of testing if some specific action
 brought about a statistically significant change in water quality can be
-accomplished by using the <a href="https://rconnect.usgs.gov/EGRET/reference/runGroups.html">runGroups(
-)</a> function and letting the two groups be distinguished by being
-either before or after the wall. The confidence level or uncertainty of
-this before and after difference can then be determined in using <a href="https://rconnect.usgs.gov/EGRETci/reference/runGroupsBoot.html">runGroupsBoot(
-)</a> in the EGRETci package. The wall can also be implemented in the <a href="https://rconnect.usgs.gov/EGRET/reference/runPairs.html">runPairs(
-)</a> and <a href="https://rconnect.usgs.gov/EGRET/reference/runSeries.html">runSeries(
-)</a> functions as well.</p>
+accomplished by using the <code>runGroups()</code> function and letting
+the two groups be distinguished by being either before or after the
+wall. The confidence level or uncertainty of this before and after
+difference can then be determined in using <a href="https://doi-usgs.github.io/EGRETci/reference/runGroupsBoot.html">EGRETci::runGroupsBoot()</a>
+in the EGRETci package. The wall can also be implemented in the
+<code>runPairs()</code> and <code>runSeries()</code> functions as
+well.</p>
 </div>
 <div id="seasonal-analysis-of-trends" class="section level1">
 <h1>7. Seasonal analysis of trends</h1>
 <p>Sometimes it is of interest to understand if there may be trends in
 water quality in some seasons and not in other seasons, or even trends
 in opposite directions for different seasons. There are scripts that can
-be used to evaluate the water quality <a href="https://rconnect.usgs.gov/EGRET/articles/SeasonalFraction.html">trends
+be used to evaluate the water quality <a href="https://doi-usgs.github.io/EGRET/articles/SeasonalFraction.html">trends
 in different seasons</a> or to show a graph of the months displaying the
 seasonal pattern of fluxes by month and the change over several years of
-these <a href="https://rconnect.usgs.gov/EGRET/articles/TrendsByMonth.html">monthly
+these <a href="https://doi-usgs.github.io/EGRET/articles/TrendsByMonth.html">monthly
 fluxes</a>.</p>
 </div>
 <div id="parallel-computing" class="section level1">
@@ -664,25 +658,24 @@ fluxes</a>.</p>
 intensive, there are a set of techniques provided to run EGRET processes
 in parallel and thus greatly compress the amount of time required to
 complete a large analysis that covers many sites and many analytes.
-EGRET and EGRETci allow for <a href="https://rconnect.usgs.gov/EGRET/articles/parallel.html">parallel
+EGRET and EGRETci allow for <a href="https://doi-usgs.github.io/EGRET/articles/parallel.html">parallel
 computing</a>. These techniques can be executed on a single computer
 with several cores, or they can be executed across a large array of
 connected computers.</p>
 </div>
 <div id="errorstats-to-describe-the-overall-accuracy-of-a-wrtds-model" class="section level1">
-<h1>9. errorStats( ) to describe the overall accuracy of a WRTDS
-model</h1>
+<h1>9. errorStats to describe the overall accuracy of a WRTDS model</h1>
 <p>Sometimes it is useful to have statistics that describe the magnitude
 of the errors in a WRTDS model, the way we would for a multiple linear
-regression. A function called <a href="https://rconnect.usgs.gov/EGRET/reference/errorStats.html">errorStats(
-)</a> has been added to the EGRET package. It computes the equivalent of
-an R-squared value (like in multiple regression). The R-squared is
-computed on the log of the concentration as well as on the log of the
-flux. It also provides a root mean squared error and a standard error of
-prediction in percent. It can provide a useful tool for comparison to
-similar water quality statistical models, or for comparing different
-settings for the three window parameters of the WRTDS model (windowY,
-windowS, and windowQ).</p>
+regression. A function called <code>errorStats()</code> has been added
+to the EGRET package. It computes the equivalent of an R-squared value
+(like in multiple regression). The R-squared is computed on the log of
+the concentration as well as on the log of the flux. It also provides a
+root mean squared error and a standard error of prediction in percent.
+It can provide a useful tool for comparison to similar water quality
+statistical models, or for comparing different settings for the three
+window parameters of the WRTDS model (windowY, windowS, and
+windowQ).</p>
 </div>
 <div id="dealing-with-problems-of-model-convergence" class="section level1">
 <h1>10. Dealing with problems of model convergence</h1>
@@ -697,8 +690,8 @@ problems are sometimes related to multicollinearity in the Sample data,
 the idea is to add some “jitter” (small amounts of random noise) to the
 time and discharge data. This often solves the numerical problems. It
 should only be used if there is a clear problem with the results. The
-function used is called <a href="https://rconnect.usgs.gov/EGRET/reference/jitterSam.html">jitterSam(
-)</a>. Its use is primarily in functions in the EGRETci package.</p>
+function used is called <code>jitterSam()</code>. Its use is primarily
+in functions in the EGRETci package.</p>
 </div>
 <div id="alternative-discharge-variables-in-the-wrtds-model" class="section level1">
 <h1>11. Alternative discharge variables in the WRTDS model</h1>
@@ -710,7 +703,7 @@ It may turn out that a better explanatory variable model for the WRTDS
 model might be a rolling-mean of discharges over some period of many
 days up to (and including) the sampled day instead of the daily
 discharge on the sampling day. There is an article describing this
-concept and a script for making such an analysis using an <a href="https://rconnect.usgs.gov/EGRET/articles/AlternativeQMethod.html">alternative
+concept and a script for making such an analysis using an <a href="https://doi-usgs.github.io/EGRET/articles/AlternativeQMethod.html">alternative
 Q variable</a>.</p>
 </div>
 <div id="enhancements-of-egretci" class="section level1">
@@ -724,7 +717,7 @@ and also likelihood measures that can provide an indication of how
 confident we should be that the sign of the estimated change is actually
 the correct sign (e.g. our estimate of trend said it was upward, what’s
 the chance it might actually be downward?). These techniques, for
-evaluating trend results are described in detail in the <a href="https://rconnect.usgs.gov/EGRETci/articles/Enhancements.html">Guide
+evaluating trend results are described in detail in the <a href="https://doi-usgs.github.io/EGRET/articles/Enhancements.html">Guide
 to EGRETci 2.0 enhancements</a>.</p>
 <p>In addition, there is now a set of functions in EGRETci which allow
 one to quantify the uncertainty about individual values (not
@@ -743,9 +736,9 @@ around those values. Is the 90% confidence interval on the order of +/-
 5%, or more like 20% or even worse 50%?” These techniques are designed
 to provide answers to those kinds of questions. They are designed to
 calculate prediction intervals for daily, monthly, or annual averages of
-concentration or flux. These methods are described in detail in <a href="https://rconnect.usgs.gov/EGRETci/articles/prediction.html">Graphics
+concentration or flux. These methods are described in detail in <a href="https://doi-usgs.github.io/EGRETci/articles/prediction.html">Graphics
 for Prediction Intervals</a>. They also provide the means to graphically
-depict the proability of concentration values exceeding some regulatory
+depict the probability of concentration values exceeding some regulatory
 threshold value.</p>
 </div>
 
