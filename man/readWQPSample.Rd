@@ -5,7 +5,7 @@
 \title{Import Sample Data from the Water Quality Portal for WRTDS}
 \usage{
 readWQPSample(siteNumber, characteristicName, startDate = "", endDate = "",
-  verbose = TRUE)
+  verbose = TRUE, legacy = TRUE)
 }
 \arguments{
 \item{siteNumber}{character site number.  If USGS, it should be in the form :'USGS-XXXXXXXXX...'}
@@ -20,6 +20,10 @@ Default is empty quotes "" which will retrieve the full period of record.}
 Default is empty quotes "" which will retrieve the full period of record.}
 
 \item{verbose}{logical specifying whether or not to display progress message}
+
+\item{legacy}{logical specifying whether to use the "legacy" WQP services, or 
+the new ones. Legacy works well for non-USGS sites. For USGS sites it is recommended
+to use the \code{readNWISSample} function. Default is \code{TRUE}.}
 }
 \value{
 A data frame 'Sample' with the following columns:
@@ -47,10 +51,12 @@ compress it (summing constituents), then converts it to the Sample dataframe str
 See chapter 7 of the EGRET user guide for more details.
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # These examples require an internet connection to run
 \donttest{
-# Sample_All <- readWQPSample('WIDNR_WQX-10032762','Specific conductance', '', '')
+Sample_All <- readWQPSample('WIDNR_WQX-10032762','Specific conductance', '', '')
 }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[dataRetrieval]{readWQPdata}}, \code{dataRetrieval::whatWQPsites}, 
